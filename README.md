@@ -1,4 +1,4 @@
-# TouchLock – Browser Screen Lock Extension
+# TouchLock – Fingerprint Browser Lock
 
 A Chromium browser extension (Edge, Chrome, Brave, etc.) that locks your browser profile behind **Touch ID / Windows Hello** biometrics or a **6-digit PIN**.
 

@@ -81,7 +81,7 @@
 
         <a id="tl-forgot-link" class="tl-forgot-link" href="#">Forgot PIN?</a>
 
-        <p class="tl-footer">TouchLock – Screen Lock Extension</p>
+        <p class="tl-footer">TouchLock – Fingerprint Browser Lock</p>
       </div>
     `;
 

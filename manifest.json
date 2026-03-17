@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "TouchLock – Screen Lock",
+  "name": "TouchLock – Fingerprint Browser Lock",
   "version": "1.0.0",
   "description": "Lock your browser profile with Touch ID, Windows Hello, or a 6-digit PIN.",
   "permissions": [
@@ -13,7 +13,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "TouchLock",
+    "default_title": "TouchLock – Fingerprint Browser Lock",
     "default_icon": {
       "16": "icons/icon-16.png",
       "48": "icons/icon-48.png",
