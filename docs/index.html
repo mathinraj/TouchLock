@@ -19,6 +19,9 @@
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="icon" type="image/png" sizes="128x128" href="assets/logo-128.png">
 
+  <!-- Font Awesome Kit -->
+  <script src="https://kit.fontawesome.com/5432a717c1.js" crossorigin="anonymous"></script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,9 +41,10 @@
       <div class="nav-links">
         <a href="#features">Features</a>
         <a href="#how-it-works">How It Works</a>
+        <a href="#screenshots">Screenshots</a>
         <a href="#install">Install</a>
         <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener" class="nav-github" aria-label="GitHub">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <i class="fa-brands fa-github fa-lg"></i>
         </a>
       </div>
     </div>
@@ -58,11 +62,11 @@
       </p>
       <div class="hero-actions">
         <a href="#install" class="btn btn-primary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <i class="fa-solid fa-download"></i>
           Install Now
         </a>
         <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener" class="btn btn-secondary">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <i class="fa-brands fa-github"></i>
           View on GitHub
         </a>
       </div>
@@ -77,18 +81,17 @@
           <div class="browser-body">
             <div class="lock-preview">
               <div class="lock-icon-wrapper">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                  <circle cx="12" cy="16" r="1"/>
-                </svg>
+                <i class="fa-solid fa-lock fa-2x"></i>
               </div>
               <div class="lock-preview-title">Browser Locked</div>
               <div class="lock-preview-subtitle">Verify your identity to continue</div>
               <div class="pin-dots-preview">
                 <span></span><span></span><span></span><span></span><span></span><span></span>
               </div>
-              <div class="lock-preview-btn">Unlock with Biometrics</div>
+              <div class="lock-preview-btn">
+                <i class="fa-solid fa-fingerprint"></i>
+                Unlock with Biometrics
+              </div>
             </div>
           </div>
         </div>
@@ -106,62 +109,42 @@
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
-              <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
-              <path d="M10 12c0 4-1 8-3 10"/>
-              <path d="M14 12c0 2.5-.5 5-1.5 7"/>
-              <path d="M18 12c0 1-.5 3-1 4.5"/>
-              <path d="M22 12a10 10 0 0 1-2 6"/>
-              <path d="M10 12a2 2 0 1 1 4 0"/>
-            </svg>
+            <i class="fa-solid fa-fingerprint fa-lg"></i>
           </div>
           <h3>Biometric Unlock</h3>
           <p>Unlock with Touch ID on Mac or Windows Hello on PC. Auto-triggers when the lock screen loads.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              <circle cx="12" cy="16" r="1"/>
-            </svg>
+            <i class="fa-solid fa-lock fa-lg"></i>
           </div>
           <h3>6-Digit PIN</h3>
           <p>SHA-256 hashed with random salt. Always available as a fallback, even without biometric hardware.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
+            <i class="fa-solid fa-shield-halved fa-lg"></i>
           </div>
           <h3>Profile-Level Lock</h3>
           <p>Blocks access to history, downloads, bookmarks — your entire profile is protected until authenticated.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
+            <i class="fa-solid fa-clock fa-lg"></i>
           </div>
           <h3>Auto-Lock on Startup</h3>
           <p>Every browser launch requires authentication. No manual action needed — it just works.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-            </svg>
+            <i class="fa-solid fa-display fa-lg"></i>
           </div>
           <h3>Tab Guards</h3>
           <p>Prevents switching tabs, opening new tabs, or closing the lock tab. No way to bypass the lock screen.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
-            </svg>
+            <i class="fa-solid fa-rotate-right fa-lg"></i>
           </div>
           <h3>PIN Recovery</h3>
           <p>Forgot your PIN? Answer 2 of 3 security questions to reset. Your data stays safe.</p>
@@ -205,6 +188,65 @@
     </div>
   </section>
 
+  <!-- Screenshots -->
+  <section class="screenshots" id="screenshots">
+    <div class="container">
+      <div class="section-header">
+        <h2>See it in <span class="gradient-text">action</span></h2>
+        <p>A quick look at TouchLock's key screens and features.</p>
+      </div>
+      <div class="screenshot-gallery">
+        <div class="screenshot-track" id="screenshot-track">
+          <div class="screenshot-slide">
+            <div class="screenshot-img-wrapper">
+              <img src="assets/Screenshots/image1.png" alt="Lock Screen" loading="lazy">
+            </div>
+            <p class="screenshot-caption">Lock Screen — PIN entry with biometric option</p>
+          </div>
+          <div class="screenshot-slide">
+            <div class="screenshot-img-wrapper">
+              <img src="assets/Screenshots/image3.png" alt="Touch ID Auto-Trigger" loading="lazy">
+            </div>
+            <p class="screenshot-caption">Auto-triggers Touch ID &amp; Windows Hello on startup</p>
+          </div>
+          <div class="screenshot-slide">
+            <div class="screenshot-img-wrapper">
+              <img src="assets/Screenshots/image2.png" alt="Profile-Level Lock" loading="lazy">
+            </div>
+            <p class="screenshot-caption">Profile-Level Lock — blocks history, downloads &amp; all tabs</p>
+          </div>
+          <div class="screenshot-slide">
+            <div class="screenshot-img-wrapper">
+              <img src="assets/Screenshots/image4.png" alt="Toolbar Popup" loading="lazy">
+            </div>
+            <p class="screenshot-caption">One-click lock from the toolbar popup</p>
+          </div>
+          <div class="screenshot-slide">
+            <div class="screenshot-img-wrapper">
+              <img src="assets/Screenshots/image6.png" alt="Settings Page" loading="lazy">
+            </div>
+            <p class="screenshot-caption">Settings — PIN, security questions &amp; biometric setup</p>
+          </div>
+          <div class="screenshot-slide">
+            <div class="screenshot-img-wrapper">
+              <img src="assets/Screenshots/image5.png" alt="PIN Recovery" loading="lazy">
+            </div>
+            <p class="screenshot-caption">PIN Recovery — reset with security questions</p>
+          </div>
+        </div>
+      </div>
+      <div class="screenshot-controls">
+        <button class="screenshot-btn" id="screenshot-prev" aria-label="Previous screenshot">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="screenshot-dots" id="screenshot-dots"></div>
+        <button class="screenshot-btn" id="screenshot-next" aria-label="Next screenshot">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <!-- Install -->
   <section class="install" id="install">
     <div class="container">
@@ -217,16 +259,12 @@
         <!-- Edge -->
         <div class="install-card install-card--active">
           <div class="install-card-icon">
-            <svg width="36" height="36" viewBox="0 0 256 256" fill="none">
-              <defs><linearGradient id="edge-g1" x1="50%" y1="0%" x2="50%" y2="100%"><stop offset="0%" stop-color="#0F5197"/><stop offset="100%" stop-color="#0078D4"/></linearGradient></defs>
-              <circle cx="128" cy="128" r="128" fill="url(#edge-g1)"/>
-              <path d="M86 170c0 16 14 30 32 30 14 0 26-8 30-20H108c-12 0-22-10-22-22s10-22 22-22h60c0-36-28-64-64-64-36 0-64 28-64 64 0 12 4 24 10 34z" fill="#fff"/>
-            </svg>
+            <i class="fa-brands fa-edge fa-2x" style="color: #0078D4;"></i>
           </div>
           <h3>Microsoft Edge</h3>
           <p class="install-card-status install-card-status--live">Available Now</p>
-          <a href="https://microsoftedge.microsoft.com/addons/" target="_blank" rel="noopener" class="btn btn-primary btn-install">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          <a href="https://microsoftedge.microsoft.com/addons/detail/touchlock-%E2%80%93-fingerprint-b/aibbojojoeamjgikgailflpbhdpcjgln" target="_blank" rel="noopener" class="btn btn-primary btn-install">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
             Get from Edge Add-ons
           </a>
         </div>
@@ -234,32 +272,25 @@
         <!-- Chrome -->
         <div class="install-card install-card--coming-soon">
           <div class="install-card-icon">
-            <svg width="36" height="36" viewBox="0 0 256 256">
-              <circle cx="128" cy="128" r="128" fill="#f4f4f5"/>
-              <circle cx="128" cy="128" r="52" fill="#fff" stroke="#d4d4d8" stroke-width="8"/>
-              <circle cx="128" cy="128" r="20" fill="#a1a1aa"/>
-              <path d="M128 76l44 76H84z" fill="#d4d4d8" opacity="0.5"/>
-            </svg>
+            <i class="fa-brands fa-chrome fa-2x" style="color: #a1a1aa;"></i>
           </div>
           <h3>Google Chrome</h3>
           <p class="install-card-status install-card-status--soon">Coming Soon</p>
-          <button class="btn btn-disabled btn-install" disabled>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Chrome Web Store
-          </button>
+          <a href="#manual-instructions" class="btn btn-outline btn-install">
+            <i class="fa-solid fa-download"></i>
+            Use Manual Install
+          </a>
         </div>
 
         <!-- Manual -->
         <div class="install-card install-card--manual">
           <div class="install-card-icon">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
+            <i class="fa-solid fa-file-zipper fa-2x" style="color: #6366f1;"></i>
           </div>
           <h3>Manual Install</h3>
           <p class="install-card-status install-card-status--manual">Any Chromium Browser</p>
           <a href="https://github.com/mathinraj/TouchLock/releases/download/v1.0.2/TouchLock-v1.0.2.zip" class="btn btn-outline btn-install">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <i class="fa-solid fa-download"></i>
             Download ZIP (v1.0.2)
           </a>
         </div>
@@ -303,22 +334,27 @@
       </div>
       <div class="browser-list">
         <div class="browser-item browser-item--supported">
+          <i class="fa-brands fa-edge"></i>
           <span class="browser-name">Microsoft Edge</span>
           <span class="browser-status-badge">Supported</span>
         </div>
         <div class="browser-item browser-item--supported">
+          <i class="fa-brands fa-chrome"></i>
           <span class="browser-name">Google Chrome</span>
           <span class="browser-status-badge">Supported</span>
         </div>
         <div class="browser-item browser-item--supported">
+          <i class="fa-brands fa-brave"></i>
           <span class="browser-name">Brave</span>
           <span class="browser-status-badge">Supported</span>
         </div>
         <div class="browser-item browser-item--supported">
+          <i class="fa-brands fa-opera"></i>
           <span class="browser-name">Opera / Vivaldi</span>
           <span class="browser-status-badge">Should Work</span>
         </div>
         <div class="browser-item browser-item--unsupported">
+          <i class="fa-brands fa-firefox-browser"></i>
           <span class="browser-name">Firefox</span>
           <span class="browser-status-badge">Not Supported</span>
         </div>
@@ -335,9 +371,9 @@
         <span>TouchLock</span>
       </div>
       <div class="footer-links">
-        <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/mathinraj/TouchLock/releases" target="_blank" rel="noopener">Releases</a>
-        <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener">Report a Bug</a>
+        <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
+        <a href="https://github.com/mathinraj/TouchLock/releases" target="_blank" rel="noopener"><i class="fa-solid fa-tag"></i> Releases</a>
+        <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener"><i class="fa-solid fa-bug"></i> Report a Bug</a>
       </div>
       <p class="footer-copy">Made by <a href="https://github.com/mathinraj" target="_blank" rel="noopener">Mathinraj 💚</a></p>
     </div>

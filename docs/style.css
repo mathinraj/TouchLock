@@ -493,6 +493,104 @@ code {
   line-height: 1.6;
 }
 
+/* ===== Screenshots ===== */
+.screenshots {
+  padding: 100px 0;
+}
+
+.screenshot-gallery {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.screenshot-track {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.screenshot-slide {
+  min-width: 100%;
+  padding: 24px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.screenshot-img-wrapper {
+  width: 100%;
+  max-width: 720px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.screenshot-img-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.screenshot-caption {
+  margin-top: 16px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.screenshot-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.screenshot-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.screenshot-btn:hover {
+  background: var(--color-surface-2);
+  border-color: var(--color-primary);
+  color: var(--color-primary-hover);
+}
+
+.screenshot-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.screenshot-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.screenshot-dot.active {
+  background: var(--color-primary);
+  width: 24px;
+  border-radius: 4px;
+}
+
 /* ===== Install ===== */
 .install {
   padding: 100px 0;
@@ -524,13 +622,15 @@ code {
 }
 
 .install-card--coming-soon {
-  opacity: 0.65;
+  opacity: 0.75;
 }
 
 .install-card-icon {
   margin-bottom: 18px;
   display: flex;
   justify-content: center;
+  min-height: 36px;
+  align-items: center;
 }
 
 .install-card h3 {
@@ -697,6 +797,9 @@ code {
 }
 
 .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.875rem;
   color: var(--color-text-muted);
   transition: color 0.2s;
@@ -764,6 +867,10 @@ code {
 
   .manual-instructions {
     padding: 28px 20px;
+  }
+
+  .screenshot-slide {
+    padding: 16px 12px 12px;
   }
 
   .browser-list {
