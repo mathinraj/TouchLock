@@ -123,6 +123,108 @@
       </div>
     </section>
 
+    <!-- ── Lock Behavior ──────────────────────── -->
+    <section class="card">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Lock Behavior
+      </h2>
+      <p class="description">Control when your browser locks automatically.</p>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Lock on browser startup</span>
+          <span class="toggle-desc">Require authentication every time the browser opens</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-startup" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Auto-lock on idle</span>
+          <span class="toggle-desc">Lock the browser after a period of inactivity</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-idle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="field-inline" id="idle-timeout-field" style="display:none">
+        <label for="idle-timeout">Lock after</label>
+        <select id="idle-timeout" class="sq-select">
+          <option value="60">1 minute</option>
+          <option value="300" selected>5 minutes</option>
+          <option value="900">15 minutes</option>
+          <option value="1800">30 minutes</option>
+          <option value="3600">1 hour</option>
+        </select>
+      </div>
+
+      <div class="msg" id="lock-msg"></div>
+      <button id="btn-save-lock" class="btn btn-primary">Save Lock Settings</button>
+
+      <div class="status-row" id="lock-status">
+        <span class="dot gray"></span>
+        <span>Default settings</span>
+      </div>
+    </section>
+
+    <!-- ── Feature Request (collapsible) ────────── -->
+    <section class="card card-feature">
+      <div class="collapsible-header" id="fr-toggle">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          Request a Feature
+        </h2>
+        <svg class="chevron" id="fr-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <p class="description">Have an idea to make TouchLock better? Expand to send us your suggestion.</p>
+
+      <div class="collapsible-body" id="fr-body">
+        <div class="field-text">
+          <label for="fr-email">Your Email <span class="optional">(optional)</span></label>
+          <input type="email" id="fr-email" class="sq-answer" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field-text">
+          <label for="fr-category">Category</label>
+          <select id="fr-category" class="sq-select">
+            <option value="feature">New Feature</option>
+            <option value="improvement">Improvement</option>
+            <option value="bug">Bug Report</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field-text">
+          <label for="fr-message">Your Message</label>
+          <textarea id="fr-message" class="fr-textarea" rows="4" placeholder="Describe your idea or issue…"></textarea>
+        </div>
+
+        <div class="msg" id="fr-msg"></div>
+        <button id="btn-send-fr" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          Send Request
+        </button>
+      </div>
+    </section>
+
     <!-- ── Danger Zone ───────────────────────── -->
     <section class="card card-danger">
       <h2>Danger Zone</h2>
@@ -131,7 +233,7 @@
     </section>
 
     <footer class="footer">
-      TouchLock – Fingerprint Browser Lock v1.0.0
+      TouchLock – Fingerprint Browser Lock v1.0.2
     </footer>
   </div>
 

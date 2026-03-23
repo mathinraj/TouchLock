@@ -116,16 +116,54 @@ async function verifyPin(pin) {
   return { success: false, error: 'Incorrect PIN.' };
 }
 
+// ── Idle detection (auto-lock on inactivity) ────
+
+async function applyIdleSettings() {
+  const { idleLockEnabled, idleLockTimeout } = await chrome.storage.local.get([
+    'idleLockEnabled', 'idleLockTimeout'
+  ]);
+
+  if (idleLockEnabled) {
+    const seconds = idleLockTimeout || 300;
+    chrome.idle.setDetectionInterval(seconds);
+  }
+}
+
+chrome.idle.onStateChanged.addListener(async (newState) => {
+  if (newState !== 'idle' && newState !== 'locked') return;
+
+  const { idleLockEnabled, setupComplete } = await chrome.storage.local.get([
+    'idleLockEnabled', 'setupComplete'
+  ]);
+
+  if (!idleLockEnabled || !setupComplete) return;
+  if (await getIsLocked()) return;
+
+  await lockBrowser();
+});
+
 // ── Lifecycle events ─────────────────────────────
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install') {
-    await chrome.storage.local.set({ isLocked: false, setupComplete: false });
+    await chrome.storage.local.set({
+      isLocked: false,
+      setupComplete: false,
+      lockOnStartup: true,
+      idleLockEnabled: false,
+      idleLockTimeout: 300
+    });
     chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
   }
+  applyIdleSettings();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
+  applyIdleSettings();
+
+  const { lockOnStartup } = await chrome.storage.local.get('lockOnStartup');
+  if (lockOnStartup === false) return;
+
   if (await isSetupComplete()) {
     await lockBrowser();
   }
@@ -270,6 +308,12 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
           height: 380,
           focused: true
         });
+        sendResponse({ success: true });
+        break;
+      }
+
+      case 'updateIdleSettings': {
+        await applyIdleSettings();
         sendResponse({ success: true });
         break;
       }

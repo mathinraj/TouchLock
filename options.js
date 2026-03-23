@@ -3,13 +3,22 @@
    (PIN setup + WebAuthn + Security Questions)
    ─────────────────────────────────────────────── */
 
+// ── EmailJS Configuration ────────────────────
+// Sign up at https://www.emailjs.com (free tier: 200 emails/month)
+// 1. Create a service (e.g., Gmail) → copy Service ID
+// 2. Create a template with variables: {{from_email}}, {{category}}, {{message}}, {{timestamp}}, {{version}}
+// 3. Copy your Public Key from Account > API Keys
+const EMAILJS_SERVICE_ID  = 'service_em2o2a6';   // ← Replace with your EmailJS service ID
+const EMAILJS_TEMPLATE_ID = 'template_6595ut4';  // ← Replace with your EmailJS template ID
+const EMAILJS_PUBLIC_KEY  = 'R2Yro3gG1FbXS9fJm';   // ← Replace with your EmailJS public key
+
 const SECURITY_QUESTIONS = [
   { id: 1,  text: 'What is the name of your first pet?' },
   { id: 2,  text: 'What was the name of your first school?' },
   { id: 3,  text: 'In what city were you born?' },
   { id: 4,  text: 'What was your childhood nickname?' },
   { id: 6,  text: 'What is the name of your favorite childhood friend?' },
-  { id: 9,  text: 'What was the name of your first stuffed animal or toy?' },
+  { id: 9,  text: 'What was the name of your first animal or toy?' },
   { id: 10, text: 'What is your favorite sports team?' },
   { id: 13, text: 'What was the name of your first employer?' },
   { id: 14, text: 'In what city did you have your first job?' }
@@ -35,9 +44,24 @@ async function init() {
   const sqMsg         = document.getElementById('sq-msg');
   const sqStatus      = document.getElementById('sq-status');
 
+  const toggleStartup = document.getElementById('toggle-startup');
+  const toggleIdle    = document.getElementById('toggle-idle');
+  const idleField     = document.getElementById('idle-timeout-field');
+  const idleTimeout   = document.getElementById('idle-timeout');
+  const btnSaveLock   = document.getElementById('btn-save-lock');
+  const lockMsg       = document.getElementById('lock-msg');
+  const lockStatus    = document.getElementById('lock-status');
+
+  const frEmail       = document.getElementById('fr-email');
+  const frCategory    = document.getElementById('fr-category');
+  const frMessage     = document.getElementById('fr-message');
+  const btnSendFR     = document.getElementById('btn-send-fr');
+  const frMsg         = document.getElementById('fr-msg');
+
   const btnReset      = document.getElementById('btn-reset');
 
   populateQuestionDropdowns();
+  await loadLockSettings();
   await refreshStatus();
 
   // ── Save PIN ─────────────────────────────────
@@ -191,6 +215,103 @@ async function init() {
     await refreshStatus();
   });
 
+  // ── Lock Behavior Settings ──────────────────
+
+  toggleIdle.addEventListener('change', () => {
+    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
+  });
+
+  btnSaveLock.addEventListener('click', async () => {
+    await chrome.storage.local.set({
+      lockOnStartup: toggleStartup.checked,
+      idleLockEnabled: toggleIdle.checked,
+      idleLockTimeout: parseInt(idleTimeout.value, 10)
+    });
+
+    chrome.runtime.sendMessage({ action: 'updateIdleSettings' });
+
+    showMsg(lockMsg, 'Lock settings saved.', 'success');
+    await refreshStatus();
+  });
+
+  async function loadLockSettings() {
+    const data = await chrome.storage.local.get([
+      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout'
+    ]);
+
+    toggleStartup.checked = data.lockOnStartup !== false;
+    toggleIdle.checked = data.idleLockEnabled === true;
+    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
+
+    if (data.idleLockTimeout) {
+      idleTimeout.value = String(data.idleLockTimeout);
+    }
+  }
+
+  // ── Feature Request (collapsible + EmailJS) ─
+
+  const frToggle  = document.getElementById('fr-toggle');
+  const frBody    = document.getElementById('fr-body');
+  const frChevron = document.getElementById('fr-chevron');
+
+  frToggle.addEventListener('click', () => {
+    const isOpen = frBody.classList.toggle('expanded');
+    frChevron.classList.toggle('open', isOpen);
+  });
+
+  btnSendFR.addEventListener('click', async () => {
+    const message = frMessage.value.trim();
+
+    if (message.length < 10) {
+      showMsg(frMsg, 'Please enter at least 10 characters describing your request.', 'error');
+      return;
+    }
+
+    btnSendFR.disabled = true;
+    btnSendFR.textContent = 'Sending…';
+
+    try {
+      const payload = {
+        service_id:  EMAILJS_SERVICE_ID,
+        template_id: EMAILJS_TEMPLATE_ID,
+        user_id:     EMAILJS_PUBLIC_KEY,
+        template_params: {
+          from_email: frEmail.value.trim() || 'Not provided',
+          category:   frCategory.value,
+          message:    message,
+          timestamp:  new Date().toISOString(),
+          version:    chrome.runtime.getManifest().version
+        }
+      };
+
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        showMsg(frMsg, 'Thank you! Your request has been sent.', 'success');
+        frEmail.value = '';
+        frMessage.value = '';
+        frCategory.value = 'feature';
+      } else {
+        throw new Error(`Status ${res.status}`);
+      }
+    } catch (err) {
+      showMsg(frMsg, 'Failed to send. Please try again later.', 'error');
+    }
+
+    btnSendFR.disabled = false;
+    btnSendFR.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+      Send Request`;
+  });
+
   // ── Reset All ────────────────────────────────
 
   btnReset.addEventListener('click', async () => {
@@ -200,10 +321,12 @@ async function init() {
     showMsg(pinMsg, '', '');
     showMsg(bioMsg, '', '');
     showMsg(sqMsg, '', '');
+    showMsg(lockMsg, '', '');
     pin1.value = '';
     pin2.value = '';
     sqAnswers.forEach(a => a.value = '');
     sqSelects.forEach(s => s.value = '');
+    await loadLockSettings();
     await refreshStatus();
     showMsg(pinMsg, 'All data has been reset.', 'success');
   });
@@ -243,7 +366,8 @@ async function init() {
 
   async function refreshStatus() {
     const data = await chrome.storage.local.get([
-      'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured', 'setupComplete'
+      'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured', 'setupComplete',
+      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout'
     ]);
 
     if (data.pinHash) {
@@ -265,6 +389,15 @@ async function init() {
     } else {
       setStatus(sqStatus, 'Not configured', 'gray');
     }
+
+    const parts = [];
+    if (data.lockOnStartup !== false) parts.push('Startup lock ON');
+    else parts.push('Startup lock OFF');
+    if (data.idleLockEnabled) {
+      const mins = Math.floor((data.idleLockTimeout || 300) / 60);
+      parts.push(`Idle lock: ${mins}m`);
+    }
+    setStatus(lockStatus, parts.join(' · '), data.lockOnStartup !== false || data.idleLockEnabled ? 'green' : 'gray');
   }
 }
 
