@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – Fingerprint Browser Lock | Reset PIN</title>
+  <link rel="stylesheet" href="recovery.css">
+</head>
+<body>
+  <div class="recovery-screen">
+    <div class="card">
+      <div class="icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <h1 class="title">Reset Your PIN</h1>
+      <p class="subtitle" id="subtitle">Answer 2 security questions to verify your identity and reset your PIN.</p>
+
+      <!-- No SQ configured -->
+      <div id="no-sq" class="info-box" style="display:none">
+        <p>No security questions have been configured for this profile.</p>
+        <p class="muted">You can reset by removing and re-installing the extension, or deleting the browser profile.</p>
+        <a href="lock.html" class="back-link">&larr; Back to lock screen</a>
+      </div>
+
+      <!-- Questions form -->
+      <div id="sq-form" style="display:none">
+        <div class="question-group">
+          <div class="question-item">
+            <label id="q-label-1" class="q-label">Loading…</label>
+            <input type="text" id="q-answer-1" class="q-input" placeholder="Your answer" autocomplete="off">
+          </div>
+          <div class="question-item">
+            <label id="q-label-2" class="q-label">Loading…</label>
+            <input type="text" id="q-answer-2" class="q-input" placeholder="Your answer" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <button id="btn-verify" class="btn btn-primary">Verify & Reset</button>
+        <a href="lock.html" class="back-link">&larr; Back to lock screen</a>
+      </div>
+
+      <!-- Success -->
+      <div id="sq-success" style="display:none"></div>
+    </div>
+  </div>
+
+  <script src="recovery.js"></script>
+</body>
+</html>

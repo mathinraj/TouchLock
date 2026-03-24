@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – Fingerprint Browser Lock | Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <img src="icons/icon.svg" width="32" height="32" alt="TouchLock">
+      </div>
+      <div>
+        <h1>TouchLock Settings</h1>
+        <p class="subtitle">Configure your screen lock preferences</p>
+      </div>
+    </header>
+
+    <!-- ── PIN Section ───────────────────────── -->
+    <section class="card">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        6-Digit PIN
+      </h2>
+      <p class="description">Set a fallback PIN for unlocking when biometrics are unavailable.</p>
+
+      <div class="field">
+        <label for="pin1">Enter PIN</label>
+        <input type="password" id="pin1" maxlength="6" inputmode="numeric"
+               pattern="[0-9]*" placeholder="••••••" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="pin2">Confirm PIN</label>
+        <input type="password" id="pin2" maxlength="6" inputmode="numeric"
+               pattern="[0-9]*" placeholder="••••••" autocomplete="off">
+      </div>
+
+      <div class="msg" id="pin-msg"></div>
+      <button id="btn-save-pin" class="btn btn-primary">Save PIN</button>
+
+      <div class="status-row" id="pin-status">
+        <span class="dot gray"></span>
+        <span>Not configured</span>
+      </div>
+    </section>
+
+    <!-- ── Biometric Section ─────────────────── -->
+    <section class="card">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+          <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
+          <path d="M10 12c0 4-1 8-3 10"/>
+          <path d="M14 12c0 2.5-.5 5-1.5 7"/>
+          <path d="M18 12c0 1-.5 3-1 4.5"/>
+          <path d="M22 12a10 10 0 0 1-2 6"/>
+          <path d="M10 12a2 2 0 1 1 4 0"/>
+        </svg>
+        Biometric Authentication
+      </h2>
+      <p class="description">
+        Register Touch ID or Windows Hello as the primary unlock method.
+        Requires a platform authenticator on your device.
+      </p>
+
+      <div class="msg" id="bio-msg"></div>
+      <button id="btn-register-bio" class="btn btn-secondary">Register Biometrics</button>
+      <button id="btn-remove-bio" class="btn btn-danger hidden">Remove Biometric Credential</button>
+
+      <div class="status-row" id="bio-status">
+        <span class="dot gray"></span>
+        <span>Not registered</span>
+      </div>
+    </section>
+
+    <!-- ── Security Questions ────────────────── -->
+    <section class="card">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Security Questions
+      </h2>
+      <p class="description">
+        Select and answer 3 security questions. If you forget your PIN, any 2 correct
+        answers will let you reset it. Answers are encrypted before storage.
+      </p>
+
+      <div class="sq-group" id="sq-group">
+        <div class="sq-item">
+          <label>Question 1</label>
+          <select class="sq-select" id="sq-select-1"><option value="">— Choose a question —</option></select>
+          <input type="text" class="sq-answer" id="sq-answer-1" placeholder="Your answer" autocomplete="off">
+        </div>
+        <div class="sq-item">
+          <label>Question 2</label>
+          <select class="sq-select" id="sq-select-2"><option value="">— Choose a question —</option></select>
+          <input type="text" class="sq-answer" id="sq-answer-2" placeholder="Your answer" autocomplete="off">
+        </div>
+        <div class="sq-item">
+          <label>Question 3</label>
+          <select class="sq-select" id="sq-select-3"><option value="">— Choose a question —</option></select>
+          <input type="text" class="sq-answer" id="sq-answer-3" placeholder="Your answer" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="msg" id="sq-msg"></div>
+      <button id="btn-save-sq" class="btn btn-primary">Save Security Questions</button>
+
+      <div class="status-row" id="sq-status">
+        <span class="dot gray"></span>
+        <span>Not configured</span>
+      </div>
+    </section>
+
+    <!-- ── Lock Behavior ──────────────────────── -->
+    <section class="card">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Lock Behavior
+      </h2>
+      <p class="description">Control when your browser locks automatically.</p>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Lock on browser startup</span>
+          <span class="toggle-desc">Require authentication every time the browser opens</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-startup" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Auto-lock on idle</span>
+          <span class="toggle-desc">Lock the browser after a period of inactivity</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-idle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="field-inline" id="idle-timeout-field" style="display:none">
+        <label for="idle-timeout">Lock after</label>
+        <select id="idle-timeout" class="sq-select">
+          <option value="60">1 minute</option>
+          <option value="300" selected>5 minutes</option>
+          <option value="900">15 minutes</option>
+          <option value="1800">30 minutes</option>
+          <option value="3600">1 hour</option>
+        </select>
+      </div>
+
+      <div class="msg" id="lock-msg"></div>
+      <button id="btn-save-lock" class="btn btn-primary">Save Lock Settings</button>
+
+      <div class="status-row" id="lock-status">
+        <span class="dot gray"></span>
+        <span>Default settings</span>
+      </div>
+    </section>
+
+    <!-- ── Feature Request (collapsible) ────────── -->
+    <section class="card card-feature">
+      <div class="collapsible-header" id="fr-toggle">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          Request a Feature
+        </h2>
+        <svg class="chevron" id="fr-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <p class="description">Have an idea to make TouchLock better? Expand to send us your suggestion.</p>
+
+      <div class="collapsible-body" id="fr-body">
+        <div class="field-text">
+          <label for="fr-email">Your Email <span class="optional">(optional)</span></label>
+          <input type="email" id="fr-email" class="sq-answer" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="field-text">
+          <label for="fr-category">Category</label>
+          <select id="fr-category" class="sq-select">
+            <option value="feature">New Feature</option>
+            <option value="improvement">Improvement</option>
+            <option value="bug">Bug Report</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field-text">
+          <label for="fr-message">Your Message</label>
+          <textarea id="fr-message" class="fr-textarea" rows="4" placeholder="Describe your idea or issue…"></textarea>
+        </div>
+
+        <div class="msg" id="fr-msg"></div>
+        <button id="btn-send-fr" class="btn btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          Send Request
+        </button>
+      </div>
+    </section>
+
+    <!-- ── Danger Zone ───────────────────────── -->
+    <section class="card card-danger">
+      <h2>Danger Zone</h2>
+      <p class="description">Reset all TouchLock data. You will need to set up again.</p>
+      <button id="btn-reset" class="btn btn-danger">Reset All Data</button>
+    </section>
+
+    <footer class="footer">
+      TouchLock – Fingerprint Browser Lock v1.0.2
+    </footer>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
