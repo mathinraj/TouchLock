@@ -3,21 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TouchLock – Fingerprint Browser Lock</title>
-  <meta name="description" content="Lock your browser profile with Touch ID, Windows Hello, or a 6-digit PIN. Free, open-source Chromium extension.">
-  <meta name="keywords" content="browser lock, fingerprint lock, Touch ID, Windows Hello, browser extension, privacy, security">
-  <meta name="author" content="mathinraj">
+  <title>TouchLock – Lock Your Browser with Fingerprint, Touch ID & PIN</title>
+  <meta name="description" content="TouchLock is a free, open-source browser extension that locks your browser profile with Touch ID, Windows Hello, or a 6-digit PIN. Protect your history, bookmarks, passwords, and downloads on Edge, Firefox, Chrome, and Brave.">
+  <meta name="keywords" content="browser lock extension, fingerprint browser lock, Touch ID browser, Windows Hello browser lock, lock browser with PIN, browser privacy extension, protect browser history, browser security extension, Edge lock extension, Firefox lock extension, Chrome lock extension, biometric browser lock, lock browser profile, open source browser lock">
+  <meta name="author" content="Mathinraj">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="theme-color" content="#10b981">
+  <link rel="canonical" href="https://touchlock.vercel.app/">
+  <meta name="google-site-verification" content="7OHgQl0_ZtSYxF2eXQIzCUngjx1qjT4jGzC4Nbg8K-Q">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="TouchLock – Fingerprint Browser Lock">
-  <meta property="og:description" content="Lock your browser profile with biometrics or PIN. Free & open-source.">
+  <meta property="og:title" content="TouchLock – Lock Your Browser with Fingerprint & PIN">
+  <meta property="og:description" content="Free, open-source browser extension that locks your entire browser profile with Touch ID, Windows Hello, or a 6-digit PIN. Works on Edge, Firefox, Chrome & Brave.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mathinraj.github.io/TouchLock/">
-  <meta property="og:image" content="https://mathinraj.github.io/TouchLock/assets/og-preview.png">
+  <meta property="og:url" content="https://touchlock.vercel.app/">
+  <meta property="og:image" content="https://touchlock.vercel.app/assets/og-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="TouchLock – Lock your browser with a fingerprint">
+  <meta property="og:site_name" content="TouchLock">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TouchLock – Lock Your Browser with Fingerprint & PIN">
+  <meta name="twitter:description" content="Free, open-source browser extension that locks your entire browser profile with Touch ID, Windows Hello, or a 6-digit PIN.">
+  <meta name="twitter:image" content="https://touchlock.vercel.app/assets/og-preview.png">
+  <meta name="twitter:image:alt" content="TouchLock – Lock your browser with a fingerprint">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="icon" type="image/png" sizes="128x128" href="assets/logo-128.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="assets/logo-128.png">
 
   <!-- Font Awesome Kit -->
   <script src="https://kit.fontawesome.com/5432a717c1.js" crossorigin="anonymous"></script>
@@ -28,6 +45,97 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+
+  <!-- Structured Data: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TouchLock",
+    "headline": "Lock Your Browser with Fingerprint, Touch ID & PIN",
+    "description": "TouchLock is a free, open-source browser extension that locks your browser profile with Touch ID, Windows Hello, or a 6-digit PIN. Protect your history, bookmarks, passwords, and downloads.",
+    "url": "https://touchlock.vercel.app/",
+    "applicationCategory": "BrowserExtension",
+    "operatingSystem": "Windows, macOS, Linux",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "softwareVersion": "1.0.2",
+    "author": {
+      "@type": "Person",
+      "name": "Mathinraj",
+      "url": "https://github.com/mathinraj"
+    },
+    "license": "https://github.com/mathinraj/TouchLock/blob/main/LICENSE",
+    "image": "https://touchlock.vercel.app/assets/og-preview.png",
+    "screenshot": [
+      "https://touchlock.vercel.app/assets/Screenshots/image1.png",
+      "https://touchlock.vercel.app/assets/Screenshots/image3.png",
+      "https://touchlock.vercel.app/assets/Screenshots/image2.png"
+    ],
+    "featureList": [
+      "Biometric unlock with Touch ID and Windows Hello",
+      "6-digit PIN with SHA-256 hashing",
+      "Profile-level browser lock",
+      "Auto-lock on startup",
+      "Tab guard protection",
+      "PIN recovery via security questions"
+    ],
+    "browserRequirements": "Chromium 110+ (Manifest V3) or Firefox 109+ (Manifest V2)"
+  }
+  </script>
+
+  <!-- Structured Data: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does TouchLock lock my browser?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TouchLock locks your entire browser profile on startup, blocking access to history, downloads, bookmarks, and all tabs until you authenticate with Touch ID, Windows Hello, or a 6-digit PIN."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which browsers does TouchLock support?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TouchLock supports Microsoft Edge, Google Chrome, Brave, Opera, Vivaldi, and Firefox. It requires Chromium 110+ (Manifest V3) or Firefox 109+ (Manifest V2)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is TouchLock free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, TouchLock is completely free and open-source. It is available on the Edge Add-ons store, Firefox Add-ons, and as a manual download from GitHub."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if I forget my PIN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TouchLock includes PIN recovery. During setup you choose 3 security questions — answer 2 of them correctly to reset your PIN. Your data stays safe throughout the process."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can someone bypass the lock screen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TouchLock uses Tab Guards that prevent switching tabs, opening new tabs, or closing the lock tab. Combined with auto-lock on startup, there is no way to access your browser content without authenticating."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -50,8 +158,10 @@
     </div>
   </nav>
 
+  <main>
+
   <!-- Hero -->
-  <section class="hero">
+  <section class="hero" aria-label="Introduction">
     <div class="hero-glow"></div>
     <div class="container hero-content">
       <div class="hero-badge">Open Source &middot; Free Forever</div>
@@ -100,7 +210,7 @@
   </section>
 
   <!-- Features -->
-  <section class="features" id="features">
+  <section class="features" id="features" aria-label="Features">
     <div class="container">
       <div class="section-header">
         <h2>Everything you need to<br><span class="gradient-text">secure your browser</span></h2>
@@ -154,7 +264,7 @@
   </section>
 
   <!-- How It Works -->
-  <section class="how-it-works" id="how-it-works">
+  <section class="how-it-works" id="how-it-works" aria-label="How it works">
     <div class="container">
       <div class="section-header">
         <h2>Simple to set up,<br><span class="gradient-text">impossible to bypass</span></h2>
@@ -189,7 +299,7 @@
   </section>
 
   <!-- Screenshots -->
-  <section class="screenshots" id="screenshots">
+  <section class="screenshots" id="screenshots" aria-label="Screenshots">
     <div class="container">
       <div class="section-header">
         <h2>See it in <span class="gradient-text">action</span></h2>
@@ -199,37 +309,37 @@
         <div class="screenshot-track" id="screenshot-track">
           <div class="screenshot-slide">
             <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image1.png" alt="Lock Screen" loading="lazy">
+              <img src="assets/Screenshots/image1.png" alt="TouchLock lock screen showing PIN entry keypad and biometric unlock button" loading="lazy" width="640" height="400">
             </div>
             <p class="screenshot-caption">Lock Screen — PIN entry with biometric option</p>
           </div>
           <div class="screenshot-slide">
             <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image3.png" alt="Touch ID Auto-Trigger" loading="lazy">
+              <img src="assets/Screenshots/image3.png" alt="TouchLock auto-triggering Touch ID and Windows Hello biometric authentication on browser startup" loading="lazy" width="640" height="400">
             </div>
             <p class="screenshot-caption">Auto-triggers Touch ID &amp; Windows Hello on startup</p>
           </div>
           <div class="screenshot-slide">
             <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image2.png" alt="Profile-Level Lock" loading="lazy">
+              <img src="assets/Screenshots/image2.png" alt="TouchLock profile-level lock blocking access to browser history, downloads, and all tabs" loading="lazy" width="640" height="400">
             </div>
             <p class="screenshot-caption">Profile-Level Lock — blocks history, downloads &amp; all tabs</p>
           </div>
           <div class="screenshot-slide">
             <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image4.png" alt="Toolbar Popup" loading="lazy">
+              <img src="assets/Screenshots/image4.png" alt="TouchLock toolbar popup for one-click browser locking from the extension icon" loading="lazy" width="640" height="400">
             </div>
             <p class="screenshot-caption">One-click lock from the toolbar popup</p>
           </div>
           <div class="screenshot-slide">
             <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image6.png" alt="Settings Page" loading="lazy">
+              <img src="assets/Screenshots/image6.png" alt="TouchLock settings page for configuring PIN, security questions, and biometric authentication" loading="lazy" width="640" height="400">
             </div>
             <p class="screenshot-caption">Settings — PIN, security questions &amp; biometric setup</p>
           </div>
           <div class="screenshot-slide">
             <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image5.png" alt="PIN Recovery" loading="lazy">
+              <img src="assets/Screenshots/image5.png" alt="TouchLock PIN recovery screen with security questions to reset forgotten PIN" loading="lazy" width="640" height="400">
             </div>
             <p class="screenshot-caption">PIN Recovery — reset with security questions</p>
           </div>
@@ -248,7 +358,7 @@
   </section>
 
   <!-- Install -->
-  <section class="install" id="install">
+  <section class="install" id="install" aria-label="Install TouchLock">
     <div class="container">
       <div class="section-header">
         <h2>Get <span class="gradient-text">TouchLock</span></h2>
@@ -340,7 +450,7 @@
   </section>
 
   <!-- Compatibility -->
-  <section class="compatibility">
+  <section class="compatibility" aria-label="Browser compatibility">
     <div class="container">
       <div class="section-header">
         <h2>Works with your browser</h2>
@@ -375,6 +485,8 @@
       <p class="compat-note">Chromium 110+ (Manifest V3) &amp; Firefox 109+ (Manifest V2)</p>
     </div>
   </section>
+
+  </main>
 
   <!-- Footer -->
   <footer class="footer">
