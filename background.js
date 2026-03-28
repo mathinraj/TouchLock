@@ -177,9 +177,15 @@ function findGuardTab(tabs) {
       || tabs.find(t => isAllowedWhileLocked(t.url));
 }
 
-// Guard 1: When user switches to a non-allowed tab, force them back
+// Guard 1: When user switches to a non-allowed tab, force them back.
+// When unlocked, clear any stale overlay the tab may have missed.
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  if (!(await getIsLocked())) return;
+  if (!(await getIsLocked())) {
+    try {
+      await chrome.tabs.sendMessage(activeInfo.tabId, { action: 'unlock' });
+    } catch (_) {}
+    return;
+  }
 
   try {
     const tab = await chrome.tabs.get(activeInfo.tabId);

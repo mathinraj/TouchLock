@@ -29,6 +29,28 @@
     }
   });
 
+  // ── React to storage changes (catches unlock even if tab missed the message) ─
+
+  try {
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area !== 'local' || !changes.isLocked) return;
+      if (changes.isLocked.newValue === false) hideOverlay();
+    });
+  } catch (_) {}
+
+  // ── Re-check lock state when tab becomes visible again ─
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') return;
+    if (!document.getElementById(OVERLAY_ID)) return;
+    try {
+      chrome.runtime.sendMessage({ action: 'getState' }, (res) => {
+        if (chrome.runtime.lastError) return;
+        if (res && !res.isLocked) hideOverlay();
+      });
+    } catch (_) {}
+  });
+
   // ── Build overlay ────────────────────────────
 
   function showOverlay() {
