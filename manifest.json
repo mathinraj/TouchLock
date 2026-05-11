@@ -10,10 +10,10 @@
     "idle"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/scripts/background.js"
   },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/pages/popup.html",
     "default_title": "TouchLock – Fingerprint Browser Lock",
     "default_icon": {
       "16": "icons/icon-16.png",
@@ -21,12 +21,12 @@
       "128": "icons/icon-128.png"
     }
   },
-  "options_page": "options.html",
+  "options_page": "src/pages/options.html",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"],
+      "js": ["src/scripts/content.js"],
+      "css": ["src/styles/content.css"],
       "run_at": "document_start",
       "all_frames": true
     }

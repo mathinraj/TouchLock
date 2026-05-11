@@ -89,7 +89,7 @@
       `;
 
       setTimeout(() => {
-        window.location.href = chrome.runtime.getURL('options.html');
+        window.location.href = chrome.runtime.getURL('src/pages/options.html');
       }, 2000);
 
     } else {

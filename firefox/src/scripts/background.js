@@ -1,10 +1,10 @@
 /* ───────────────────────────────────────────────
-   TouchLock – Background Service Worker (MV3)
+   TouchLock – Background Script (Firefox MV3 Event Page)
    ─────────────────────────────────────────────── */
 
-const LOCK_URL     = chrome.runtime.getURL('lock.html');
-const RECOVERY_URL = chrome.runtime.getURL('recovery.html');
-const OPTIONS_URL  = chrome.runtime.getURL('options.html');
+const LOCK_URL     = chrome.runtime.getURL('src/pages/lock.html');
+const RECOVERY_URL = chrome.runtime.getURL('src/pages/recovery.html');
+const OPTIONS_URL  = chrome.runtime.getURL('src/pages/options.html');
 
 // ── Helpers ──────────────────────────────────────
 
@@ -44,7 +44,6 @@ async function hashPin(pin, salt) {
 async function lockBrowser() {
   await chrome.storage.local.set({ isLocked: true });
 
-  // Open a lock tab in every open window
   const windows = await chrome.windows.getAll({ populate: true });
   for (const win of windows) {
     if (win.type !== 'normal') continue;
@@ -56,7 +55,6 @@ async function lockBrowser() {
     }
   }
 
-  // Inject content overlay on all non-lock tabs (visual safety net)
   const tabs = await chrome.tabs.query({});
   for (const tab of tabs) {
     if (!isLockUrl(tab.url)) {
@@ -68,14 +66,12 @@ async function lockBrowser() {
 async function unlockBrowser() {
   await chrome.storage.local.set({ isLocked: false });
 
-  // Close all lock tabs
   const allTabs = await chrome.tabs.query({});
   const lockTabIds = allTabs.filter(t => isLockUrl(t.url)).map(t => t.id);
   if (lockTabIds.length > 0) {
     try { await chrome.tabs.remove(lockTabIds); } catch (_) {}
   }
 
-  // Remove content overlays from remaining tabs
   const remaining = await chrome.tabs.query({});
   for (const tab of remaining) {
     try {
@@ -91,14 +87,14 @@ async function injectOverlay(tabId) {
     try {
       await chrome.scripting.executeScript({
         target: { tabId, allFrames: true },
-        files: ['content.js']
+        files: ['src/scripts/content.js']
       });
       await chrome.scripting.insertCSS({
         target: { tabId, allFrames: true },
-        files: ['content.css']
+        files: ['src/styles/content.css']
       });
       await chrome.tabs.sendMessage(tabId, { action: 'lock' });
-    } catch (_e) { /* restricted page */ }
+    } catch (_e) { /* restricted page (about:, etc.) */ }
   }
 }
 
@@ -153,7 +149,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       idleLockEnabled: false,
       idleLockTimeout: 300
     });
-    chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+    chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/options.html') });
   }
   applyIdleSettings();
 });
@@ -171,14 +167,11 @@ chrome.runtime.onStartup.addListener(async () => {
 
 // ── Tab guards (profile-level lock) ─────────────
 
-// Finds the best "guard" tab (lock or recovery) to redirect to in a window
 function findGuardTab(tabs) {
   return tabs.find(t => isLockUrl(t.url))
       || tabs.find(t => isAllowedWhileLocked(t.url));
 }
 
-// Guard 1: When user switches to a non-allowed tab, force them back.
-// When unlocked, clear any stale overlay the tab may have missed.
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   if (!(await getIsLocked())) {
     try {
@@ -201,7 +194,6 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
   } catch (_) {}
 });
 
-// Guard 2: When a new tab is created, redirect focus to guard tab
 chrome.tabs.onCreated.addListener(async (tab) => {
   if (!(await getIsLocked())) return;
   if (isAllowedWhileLocked(tab.url) || isAllowedWhileLocked(tab.pendingUrl)) return;
@@ -215,7 +207,6 @@ chrome.tabs.onCreated.addListener(async (tab) => {
   } catch (_) {}
 });
 
-// Guard 3: When a tab finishes loading, ensure guard tab is active + overlay injected
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (!(await getIsLocked())) return;
   if (changeInfo.status !== 'complete') return;
@@ -235,7 +226,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   } catch (_) {}
 });
 
-// Guard 4: If a guard tab is closed while locked, re-create a lock tab
 chrome.tabs.onRemoved.addListener(async (_tabId, removeInfo) => {
   if (!(await getIsLocked())) return;
   if (removeInfo.isWindowClosing) return;
@@ -249,7 +239,6 @@ chrome.tabs.onRemoved.addListener(async (_tabId, removeInfo) => {
   } catch (_) {}
 });
 
-// Guard 5: New windows while locked get a lock tab
 chrome.windows.onCreated.addListener(async (window) => {
   if (!(await getIsLocked())) return;
   if (window.type !== 'normal') return;
@@ -308,7 +297,7 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 
       case 'openBiometricAuth': {
         chrome.windows.create({
-          url: chrome.runtime.getURL('auth.html'),
+          url: chrome.runtime.getURL('src/pages/auth.html'),
           type: 'popup',
           width: 420,
           height: 380,
@@ -326,7 +315,6 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 
       case 'recoveryComplete': {
         await chrome.storage.local.set({ isLocked: false });
-        // Remove content overlays from all tabs
         const allTabs = await chrome.tabs.query({});
         for (const tab of allTabs) {
           try {
