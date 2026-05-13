@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to TouchLock</title>
+  <link rel="stylesheet" href="../styles/welcome.css">
+</head>
+<body>
+  <div class="page">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-icon">
+        <img src="../../icons/icon.svg" width="72" height="72" alt="TouchLock">
+      </div>
+      <h1>Welcome to <span class="gradient-text">TouchLock</span></h1>
+      <p class="hero-sub">Your browser profile is about to get a whole lot more secure.</p>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+            <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
+            <path d="M10 12c0 4-1 8-3 10"/>
+            <path d="M14 12c0 2.5-.5 5-1.5 7"/>
+            <path d="M18 12c0 1-.5 3-1 4.5"/>
+            <path d="M22 12a10 10 0 0 1-2 6"/>
+            <path d="M10 12a2 2 0 1 1 4 0"/>
+          </svg>
+        </div>
+        <h3>Biometric Unlock</h3>
+        <p>Use Touch ID or Windows Hello to unlock your browser instantly with a single touch.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h3>6-Digit PIN</h3>
+        <p>Set a secure fallback PIN for when biometrics aren't available or supported.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <h3>Auto-Lock</h3>
+        <p>Automatically lock your browser on startup or after a period of inactivity.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3>Profile-Level Security</h3>
+        <p>Every tab and window is locked down — no way to peek at your data while locked.</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="steps-section">
+      <h2>Get started in 3 simple steps</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Set your PIN</h4>
+            <p>Create a 6-digit PIN as your secure fallback unlock method.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Register biometrics</h4>
+            <p>Enable Touch ID or Windows Hello for instant, passwordless unlocking.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Add security questions</h4>
+            <p>Choose recovery questions so you can reset your PIN if you ever forget it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <button id="btn-setup" class="btn btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Open Setup
+      </button>
+      <p class="cta-hint">You can always access settings from the extension toolbar icon.</p>
+    </section>
+
+    <footer class="footer">
+      TouchLock – Fingerprint Browser Lock v1.0.3
+    </footer>
+  </div>
+
+  <script src="../scripts/welcome.js"></script>
+</body>
+</html>

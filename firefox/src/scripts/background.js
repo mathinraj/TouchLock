@@ -5,6 +5,7 @@
 const LOCK_URL     = chrome.runtime.getURL('src/pages/lock.html');
 const RECOVERY_URL = chrome.runtime.getURL('src/pages/recovery.html');
 const OPTIONS_URL  = chrome.runtime.getURL('src/pages/options.html');
+const WELCOME_URL  = chrome.runtime.getURL('src/pages/welcome.html');
 
 // ── Helpers ──────────────────────────────────────
 
@@ -16,7 +17,8 @@ function isAllowedWhileLocked(url) {
   return url && (
     url.startsWith(LOCK_URL) ||
     url.startsWith(RECOVERY_URL) ||
-    url.startsWith(OPTIONS_URL)
+    url.startsWith(OPTIONS_URL) ||
+    url.startsWith(WELCOME_URL)
   );
 }
 
@@ -149,7 +151,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       idleLockEnabled: false,
       idleLockTimeout: 300
     });
-    chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/options.html') });
+    chrome.tabs.create({ url: WELCOME_URL });
   }
   applyIdleSettings();
 });
