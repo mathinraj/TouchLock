@@ -461,6 +461,78 @@ body {
 
 .hidden { display: none !important; }
 
+/* ── Support / Buy me a coffee ────────────── */
+
+.card-support {
+  border-color: rgba(255, 221, 0, 0.12);
+}
+
+.support-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.support-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  flex-shrink: 0;
+}
+
+.support-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.support-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.support-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.45;
+}
+
+.btn-coffee {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 10px;
+  background: #FFDD00;
+  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 10px rgba(255, 221, 0, 0.12);
+}
+
+.btn-coffee:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255, 221, 0, 0.22);
+}
+
+.btn-coffee:active {
+  transform: translateY(0);
+}
+
+.btn-coffee svg {
+  stroke: #1a1a1a;
+}
+
 /* ── Footer ────────────────────────────────── */
 
 .footer {
