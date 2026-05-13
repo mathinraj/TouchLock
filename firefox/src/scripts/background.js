@@ -16,9 +16,7 @@ function isLockUrl(url) {
 function isAllowedWhileLocked(url) {
   return url && (
     url.startsWith(LOCK_URL) ||
-    url.startsWith(RECOVERY_URL) ||
-    url.startsWith(OPTIONS_URL) ||
-    url.startsWith(WELCOME_URL)
+    url.startsWith(RECOVERY_URL)
   );
 }
 

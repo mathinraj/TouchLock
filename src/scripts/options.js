@@ -27,6 +27,12 @@ const SECURITY_QUESTIONS = [
 document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
+  const { isLocked } = await chrome.storage.local.get('isLocked');
+  if (isLocked === true) {
+    window.location.replace(chrome.runtime.getURL('src/pages/lock.html'));
+    return;
+  }
+
   const pin1          = document.getElementById('pin1');
   const pin2          = document.getElementById('pin2');
   const btnSavePin    = document.getElementById('btn-save-pin');
