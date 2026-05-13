@@ -1,5 +1,5 @@
 /* ───────────────────────────────────────────────
-   TouchLock – Options Page Styles
+   TouchLock – Options Page Styles (Grid Layout)
    ─────────────────────────────────────────────── */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -12,9 +12,9 @@ body {
 }
 
 .container {
-  max-width: 560px;
+  max-width: 920px;
   margin: 0 auto;
-  padding: 40px 20px 60px;
+  padding: 40px 24px 60px;
 }
 
 /* ── Header ────────────────────────────────── */
@@ -23,7 +23,7 @@ body {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .logo {
@@ -55,30 +55,47 @@ body {
   margin-top: 2px;
 }
 
+/* ── Grid layouts ─────────────────────────── */
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 /* ── Cards ─────────────────────────────────── */
 
 .card {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 20px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
 }
 
 .card h2 {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   margin-bottom: 6px;
 }
 
 .card .description {
-  font-size: 13px;
+  font-size: 12.5px;
   color: rgba(255, 255, 255, 0.45);
   line-height: 1.5;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .card-danger {
@@ -88,28 +105,28 @@ body {
 /* ── Fields ────────────────────────────────── */
 
 .field {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .field label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .field input {
   width: 100%;
-  padding: 10px 14px;
+  padding: 9px 12px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   color: #fff;
-  font-size: 18px;
-  letter-spacing: 10px;
+  font-size: 16px;
+  letter-spacing: 8px;
   text-align: center;
   outline: none;
   transition: border-color 0.2s;
@@ -128,9 +145,9 @@ body {
 /* ── Messages ──────────────────────────────── */
 
 .msg {
-  min-height: 20px;
-  font-size: 13px;
-  margin-bottom: 10px;
+  min-height: 18px;
+  font-size: 12px;
+  margin-bottom: 8px;
   transition: opacity 0.2s;
 }
 
@@ -143,16 +160,16 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
-  padding-top: 14px;
+  margin-top: auto;
+  padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 13px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -169,14 +186,14 @@ body {
   justify-content: center;
   gap: 6px;
   width: 100%;
-  padding: 11px 16px;
+  padding: 10px 14px;
   border: none;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .btn-primary {
@@ -211,28 +228,28 @@ body {
 .sq-group {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
 .sq-item label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .sq-select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 9px 12px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   color: #e4e4e7;
-  font-size: 13px;
+  font-size: 12px;
   outline: none;
   appearance: none;
   -webkit-appearance: none;
@@ -240,9 +257,9 @@ body {
   transition: border-color 0.2s;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-  margin-bottom: 8px;
+  background-position: right 10px center;
+  padding-right: 32px;
+  margin-bottom: 6px;
 }
 
 .sq-select option {
@@ -257,12 +274,12 @@ body {
 
 .sq-answer {
   width: 100%;
-  padding: 10px 14px;
+  padding: 9px 12px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: normal;
   text-align: left;
   outline: none;
@@ -284,8 +301,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 14px 0;
+  gap: 12px;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -300,20 +317,20 @@ body {
 }
 
 .toggle-label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.85);
 }
 
 .toggle-desc {
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.35);
 }
 
 .toggle {
   position: relative;
-  width: 44px;
-  height: 24px;
+  width: 40px;
+  height: 22px;
   flex-shrink: 0;
   cursor: pointer;
 }
@@ -328,7 +345,7 @@ body {
   position: absolute;
   inset: 0;
   background: rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
+  border-radius: 11px;
   transition: background 0.2s;
 }
 
@@ -337,8 +354,8 @@ body {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background: #fff;
   border-radius: 50%;
   transition: transform 0.2s;
@@ -349,21 +366,21 @@ body {
 }
 
 .toggle input:checked + .toggle-slider::before {
-  transform: translateX(20px);
+  transform: translateX(18px);
 }
 
 /* ── Inline field (timeout dropdown) ──────── */
 
 .field-inline {
-  padding: 14px 0 6px;
+  padding: 12px 0 4px;
 }
 
 .field-inline label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -404,7 +421,7 @@ body {
 .collapsible-body.expanded {
   max-height: 500px;
   opacity: 1;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
 /* ── Feature Request ──────────────────────── */
@@ -414,15 +431,15 @@ body {
 }
 
 .field-text {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .field-text label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -436,17 +453,17 @@ body {
 
 .fr-textarea {
   width: 100%;
-  padding: 10px 14px;
+  padding: 9px 12px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
   color: #fff;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.5;
   outline: none;
   resize: vertical;
-  min-height: 80px;
+  min-height: 60px;
   transition: border-color 0.2s;
 }
 
@@ -465,13 +482,9 @@ body {
 
 .card-support {
   border-color: rgba(255, 221, 0, 0.12);
-}
-
-.support-row {
-  display: flex;
+  text-align: center;
+  justify-content: center;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
 }
 
 .support-icon {
@@ -482,37 +495,33 @@ body {
   height: 44px;
   border-radius: 12px;
   background: rgba(239, 68, 68, 0.08);
-  flex-shrink: 0;
-}
-
-.support-text {
-  flex: 1;
-  min-width: 0;
+  margin-bottom: 12px;
 }
 
 .support-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .support-desc {
-  font-size: 13px;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.4);
   line-height: 1.45;
+  margin-bottom: 16px;
 }
 
 .btn-coffee {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
   width: 100%;
-  padding: 11px 16px;
+  padding: 10px 14px;
   border-radius: 10px;
   background: #FFDD00;
   color: #1a1a1a;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
@@ -539,5 +548,21 @@ body {
   text-align: center;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.2);
-  margin-top: 24px;
+  margin-top: 20px;
+}
+
+/* ── Responsive ────────────────────────────── */
+
+@media (max-width: 720px) {
+  .container {
+    max-width: 560px;
+  }
+
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
 }
