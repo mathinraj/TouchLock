@@ -45,14 +45,14 @@
   });
 
   pinBtn.addEventListener('click', submitPin);
-  bioBtn.addEventListener('click', triggerBiometrics);
+  bioBtn.addEventListener('click', () => triggerBiometrics(false, MAX_AUTO_RETRIES));
 
   // ── Auto-trigger biometrics if registered ──
 
   if (hasBiometrics) {
     bioAutoStatus.style.display = 'flex';
     subtitleEl.textContent = 'Verifying your identity…';
-    setTimeout(() => triggerBiometrics(true), 400);
+    setTimeout(() => triggerBiometrics(true, 0), 1000);
   } else {
     setTimeout(() => pinInput.focus(), 100);
   }
@@ -90,7 +90,9 @@
 
   // ── Biometric authentication ───────────────
 
-  async function triggerBiometrics(isAutoTrigger) {
+  const MAX_AUTO_RETRIES = 2;
+
+  async function triggerBiometrics(isAutoTrigger, retryCount) {
     bioAutoStatus.style.display = 'flex';
     bioAutoStatus.querySelector('span').textContent = 'Waiting for biometric verification…';
 
@@ -109,13 +111,21 @@
           }],
           userVerification: 'required',
           timeout: 60000
-        }
+        },
+        mediation: 'optional'
       });
 
       if (assertion) {
         chrome.runtime.sendMessage({ action: 'biometricUnlock' }, () => showSuccess());
       }
     } catch (err) {
+      const userCancelled = err.name === 'NotAllowedError';
+
+      if (isAutoTrigger && !userCancelled && retryCount < MAX_AUTO_RETRIES) {
+        setTimeout(() => triggerBiometrics(true, retryCount + 1), 800);
+        return;
+      }
+
       bioAutoStatus.style.display = 'none';
       subtitleEl.textContent = 'Enter your 6-digit PIN or use biometrics to unlock';
 
@@ -123,7 +133,7 @@
         pinInput.focus();
       } else {
         showError(
-          err.name === 'NotAllowedError'
+          userCancelled
             ? 'Verification cancelled or timed out.'
             : `Authentication failed: ${err.message}`
         );
