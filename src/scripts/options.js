@@ -77,9 +77,13 @@ async function init() {
 
   const btnReset      = document.getElementById('btn-reset');
 
+  const btnWhatsNew   = document.getElementById('btn-whats-new');
+  const whatsNewDot   = document.getElementById('whats-new-dot');
+
   populateQuestionDropdowns();
   await loadLockSettings();
   await loadShortcut();
+  await loadWhatsNew();
   await refreshStatus();
 
   // ── PIN strength indicator ──────────────────
@@ -350,6 +354,21 @@ async function init() {
     shortcutRecording.classList.add('hidden');
     btnRecordShortcut.classList.remove('hidden');
   }
+
+  // ── What's New ─────────────────────────────────
+
+  async function loadWhatsNew() {
+    const { showWhatsNew } = await chrome.storage.local.get('showWhatsNew');
+    if (showWhatsNew) {
+      whatsNewDot.classList.remove('hidden');
+    }
+  }
+
+  btnWhatsNew.addEventListener('click', () => {
+    chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/whats-new.html') });
+    whatsNewDot.classList.add('hidden');
+    chrome.storage.local.set({ showWhatsNew: false });
+  });
 
   // ── Feature Request (collapsible + EmailJS) ─
 

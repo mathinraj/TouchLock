@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, observerOptions);
 
-  document.querySelectorAll('.feature-card, .step, .install-card').forEach(el => {
+  document.querySelectorAll('.feature-card, .step, .install-card, .wn-item').forEach(el => {
     observer.observe(el);
   });
 

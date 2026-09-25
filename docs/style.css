@@ -591,6 +591,71 @@ code {
   border-radius: 4px;
 }
 
+/* ===== What's New Section ===== */
+.whats-new-section {
+  padding: 100px 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.wn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 640px;
+  margin: 0 auto 36px;
+}
+
+.wn-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 24px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all 0.25s ease;
+}
+
+.wn-item:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.08);
+}
+
+.wn-icon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.wn-icon--pin      { background: linear-gradient(135deg, #6366f1, #a855f7); }
+.wn-icon--shortcut { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+.wn-icon--firefox  { background: linear-gradient(135deg, #ff7139, #e05d26); }
+
+.wn-content h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.wn-content p {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.wn-cta {
+  text-align: center;
+}
+
 /* ===== Install ===== */
 .install {
   padding: 100px 0;

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – Changelog &amp; New Features</title>
+  <meta name="description" content="See what's new in every version of TouchLock — the free browser extension that locks your profile with Touch ID, Windows Hello, or a PIN.">
+  <link rel="canonical" href="https://touchlock.vercel.app/changelog.html">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="128x128" href="assets/logo-128.png">
+
+  <script src="https://kit.fontawesome.com/5432a717c1.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .changelog-hero {
+      padding: 140px 0 60px;
+      text-align: center;
+    }
+
+    .changelog-hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .changelog-hero p {
+      font-size: 1.0625rem;
+      color: var(--color-text-muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── Timeline ──────────────────────────── */
+
+    .timeline {
+      position: relative;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 28px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--color-primary), var(--color-accent), var(--color-border));
+    }
+
+    /* ── Version block ─────────────────────── */
+
+    .version-block {
+      position: relative;
+      padding-left: 72px;
+      margin-bottom: 56px;
+    }
+
+    .version-dot {
+      position: absolute;
+      left: 17px;
+      top: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-bg);
+      border: 3px solid var(--color-primary);
+      z-index: 1;
+    }
+
+    .version-block.latest .version-dot {
+      background: var(--color-primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    }
+
+    .version-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .version-tag {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .version-date {
+      font-size: 0.8125rem;
+      color: var(--color-text-dim);
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .version-badge.latest {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--color-success);
+    }
+
+    .version-desc {
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* ── Feature items ─────────────────────── */
+
+    .change-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .change-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 18px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.2s;
+    }
+
+    .change-item:hover {
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    .change-icon {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      margin-top: 1px;
+    }
+
+    .change-icon.feat    { background: rgba(99, 102, 241, 0.12); color: var(--color-primary-hover); }
+    .change-icon.improve { background: rgba(34, 197, 94, 0.12);  color: var(--color-success); }
+    .change-icon.fix     { background: rgba(245, 158, 11, 0.12); color: var(--color-warning); }
+
+    .change-content h4 {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .change-content p {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Back link ─────────────────────────── */
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: all 0.2s;
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 101;
+    }
+
+    .back-link:hover {
+      color: var(--color-text);
+      border-color: var(--color-primary);
+    }
+
+    @media (max-width: 600px) {
+      .timeline::before { left: 18px; }
+      .version-block { padding-left: 52px; }
+      .version-dot { left: 7px; }
+      .back-link { position: static; margin-bottom: 20px; }
+      .changelog-hero { padding-top: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back to TouchLock
+  </a>
+
+  <main>
+    <section class="changelog-hero">
+      <div class="container">
+        <h1>What's <span class="gradient-text">New</span></h1>
+        <p>Every feature, improvement, and fix across all versions of TouchLock.</p>
+      </div>
+    </section>
+
+    <section class="timeline container">
+
+      <!-- v1.2.0 -->
+      <div class="version-block latest">
+        <div class="version-dot"></div>
+        <div class="version-header">
+          <span class="version-tag">v1.2.0</span>
+          <span class="version-badge latest">Latest</span>
+          <span class="version-date">September 2026</span>
+        </div>
+        <p class="version-desc">Flexible PIN length, keyboard shortcuts, and quality-of-life improvements.</p>
+        <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-lock"></i></div>
+            <div class="change-content">
+              <h4>Flexible PIN Length (4–10 digits)</h4>
+              <p>Choose anywhere from 4 to 10 digits for your PIN. A live strength indicator shows Weak, Fair, Good, or Strong as you type.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-keyboard"></i></div>
+            <div class="change-content">
+              <h4>Keyboard Shortcut to Lock</h4>
+              <p>Instantly lock the browser with Alt+L (or Ctrl+L on Mac). Fully customizable from Settings — reserved browser shortcuts are blocked with clear warnings.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon improve"><i class="fa-brands fa-firefox-browser"></i></div>
+            <div class="change-content">
+              <h4>Firefox Auto-Shortcut Sync</h4>
+              <p>On Firefox, custom shortcuts are automatically applied at the browser level via browser.commands.update() — no manual step needed.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon improve"><i class="fa-solid fa-bell"></i></div>
+            <div class="change-content">
+              <h4>What's New Notifications</h4>
+              <p>After updates, a subtle notification dot in Settings lets you discover new features without any interruption.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.1.0 -->
+      <div class="version-block">
+        <div class="version-dot"></div>
+        <div class="version-header">
+          <span class="version-tag">v1.1.0</span>
+          <span class="version-date">August 2026</span>
+        </div>
+        <p class="version-desc">First public release with full browser locking, biometrics, and recovery.</p>
+        <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-fingerprint"></i></div>
+            <div class="change-content">
+              <h4>Biometric Unlock</h4>
+              <p>Unlock with Touch ID on Mac or Windows Hello on PC. Auto-triggers when the lock screen loads — no clicks needed.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="change-content">
+              <h4>Profile-Level Lock</h4>
+              <p>Blocks access to the entire browser profile — history, downloads, bookmarks, passwords — until you authenticate.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-lock"></i></div>
+            <div class="change-content">
+              <h4>6-Digit PIN with SHA-256</h4>
+              <p>Secure fallback PIN hashed with SHA-256 and random salt. Never stored in plaintext.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-display"></i></div>
+            <div class="change-content">
+              <h4>Tab Guards</h4>
+              <p>Five layers of protection prevent switching tabs, opening new tabs, or closing the lock tab while locked.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-clock"></i></div>
+            <div class="change-content">
+              <h4>Auto-Lock on Startup &amp; Idle</h4>
+              <p>Locks automatically on browser launch. Optional idle lock after configurable inactivity (1 min – 1 hour).</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-rotate-right"></i></div>
+            <div class="change-content">
+              <h4>PIN Recovery via Security Questions</h4>
+              <p>Set 3 security questions during setup. Answer any 2 correctly to reset a forgotten PIN.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.0.0 -->
+      <div class="version-block">
+        <div class="version-dot"></div>
+        <div class="version-header">
+          <span class="version-tag">v1.0.0</span>
+          <span class="version-date">July 2026</span>
+        </div>
+        <p class="version-desc">Internal release. Foundation for Manifest V3 architecture and core locking mechanism.</p>
+        <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-code"></i></div>
+            <div class="change-content">
+              <h4>Initial Build</h4>
+              <p>Core service worker, lock screen, content overlay, and extension popup. Manifest V3 architecture for Chrome 110+ and Edge 110+.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <img src="assets/logo.svg" alt="TouchLock" width="28" height="28">
+        <span>TouchLock</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
+        <a href="https://github.com/mathinraj/TouchLock/releases" target="_blank" rel="noopener"><i class="fa-solid fa-tag"></i> Releases</a>
+        <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener"><i class="fa-solid fa-bug"></i> Report a Bug</a>
+      </div>
+      <p class="footer-copy">Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj 💚</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>

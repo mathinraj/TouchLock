@@ -1,0 +1,285 @@
+/* ───────────────────────────────────────────────
+   TouchLock – What's New Page
+   ─────────────────────────────────────────────── */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #0a0a14;
+  color: #e4e4e7;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 44px 24px 48px;
+}
+
+/* ── Header ────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+}
+
+/* ── Hero badge ────────────────────────────── */
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #60a5fa;
+  margin-bottom: 28px;
+}
+
+/* ── Feature list (vertical) ───────────────── */
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  transition: border-color 0.2s;
+}
+
+.feature-item:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 11px;
+  color: #fff;
+}
+
+.feature-icon--pin      { background: linear-gradient(135deg, #3b82f6, #6366f1); }
+.feature-icon--shortcut { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+.feature-icon--strength { background: linear-gradient(135deg, #10b981, #059669); }
+
+.feature-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.feature-body h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.feature-body p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.55;
+}
+
+.feature-body strong {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Inline demos ──────────────────────────── */
+
+.strength-preview {
+  margin-top: 12px;
+}
+
+.strength-bar {
+  display: flex;
+  gap: 4px;
+  height: 5px;
+}
+
+.seg {
+  flex: 1;
+  border-radius: 3px;
+}
+
+.seg--weak   { background: #f87171; }
+.seg--fair   { background: #fb923c; }
+.seg--good   { background: #facc15; }
+.seg--strong { background: #34d399; }
+
+.strength-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.25);
+  margin-top: 4px;
+}
+
+.shortcut-demo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.shortcut-demo kbd {
+  padding: 3px 9px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #e4e4e7;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.plus {
+  color: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.shortcut-demo svg {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.demo-lock {
+  padding: 3px 9px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #60a5fa;
+}
+
+.t-weak   { color: #f87171; font-weight: 600; }
+.t-strong { color: #34d399; font-weight: 600; }
+
+/* ── CTA section ───────────────────────────── */
+
+.cta-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  flex: 1;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+/* ── Footer ────────────────────────────────── */
+
+.footer {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.footer a {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer a:hover {
+  color: #60a5fa;
+}
+
+.sep {
+  margin: 0 6px;
+}
+
+/* ── Responsive ────────────────────────────── */
+
+@media (max-width: 480px) {
+  .cta-section {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

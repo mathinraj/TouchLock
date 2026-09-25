@@ -158,6 +158,15 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     });
     chrome.tabs.create({ url: WELCOME_URL });
   }
+
+  if (details.reason === 'update') {
+    await chrome.storage.local.set({
+      showWhatsNew: true,
+      updatedFrom: details.previousVersion,
+      updatedTo: chrome.runtime.getManifest().version
+    });
+  }
+
   applyIdleSettings();
 });
 

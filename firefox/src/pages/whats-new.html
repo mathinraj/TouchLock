@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – What's New in v1.2.0</title>
+  <link rel="stylesheet" href="../styles/whats-new.css">
+</head>
+<body>
+  <div class="container">
+
+    <header class="header">
+      <div class="logo">
+        <img src="../../icons/icon.svg" width="36" height="36" alt="TouchLock">
+      </div>
+      <div>
+        <h1>What's New</h1>
+        <p class="subtitle">TouchLock v1.2.0</p>
+      </div>
+    </header>
+
+    <div class="hero-badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+      <span>New features &amp; improvements</span>
+    </div>
+
+    <div class="feature-list">
+
+      <div class="feature-item">
+        <div class="feature-icon feature-icon--pin">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div class="feature-body">
+          <h3>Flexible PIN Length</h3>
+          <p>Your PIN is no longer limited to 6 digits. Choose anywhere from <strong>4 to 10 digits</strong> for the security level you prefer.</p>
+          <div class="strength-preview">
+            <div class="strength-bar">
+              <span class="seg seg--weak"></span>
+              <span class="seg seg--fair"></span>
+              <span class="seg seg--good"></span>
+              <span class="seg seg--strong"></span>
+            </div>
+            <div class="strength-labels">
+              <span>Weak</span><span>Fair</span><span>Good</span><span>Strong</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon feature-icon--shortcut">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
+          </svg>
+        </div>
+        <div class="feature-body">
+          <h3>Keyboard Shortcut</h3>
+          <p>Lock your browser instantly with a key combo — fully customizable from Settings.</p>
+          <div class="shortcut-demo">
+            <kbd>Alt</kbd><span class="plus">+</span><kbd>L</kbd>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+            <span class="demo-lock">Locked</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon feature-icon--strength">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="feature-body">
+          <h3>PIN Strength Indicator</h3>
+          <p>A live visual bar shows the strength of your PIN as you type — from <span class="t-weak">Weak</span> to <span class="t-strong">Strong</span>.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cta-section">
+      <a href="https://touchlock.vercel.app/changelog.html" target="_blank" rel="noopener" class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        View full changelog
+      </a>
+      <button id="btn-got-it" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Got it
+      </button>
+    </div>
+
+    <footer class="footer">
+      <span>TouchLock v1.2.0</span>
+      <span class="sep">&middot;</span>
+      <a href="https://touchlock.vercel.app/" target="_blank" rel="noopener">touchlock.vercel.app</a>
+      <span class="sep">&middot;</span>
+      <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">by Mathinraj</a>
+    </footer>
+
+  </div>
+
+  <script src="../scripts/whats-new.js"></script>
+</body>
+</html>
