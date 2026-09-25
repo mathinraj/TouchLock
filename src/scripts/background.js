@@ -105,8 +105,11 @@ async function injectOverlay(tabId) {
 // ── PIN verification ─────────────────────────────
 
 async function verifyPin(pin) {
-  const { pinHash, pinSalt } = await chrome.storage.local.get(['pinHash', 'pinSalt']);
+  const { pinHash, pinSalt, pinLength } = await chrome.storage.local.get(['pinHash', 'pinSalt', 'pinLength']);
   if (!pinHash || !pinSalt) return { success: false, error: 'PIN not configured.' };
+
+  const expectedLen = pinLength || 6;
+  if (pin.length !== expectedLen) return { success: false, error: 'Incorrect PIN.' };
 
   const hash = await hashPin(pin, pinSalt);
   if (hash === pinHash) {
@@ -167,6 +170,15 @@ chrome.runtime.onStartup.addListener(async () => {
   if (await isSetupComplete()) {
     await lockBrowser();
   }
+});
+
+// ── Keyboard shortcut (quick lock) ───────────
+
+chrome.commands.onCommand.addListener(async (command) => {
+  if (command !== 'lock-browser') return;
+  if (!(await isSetupComplete())) return;
+  if (await getIsLocked()) return;
+  await lockBrowser();
 });
 
 // ── Tab guards (profile-level lock) ─────────────
@@ -321,6 +333,27 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       case 'updateIdleSettings': {
         await applyIdleSettings();
         sendResponse({ success: true });
+        break;
+      }
+
+      case 'updateShortcut': {
+        sendResponse({ success: true });
+        break;
+      }
+
+      case 'lockFromShortcut': {
+        if (await isSetupComplete() && !(await getIsLocked())) {
+          await lockBrowser();
+          sendResponse({ success: true });
+        } else {
+          sendResponse({ success: false });
+        }
+        break;
+      }
+
+      case 'getPinLength': {
+        const { pinLength } = await chrome.storage.local.get('pinLength');
+        sendResponse({ pinLength: pinLength || 6 });
         break;
       }
 

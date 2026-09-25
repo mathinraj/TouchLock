@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TouchLock – Lock Your Browser with Fingerprint, Touch ID & PIN</title>
-  <meta name="description" content="TouchLock is a free, open-source browser extension that locks your browser profile with Touch ID, Windows Hello, or a 6-digit PIN. Protect your history, bookmarks, passwords, and downloads on Edge, Firefox, Chrome, and Brave.">
+  <meta name="description" content="TouchLock is a free, open-source browser extension that locks your browser profile with Touch ID, Windows Hello, or a secure PIN. Protect your history, bookmarks, passwords, and downloads on Edge, Firefox, Chrome, and Brave.">
   <meta name="keywords" content="browser lock extension, fingerprint browser lock, Touch ID browser, Windows Hello browser lock, lock browser with PIN, browser privacy extension, protect browser history, browser security extension, Edge lock extension, Firefox lock extension, Chrome lock extension, biometric browser lock, lock browser profile, open source browser lock">
   <meta name="author" content="Mathinraj">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
@@ -14,7 +14,7 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="TouchLock – Lock Your Browser with Fingerprint & PIN">
-  <meta property="og:description" content="Free, open-source browser extension that locks your entire browser profile with Touch ID, Windows Hello, or a 6-digit PIN. Works on Edge, Firefox, Chrome & Brave.">
+  <meta property="og:description" content="Free, open-source browser extension that locks your entire browser profile with Touch ID, Windows Hello, or a secure PIN. Works on Edge, Firefox, Chrome & Brave.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://touchlock.vercel.app/">
   <meta property="og:image" content="https://touchlock.vercel.app/assets/og-preview.png">
@@ -27,7 +27,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="TouchLock – Lock Your Browser with Fingerprint & PIN">
-  <meta name="twitter:description" content="Free, open-source browser extension that locks your entire browser profile with Touch ID, Windows Hello, or a 6-digit PIN.">
+  <meta name="twitter:description" content="Free, open-source browser extension that locks your entire browser profile with Touch ID, Windows Hello, or a secure PIN.">
   <meta name="twitter:image" content="https://touchlock.vercel.app/assets/og-preview.png">
   <meta name="twitter:image:alt" content="TouchLock – Lock your browser with a fingerprint">
 
@@ -53,7 +53,7 @@
     "@type": "SoftwareApplication",
     "name": "TouchLock",
     "headline": "Lock Your Browser with Fingerprint, Touch ID & PIN",
-    "description": "TouchLock is a free, open-source browser extension that locks your browser profile with Touch ID, Windows Hello, or a 6-digit PIN. Protect your history, bookmarks, passwords, and downloads.",
+    "description": "TouchLock is a free, open-source browser extension that locks your browser profile with Touch ID, Windows Hello, or a secure PIN. Protect your history, bookmarks, passwords, and downloads.",
     "url": "https://touchlock.vercel.app/",
     "applicationCategory": "BrowserExtension",
     "operatingSystem": "Windows, macOS, Linux",
@@ -62,7 +62,7 @@
       "price": "0",
       "priceCurrency": "USD"
     },
-    "softwareVersion": "1.0.3",
+    "softwareVersion": "1.2.0",
     "author": {
       "@type": "Person",
       "name": "Mathinraj",
@@ -77,9 +77,10 @@
     ],
     "featureList": [
       "Biometric unlock with Touch ID and Windows Hello",
-      "6-digit PIN with SHA-256 hashing",
+      "4–10 digit PIN with SHA-256 hashing and strength indicator",
+      "Keyboard shortcut to lock instantly (customizable)",
       "Profile-level browser lock",
-      "Auto-lock on startup",
+      "Auto-lock on startup and idle",
       "Tab guard protection",
       "PIN recovery via security questions"
     ],
@@ -98,7 +99,7 @@
         "name": "How does TouchLock lock my browser?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "TouchLock locks your entire browser profile on startup, blocking access to history, downloads, bookmarks, and all tabs until you authenticate with Touch ID, Windows Hello, or a 6-digit PIN."
+          "text": "TouchLock locks your entire browser profile on startup, blocking access to history, downloads, bookmarks, and all tabs until you authenticate with Touch ID, Windows Hello, or your PIN. You can also lock instantly with a keyboard shortcut."
         }
       },
       {
@@ -167,7 +168,7 @@
       <div class="hero-badge">Open Source &middot; Free Forever</div>
       <h1>Lock your browser<br>with a <span class="gradient-text">fingerprint</span></h1>
       <p class="hero-subtitle">
-        Protect your browser profile with Touch ID, Windows Hello, or a 6-digit PIN.
+        Protect your browser profile with Touch ID, Windows Hello, or a secure PIN.
         No one sees your history, bookmarks, or passwords without your permission.
       </p>
       <div class="hero-actions">
@@ -228,8 +229,8 @@
           <div class="feature-icon">
             <i class="fa-solid fa-lock fa-lg"></i>
           </div>
-          <h3>6-Digit PIN</h3>
-          <p>SHA-256 hashed with random salt. Always available as a fallback, even without biometric hardware.</p>
+          <h3>Flexible PIN</h3>
+          <p>4–10 digit PIN with strength indicator, SHA-256 hashed with random salt. Always available as a fallback.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
@@ -283,7 +284,7 @@
           <div class="step-number">2</div>
           <div class="step-content">
             <h3>Set your PIN &amp; security questions</h3>
-            <p>Choose a 6-digit PIN and answer 3 security questions for recovery. Optionally register biometrics.</p>
+            <p>Choose a 4–10 digit PIN and answer 3 security questions for recovery. Optionally register biometrics.</p>
           </div>
         </div>
         <div class="step-connector"></div>

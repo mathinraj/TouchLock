@@ -8,14 +8,84 @@
   const OVERLAY_ID = 'touchlock-overlay';
   let overlay = null;
 
+  let currentPinLength = 6;
+
   // ── Check state on load ──────────────────────
 
   try {
     chrome.runtime.sendMessage({ action: 'getState' }, (res) => {
       if (chrome.runtime.lastError) return;
-      if (res && res.isLocked) showOverlay();
+      if (res && res.isLocked) {
+        chrome.runtime.sendMessage({ action: 'getPinLength' }, (plRes) => {
+          if (!chrome.runtime.lastError && plRes) currentPinLength = plRes.pinLength || 6;
+          showOverlay();
+        });
+      }
     });
   } catch (_) { /* extension context invalidated */ }
+
+  // ── Keyboard shortcut listener (reactive) ───
+
+  let activeShortcut = null;
+  let browserShortcut = null;
+
+  function shortcutHandler(e) {
+    if (!activeShortcut) return;
+    const sc = activeShortcut;
+    const code = sc.code || ('Key' + sc.key.toUpperCase());
+    if (e.altKey === !!sc.altKey && e.ctrlKey === !!sc.ctrlKey &&
+        e.shiftKey === !!sc.shiftKey && e.metaKey === !!sc.metaKey &&
+        e.code === code) {
+      if (browserShortcut && shortcutsMatch(sc, browserShortcut)) return;
+      e.preventDefault();
+      try {
+        chrome.runtime.sendMessage({ action: 'lockFromShortcut' });
+      } catch (_) {}
+    }
+  }
+
+  function shortcutsMatch(a, b) {
+    return !!a.altKey === !!b.altKey && !!a.ctrlKey === !!b.ctrlKey &&
+           !!a.shiftKey === !!b.shiftKey && !!a.metaKey === !!b.metaKey &&
+           (a.code || 'Key' + a.key) === (b.code || 'Key' + b.key);
+  }
+
+  document.addEventListener('keydown', shortcutHandler);
+
+  try {
+    chrome.storage.local.get(['lockShortcut', 'browserShortcutInfo'], (data) => {
+      if (chrome.runtime.lastError) return;
+      activeShortcut = data.lockShortcut || null;
+    });
+
+    chrome.commands.getAll((cmds) => {
+      if (chrome.runtime.lastError) return;
+      const lockCmd = cmds.find(c => c.name === 'lock-browser');
+      if (lockCmd && lockCmd.shortcut) {
+        browserShortcut = parseShortcutString(lockCmd.shortcut);
+      }
+    });
+
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area !== 'local' || !changes.lockShortcut) return;
+      activeShortcut = changes.lockShortcut.newValue || null;
+    });
+  } catch (_) {}
+
+  function parseShortcutString(str) {
+    if (!str) return null;
+    const parts = str.split('+').map(s => s.trim());
+    const sc = { ctrlKey: false, altKey: false, shiftKey: false, metaKey: false, key: '', code: '' };
+    for (const p of parts) {
+      const up = p.toUpperCase();
+      if (up === 'CTRL' || up === 'MACCTRL') sc.ctrlKey = true;
+      else if (up === 'ALT') sc.altKey = true;
+      else if (up === 'SHIFT') sc.shiftKey = true;
+      else if (up === 'COMMAND' || up === 'META') sc.metaKey = true;
+      else { sc.key = p.toUpperCase(); sc.code = 'Key' + p.toUpperCase(); }
+    }
+    return sc;
+  }
 
   // ── Listen for lock / unlock from background ─
 
@@ -70,15 +140,15 @@
           </svg>
         </div>
         <h1 class="tl-title">Browser Locked</h1>
-        <p class="tl-subtitle">Enter your 6-digit PIN or use biometrics to unlock</p>
+        <p class="tl-subtitle">Enter your PIN or use biometrics to unlock</p>
 
         <div class="tl-pin-wrap">
           <div class="tl-pin-dots" id="tl-pin-dots">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
+            ${'<span></span>'.repeat(currentPinLength)}
           </div>
           <input type="password" id="tl-pin-input" class="tl-pin-input"
-                 maxlength="6" inputmode="numeric" pattern="[0-9]*"
-                 placeholder="••••••" autocomplete="off" />
+                 maxlength="${currentPinLength}" inputmode="numeric" pattern="[0-9]*"
+                 placeholder="${'•'.repeat(currentPinLength)}" autocomplete="off" />
         </div>
 
         <div class="tl-error" id="tl-error"></div>
@@ -176,8 +246,8 @@
 
     function submitPin() {
       const pin = pinInput.value.trim();
-      if (pin.length !== 6 || !/^\d{6}$/.test(pin)) {
-        showError('Please enter a 6-digit PIN.');
+      if (pin.length < 4 || pin.length > 10 || !/^\d+$/.test(pin)) {
+        showError('Please enter your PIN.');
         return;
       }
       pinBtn.disabled = true;

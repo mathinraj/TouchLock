@@ -24,6 +24,10 @@ const SECURITY_QUESTIONS = [
   { id: 14, text: 'In what city did you have your first job?' }
 ];
 
+const DEFAULT_SHORTCUT = { ctrlKey: false, altKey: true, shiftKey: false, metaKey: false, key: 'L', code: 'KeyL' };
+const MIN_PIN = 4;
+const MAX_PIN = 10;
+
 document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
@@ -38,6 +42,8 @@ async function init() {
   const btnSavePin    = document.getElementById('btn-save-pin');
   const pinMsg        = document.getElementById('pin-msg');
   const pinStatus     = document.getElementById('pin-status');
+  const pinStrFill    = document.getElementById('pin-strength-fill');
+  const pinStrLabel   = document.getElementById('pin-strength-label');
 
   const btnRegBio     = document.getElementById('btn-register-bio');
   const btnRemoveBio  = document.getElementById('btn-remove-bio');
@@ -58,6 +64,11 @@ async function init() {
   const lockMsg       = document.getElementById('lock-msg');
   const lockStatus    = document.getElementById('lock-status');
 
+  const shortcutDisplay   = document.getElementById('shortcut-display');
+  const btnRecordShortcut = document.getElementById('btn-record-shortcut');
+  const shortcutRecording = document.getElementById('shortcut-recording');
+  const btnCancelShortcut = document.getElementById('btn-cancel-shortcut');
+
   const frEmail       = document.getElementById('fr-email');
   const frCategory    = document.getElementById('fr-category');
   const frMessage     = document.getElementById('fr-message');
@@ -68,7 +79,25 @@ async function init() {
 
   populateQuestionDropdowns();
   await loadLockSettings();
+  await loadShortcut();
   await refreshStatus();
+
+  // ── PIN strength indicator ──────────────────
+
+  pin1.addEventListener('input', () => {
+    const len = pin1.value.replace(/\D/g, '').length;
+    const { level, label } = getPinStrength(len);
+    if (len === 0) {
+      pinStrFill.style.width = '0';
+      pinStrFill.removeAttribute('data-level');
+      pinStrLabel.textContent = '';
+      pinStrLabel.removeAttribute('data-level');
+    } else {
+      pinStrFill.setAttribute('data-level', level);
+      pinStrLabel.setAttribute('data-level', level);
+      pinStrLabel.textContent = label;
+    }
+  });
 
   // ── Save PIN ─────────────────────────────────
 
@@ -76,8 +105,8 @@ async function init() {
     const p1 = pin1.value.trim();
     const p2 = pin2.value.trim();
 
-    if (!/^\d{6}$/.test(p1)) {
-      showMsg(pinMsg, 'PIN must be exactly 6 digits.', 'error');
+    if (!/^\d+$/.test(p1) || p1.length < MIN_PIN || p1.length > MAX_PIN) {
+      showMsg(pinMsg, `PIN must be ${MIN_PIN}–${MAX_PIN} digits.`, 'error');
       return;
     }
     if (p1 !== p2) {
@@ -91,11 +120,16 @@ async function init() {
     await chrome.storage.local.set({
       pinHash: hash,
       pinSalt: salt,
+      pinLength: p1.length,
       setupComplete: true
     });
 
     pin1.value = '';
     pin2.value = '';
+    pinStrFill.style.width = '0';
+    pinStrFill.removeAttribute('data-level');
+    pinStrLabel.textContent = '';
+    pinStrLabel.removeAttribute('data-level');
     showMsg(pinMsg, 'PIN saved successfully.', 'success');
     await refreshStatus();
   });
@@ -252,6 +286,69 @@ async function init() {
     if (data.idleLockTimeout) {
       idleTimeout.value = String(data.idleLockTimeout);
     }
+  }
+
+  // ── Keyboard Shortcut ─────────────────────────
+
+  const openBrowserShortcuts = document.getElementById('open-browser-shortcuts');
+
+  async function loadShortcut() {
+    const { lockShortcut } = await chrome.storage.local.get('lockShortcut');
+    const sc = lockShortcut || DEFAULT_SHORTCUT;
+    shortcutDisplay.textContent = formatShortcut(sc);
+  }
+
+  openBrowserShortcuts.addEventListener('click', (e) => {
+    e.preventDefault();
+    chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+  });
+
+  btnRecordShortcut.addEventListener('click', () => {
+    shortcutRecording.classList.remove('hidden');
+    btnRecordShortcut.classList.add('hidden');
+    document.addEventListener('keydown', captureShortcut);
+  });
+
+  btnCancelShortcut.addEventListener('click', stopRecording);
+
+  function captureShortcut(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (['Control', 'Alt', 'Shift', 'Meta'].includes(e.key)) return;
+
+    if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+      showMsg(lockMsg, 'Shortcut must include Ctrl, Alt, or Cmd.', 'error');
+      return;
+    }
+
+    const letterKey = e.code.startsWith('Key') ? e.code.slice(3) : (e.key.length === 1 ? e.key.toUpperCase() : e.key);
+    const combo = { ctrlKey: e.ctrlKey, altKey: e.altKey, shiftKey: e.shiftKey, metaKey: e.metaKey, code: e.code };
+
+    const reserved = isReservedShortcut(combo, letterKey);
+    if (reserved) {
+      showMsg(lockMsg, reserved, 'error');
+      return;
+    }
+
+    const newShortcut = {
+      ctrlKey: e.ctrlKey,
+      altKey: e.altKey,
+      shiftKey: e.shiftKey,
+      metaKey: e.metaKey,
+      key: letterKey,
+      code: e.code
+    };
+
+    shortcutDisplay.textContent = formatShortcut(newShortcut);
+    chrome.storage.local.set({ lockShortcut: newShortcut });
+    stopRecording();
+    showMsg(lockMsg, 'Shortcut saved!', 'success');
+  }
+
+  function stopRecording() {
+    document.removeEventListener('keydown', captureShortcut);
+    shortcutRecording.classList.add('hidden');
+    btnRecordShortcut.classList.remove('hidden');
   }
 
   // ── Feature Request (collapsible + EmailJS) ─
@@ -444,4 +541,57 @@ function setStatus(el, text, color) {
 function showMsg(el, text, type) {
   el.textContent = text;
   el.className = `msg ${type}`;
+}
+
+function getPinStrength(length) {
+  if (length <= 4)  return { level: 'weak',   label: 'Weak' };
+  if (length <= 5)  return { level: 'fair',   label: 'Fair' };
+  if (length <= 7)  return { level: 'good',   label: 'Good' };
+  return                    { level: 'strong', label: 'Strong' };
+}
+
+function formatShortcut(sc) {
+  const parts = [];
+  const isMac = navigator.platform.toUpperCase().includes('MAC');
+  if (sc.ctrlKey)  parts.push(isMac ? 'Ctrl' : 'Ctrl');
+  if (sc.altKey)   parts.push(isMac ? 'Option' : 'Alt');
+  if (sc.shiftKey) parts.push('Shift');
+  if (sc.metaKey)  parts.push(isMac ? 'Cmd' : 'Win');
+  parts.push(sc.key);
+  return parts.join(' + ');
+}
+
+function isReservedShortcut(combo, key) {
+  const isMac = navigator.platform.toUpperCase().includes('MAC');
+  const c = isMac ? combo.metaKey : combo.ctrlKey;
+  const s = combo.shiftKey;
+  const a = combo.altKey;
+  const k = key.toUpperCase();
+  const mod = isMac ? 'Cmd' : 'Ctrl';
+
+  if (c && !s && !a) {
+    const reserved = ['S','P','Z','X','C','V','A','F','H','J','N','T','W','R','L','D','G','E','K','O','U','B','Q'];
+    if (reserved.includes(k)) return `${mod}+${k} is reserved by the browser.`;
+    if (/^[1-9]$/.test(k)) return `${mod}+${k} is used for tab switching.`;
+  }
+
+  if (c && s && !a) {
+    const reserved = ['T','N','I','J','B','R','P','D','M','O'];
+    if (reserved.includes(k)) return `${mod}+Shift+${k} is reserved by the browser.`;
+  }
+
+  if (!isMac && a && !c && !s && !combo.metaKey) {
+    if (k === 'F4') return 'Alt+F4 closes the window.';
+  }
+
+  if (/^F\d{1,2}$/.test(k)) {
+    const fNum = parseInt(k.slice(1), 10);
+    if (fNum >= 1 && fNum <= 12 && !a && !s) return `${k} is reserved by the browser.`;
+  }
+
+  if (isMac && a && !combo.ctrlKey && !combo.metaKey) {
+    return 'Option key produces special characters on Mac, which may interfere with text fields. Use Ctrl + key instead.';
+  }
+
+  return null;
 }

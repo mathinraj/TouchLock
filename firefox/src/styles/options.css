@@ -142,6 +142,198 @@ body {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
+/* ── PIN strength indicator ────────────────── */
+
+.pin-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -4px 0 12px;
+  min-height: 22px;
+}
+
+.pin-strength-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pin-strength-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.pin-strength-fill[data-level="weak"] {
+  width: 25%;
+  background: #f87171;
+}
+
+.pin-strength-fill[data-level="fair"] {
+  width: 50%;
+  background: #fb923c;
+}
+
+.pin-strength-fill[data-level="good"] {
+  width: 75%;
+  background: #facc15;
+}
+
+.pin-strength-fill[data-level="strong"] {
+  width: 100%;
+  background: #34d399;
+}
+
+.pin-strength-label {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  min-width: 70px;
+  text-align: right;
+}
+
+.pin-strength-label[data-level="weak"]   { color: #f87171; }
+.pin-strength-label[data-level="fair"]   { color: #fb923c; }
+.pin-strength-label[data-level="good"]   { color: #facc15; }
+.pin-strength-label[data-level="strong"] { color: #34d399; }
+
+/* ── Keyboard shortcut ────────────────────── */
+
+.shortcut-section {
+  padding: 14px 0 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 4px;
+}
+
+.shortcut-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 4px;
+}
+
+.shortcut-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 10px;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shortcut-display {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #e4e4e7;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-shortcut-record {
+  padding: 6px 14px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
+  color: #60a5fa;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-shortcut-record:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.shortcut-recording {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.recording-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  animation: pulse-glow 1s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(59, 130, 246, 0.4); }
+  50%      { opacity: 0.4; box-shadow: 0 0 8px rgba(59, 130, 246, 0.6); }
+}
+
+.btn-shortcut-cancel {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-shortcut-cancel:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.shortcut-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: rgba(251, 191, 36, 0.06);
+  border: 1px solid rgba(251, 191, 36, 0.12);
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.shortcut-note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: #fbbf24;
+}
+
+.shortcut-note a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.shortcut-note a:hover {
+  text-decoration: underline;
+}
+
 /* ── Messages ──────────────────────────────── */
 
 .msg {

@@ -62,7 +62,7 @@
     if (match1 && match2) {
       // Reset all credentials, unlock, redirect to setup
       await chrome.storage.local.remove([
-        'pinHash', 'pinSalt',
+        'pinHash', 'pinSalt', 'pinLength',
         'webauthnCredentialId', 'webauthnRegistered',
         'securityQuestions', 'securityQuestionsConfigured',
         'setupComplete'

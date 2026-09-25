@@ -18,7 +18,7 @@
         </svg>
       </div>
       <h1 class="title">Browser Locked</h1>
-      <p class="subtitle" id="subtitle">Enter your 6-digit PIN or use biometrics to unlock</p>
+      <p class="subtitle" id="subtitle">Enter your PIN or use biometrics to unlock</p>
 
       <!-- Biometric auto-trigger status -->
       <div class="bio-status" id="bio-auto-status" style="display:none">
@@ -28,12 +28,10 @@
 
       <!-- PIN input -->
       <div class="pin-section" id="pin-section">
-        <div class="pin-dots" id="pin-dots">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="pin-dots" id="pin-dots"></div>
         <input type="password" id="pin-input" class="pin-input"
-               maxlength="6" inputmode="numeric" pattern="[0-9]*"
-               placeholder="••••••" autocomplete="off" />
+               maxlength="10" inputmode="numeric" pattern="[0-9]*"
+               placeholder="••••" autocomplete="off" />
 
         <div class="error" id="error"></div>
 

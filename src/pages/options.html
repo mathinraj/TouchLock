@@ -29,19 +29,25 @@
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
-          6-Digit PIN
+          PIN Lock
         </h2>
-        <p class="description">Set a fallback PIN for unlocking when biometrics are unavailable.</p>
+        <p class="description">Set a 4–10 digit PIN for unlocking when biometrics are unavailable.</p>
 
         <div class="field">
           <label for="pin1">Enter PIN</label>
-          <input type="password" id="pin1" maxlength="6" inputmode="numeric"
-                 pattern="[0-9]*" placeholder="••••••" autocomplete="off">
+          <input type="password" id="pin1" maxlength="10" inputmode="numeric"
+                 pattern="[0-9]*" placeholder="••••" autocomplete="off">
+        </div>
+        <div class="pin-strength" id="pin-strength">
+          <div class="pin-strength-bar">
+            <div class="pin-strength-fill" id="pin-strength-fill"></div>
+          </div>
+          <span class="pin-strength-label" id="pin-strength-label"></span>
         </div>
         <div class="field">
           <label for="pin2">Confirm PIN</label>
-          <input type="password" id="pin2" maxlength="6" inputmode="numeric"
-                 pattern="[0-9]*" placeholder="••••••" autocomplete="off">
+          <input type="password" id="pin2" maxlength="10" inputmode="numeric"
+                 pattern="[0-9]*" placeholder="••••" autocomplete="off">
         </div>
 
         <div class="msg" id="pin-msg"></div>
@@ -170,6 +176,37 @@
           </select>
         </div>
 
+        <div class="shortcut-section">
+          <div class="shortcut-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
+            </svg>
+            <span>Quick-lock shortcut</span>
+          </div>
+          <p class="shortcut-desc">Press this key combo on any web page to instantly lock the browser.</p>
+          <div class="shortcut-row">
+            <kbd class="shortcut-display" id="shortcut-display">Alt + L</kbd>
+            <button class="btn-shortcut-record" id="btn-record-shortcut">Change</button>
+          </div>
+          <div class="shortcut-recording hidden" id="shortcut-recording">
+            <span class="recording-pulse"></span>
+            <span>Press your new shortcut…</span>
+            <button class="btn-shortcut-cancel" id="btn-cancel-shortcut">Cancel</button>
+          </div>
+          <div class="shortcut-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            <span>This shortcut works on all websites. For it to also work on browser pages
+              (new tab, homepage), <a href="#" id="open-browser-shortcuts">set it in browser shortcut settings</a>.</span>
+          </div>
+        </div>
+
         <div class="msg" id="lock-msg"></div>
         <button id="btn-save-lock" class="btn btn-primary">Save Lock Settings</button>
 
@@ -274,7 +311,7 @@
     </div>
 
     <footer class="footer">
-      TouchLock – Fingerprint Browser Lock v1.1.0
+      TouchLock – Fingerprint Browser Lock v1.2.0
     </footer>
   </div>
 

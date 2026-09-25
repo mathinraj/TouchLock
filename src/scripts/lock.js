@@ -16,15 +16,24 @@
 
   const forgotLink    = document.getElementById('forgot-link');
 
-  const { webauthnRegistered, webauthnCredentialId, securityQuestionsConfigured } =
-    await chrome.storage.local.get(['webauthnRegistered', 'webauthnCredentialId', 'securityQuestionsConfigured']);
+  const { webauthnRegistered, webauthnCredentialId, securityQuestionsConfigured, pinLength } =
+    await chrome.storage.local.get(['webauthnRegistered', 'webauthnCredentialId', 'securityQuestionsConfigured', 'pinLength']);
 
+  const currentPinLength = pinLength || 6;
   const hasBiometrics = !!(webauthnRegistered && webauthnCredentialId);
+
+  pinInput.maxLength = currentPinLength;
+  pinInput.placeholder = '•'.repeat(currentPinLength);
+
+  dots.innerHTML = '';
+  for (let i = 0; i < currentPinLength; i++) {
+    dots.appendChild(document.createElement('span'));
+  }
 
   if (!hasBiometrics) {
     bioBtn.style.display = 'none';
-    bioBtn.previousElementSibling.style.display = 'none'; // hide divider
-    subtitleEl.textContent = 'Enter your 6-digit PIN to unlock';
+    bioBtn.previousElementSibling.style.display = 'none';
+    subtitleEl.textContent = `Enter your ${currentPinLength}-digit PIN to unlock`;
   }
 
   if (!securityQuestionsConfigured) {
@@ -61,8 +70,8 @@
 
   function submitPin() {
     const pin = pinInput.value.trim();
-    if (pin.length !== 6 || !/^\d{6}$/.test(pin)) {
-      showError('Please enter a 6-digit PIN.');
+    if (pin.length < 4 || pin.length > 10 || !/^\d+$/.test(pin)) {
+      showError(`Please enter your ${currentPinLength}-digit PIN.`);
       return;
     }
     pinBtn.disabled = true;
@@ -127,7 +136,7 @@
       }
 
       bioAutoStatus.style.display = 'none';
-      subtitleEl.textContent = 'Enter your 6-digit PIN or use biometrics to unlock';
+      subtitleEl.textContent = 'Enter your PIN or use biometrics to unlock';
 
       if (isAutoTrigger) {
         pinInput.focus();
