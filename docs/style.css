@@ -835,6 +835,28 @@ code {
   color: var(--color-text-dim);
 }
 
+/* ===== User Requested Tag ===== */
+.requested-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 4px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--color-success);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+.requested-tag i {
+  font-size: 0.5rem;
+}
+
 /* ===== Roadmap / Upcoming ===== */
 .roadmap {
   padding: 100px 0;
@@ -868,6 +890,28 @@ code {
 .rm-card--pro:hover {
   border-color: rgba(245, 158, 11, 0.4);
   box-shadow: 0 8px 32px rgba(245, 158, 11, 0.06);
+}
+
+.rm-requested-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 4px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--color-success);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.rm-requested-badge i {
+  font-size: 0.5rem;
 }
 
 .rm-pro-badge {
