@@ -118,6 +118,73 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* ── Rate prompt ───────────────────────────── */
+
+.rate-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  margin: 4px 0 6px;
+  background: rgba(250, 204, 21, 0.05);
+  border: 1px solid rgba(250, 204, 21, 0.12);
+  border-radius: 10px;
+}
+
+.rate-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.rate-star {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.rate-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.rate-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.rate-btn {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.rate-btn--primary {
+  background: linear-gradient(135deg, #f59e0b, #eab308);
+  color: #1a1a1a;
+}
+
+.rate-btn--primary:hover {
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.rate-btn--later {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.rate-btn--later:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
 /* ── Promo banner ──────────────────────────── */
 
 .promo-banner {

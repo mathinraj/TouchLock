@@ -84,6 +84,7 @@ async function init() {
   await loadLockSettings();
   await loadShortcut();
   await loadWhatsNew();
+  await loadRateBanner();
   await refreshStatus();
 
   // ── PIN strength indicator ──────────────────
@@ -370,6 +371,36 @@ async function init() {
     chrome.storage.local.set({ showWhatsNew: false });
   });
 
+  // ── Rate Banner ────────────────────────────────
+
+  async function loadRateBanner() {
+    const data = await chrome.storage.local.get(['rated', 'remindRateAfter', 'unlockCount']);
+    if (data.rated) return;
+
+    const count = data.unlockCount || 0;
+    if (count < 20) return;
+
+    if (data.remindRateAfter && Date.now() < data.remindRateAfter) return;
+
+    const banner     = document.getElementById('rate-banner');
+    const btnRate    = document.getElementById('opt-rate-now');
+    const btnLater   = document.getElementById('opt-rate-later');
+
+    banner.classList.remove('hidden');
+    btnRate.href = getReviewUrl();
+
+    btnRate.addEventListener('click', async () => {
+      await chrome.storage.local.set({ rated: true });
+      banner.classList.add('hidden');
+    });
+
+    btnLater.addEventListener('click', async () => {
+      const remindAt = Date.now() + (2 * 24 * 60 * 60 * 1000);
+      await chrome.storage.local.set({ remindRateAfter: remindAt });
+      banner.classList.add('hidden');
+    });
+  }
+
   // ── Feature Request (collapsible + EmailJS) ─
 
   const frToggle  = document.getElementById('fr-toggle');
@@ -622,4 +653,18 @@ function isReservedShortcut(combo, key) {
   }
 
   return null;
+}
+
+function getReviewUrl() {
+  const ua = navigator.userAgent;
+  if (typeof browser !== 'undefined' && browser.runtime) {
+    return 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/';
+  }
+  if (ua.includes('Edg/')) {
+    return 'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln';
+  }
+  if (ua.includes('Chrome/')) {
+    return 'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews';
+  }
+  return 'https://touchlock.vercel.app/rate.html';
 }

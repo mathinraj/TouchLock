@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rate TouchLock – Leave a Review</title>
+  <meta name="description" content="Rate TouchLock on the Chrome Web Store, Edge Add-ons, or Firefox Add-ons.">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="128x128" href="assets/logo-128.png">
+
+  <script src="https://kit.fontawesome.com/5432a717c1.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .rate-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .rate-card {
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+    }
+
+    .rate-icon {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      line-height: 1;
+    }
+
+    .rate-card h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .rate-subtitle {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .store-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .store-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--color-text);
+      transition: all 0.2s ease;
+    }
+
+    .store-link:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.1);
+    }
+
+    .store-link-icon {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      font-size: 1.25rem;
+    }
+
+    .store-link-icon--chrome  { background: rgba(66, 133, 244, 0.12); color: #4285F4; }
+    .store-link-icon--edge    { background: rgba(0, 120, 212, 0.12);  color: #0078D4; }
+    .store-link-icon--firefox { background: rgba(255, 113, 57, 0.12); color: #FF7139; }
+
+    .store-link-body {
+      text-align: left;
+      flex: 1;
+    }
+
+    .store-link-name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .store-link-desc {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+    }
+
+    .store-link-arrow {
+      color: var(--color-text-dim);
+      font-size: 0.875rem;
+      transition: transform 0.2s;
+    }
+
+    .store-link:hover .store-link-arrow {
+      transform: translateX(3px);
+      color: var(--color-primary-hover);
+    }
+
+    .rate-footer {
+      font-size: 0.8125rem;
+      color: var(--color-text-dim);
+    }
+
+    .rate-footer a {
+      color: var(--color-text-muted);
+      transition: color 0.15s;
+    }
+
+    .rate-footer a:hover {
+      color: var(--color-primary-hover);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: all 0.2s;
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 101;
+    }
+
+    .back-link:hover {
+      color: var(--color-text);
+      border-color: var(--color-primary);
+    }
+
+    @media (max-width: 480px) {
+      .back-link { position: static; margin-bottom: 20px; }
+      .rate-page { padding-top: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back to TouchLock
+  </a>
+
+  <main class="rate-page">
+    <div class="rate-card">
+      <div class="rate-icon">⭐</div>
+      <h1>Rate <span class="gradient-text">TouchLock</span></h1>
+      <p class="rate-subtitle">
+        Your review helps others discover TouchLock and keeps the project going.
+        Pick your browser's store below.
+      </p>
+
+      <div class="store-list">
+        <a href="https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews" target="_blank" rel="noopener" class="store-link">
+          <div class="store-link-icon store-link-icon--chrome">
+            <i class="fa-brands fa-chrome"></i>
+          </div>
+          <div class="store-link-body">
+            <div class="store-link-name">Chrome Web Store</div>
+            <div class="store-link-desc">Chrome, Brave, Opera, Vivaldi</div>
+          </div>
+          <span class="store-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a href="https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln" target="_blank" rel="noopener" class="store-link">
+          <div class="store-link-icon store-link-icon--edge">
+            <i class="fa-brands fa-edge"></i>
+          </div>
+          <div class="store-link-body">
+            <div class="store-link-name">Edge Add-ons</div>
+            <div class="store-link-desc">Microsoft Edge</div>
+          </div>
+          <span class="store-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+
+        <a href="https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/" target="_blank" rel="noopener" class="store-link">
+          <div class="store-link-icon store-link-icon--firefox">
+            <i class="fa-brands fa-firefox-browser"></i>
+          </div>
+          <div class="store-link-body">
+            <div class="store-link-name">Firefox Add-ons</div>
+            <div class="store-link-desc">Mozilla Firefox</div>
+          </div>
+          <span class="store-link-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+        </a>
+      </div>
+
+      <p class="rate-footer">
+        <a href="/">touchlock.vercel.app</a> · Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj</a>
+      </p>
+    </div>
+  </main>
+
+</body>
+</html>

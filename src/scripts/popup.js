@@ -2,8 +2,25 @@
    TouchLock – Popup Script
    ─────────────────────────────────────────────── */
 
-const PROMO_URL = 'https://raw.githubusercontent.com/mathinraj/mathinraj/main/promotions/promos.json';
-const SELF_ID   = 'touchlock';
+const PROMO_URL    = 'https://raw.githubusercontent.com/mathinraj/mathinraj/main/promotions/promos.json';
+const SELF_ID      = 'touchlock';
+const RATE_ITEM_ID = '__rate__';
+const REMIND_DAYS  = 2;
+const RATE_URL     = 'https://touchlock.vercel.app/rate.html';
+
+function getReviewUrl() {
+  const ua = navigator.userAgent;
+  if (typeof browser !== 'undefined' && browser.runtime) {
+    return 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/';
+  }
+  if (ua.includes('Edg/')) {
+    return 'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln';
+  }
+  if (ua.includes('Chrome/')) {
+    return 'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews';
+  }
+  return RATE_URL;
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const badge       = document.getElementById('status-badge');
@@ -58,13 +75,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.close();
   });
 
-  loadPromo();
+  document.getElementById('btn-rate-now').addEventListener('click', async () => {
+    await chrome.storage.local.set({ rated: true });
+    chrome.tabs.create({ url: getReviewUrl() });
+    window.close();
+  });
+
+  document.getElementById('btn-rate-later').addEventListener('click', async () => {
+    const remindAt = Date.now() + (REMIND_DAYS * 24 * 60 * 60 * 1000);
+    await chrome.storage.local.set({ remindRateAfter: remindAt });
+    document.getElementById('rate-prompt').classList.add('hidden');
+  });
+
+  loadBanner();
 });
 
-async function loadPromo() {
-  const banner = document.getElementById('promo-banner');
-  let promos;
+async function shouldShowRate() {
+  const data = await chrome.storage.local.get(['rated', 'remindRateAfter']);
+  if (data.rated) return false;
+  if (data.remindRateAfter && Date.now() < data.remindRateAfter) return false;
+  return true;
+}
 
+async function loadBanner() {
+  const promoBanner = document.getElementById('promo-banner');
+  const ratePrompt  = document.getElementById('rate-prompt');
+
+  let promos;
   try {
     const res = await fetch(PROMO_URL, { cache: 'no-cache' });
     promos = await res.json();
@@ -75,30 +112,44 @@ async function loadPromo() {
   }
 
   promos = promos.filter(p => p.id !== SELF_ID);
+
+  const canRate = await shouldShowRate();
+  if (canRate) {
+    promos.push({ id: RATE_ITEM_ID });
+  }
+
   if (!promos.length) {
-    banner.style.display = 'none';
+    promoBanner.style.display = 'none';
     return;
   }
 
   const { promoIndex } = await chrome.storage.local.get('promoIndex');
   const idx = (typeof promoIndex === 'number') ? promoIndex % promos.length : 0;
-  const promo = promos[idx];
+  const item = promos[idx];
+
+  await chrome.storage.local.set({ promoIndex: (idx + 1) % promos.length });
+
+  if (item.id === RATE_ITEM_ID) {
+    promoBanner.style.display = 'none';
+    ratePrompt.classList.remove('hidden');
+    return;
+  }
+
+  ratePrompt.classList.add('hidden');
 
   const iconEl = document.getElementById('promo-icon');
   const logoEl = document.getElementById('promo-logo');
 
-  if (promo.logo) {
-    logoEl.src = promo.logo;
+  if (item.logo) {
+    logoEl.src = item.logo;
     logoEl.classList.remove('hidden');
     iconEl.childNodes.forEach(n => { if (n.nodeType === 3) n.textContent = ''; });
   } else {
     logoEl.classList.add('hidden');
-    iconEl.childNodes[0].textContent = promo.icon;
+    iconEl.childNodes[0].textContent = item.icon;
   }
 
-  document.getElementById('promo-name').textContent = promo.name;
-  document.getElementById('promo-desc').textContent = promo.desc;
-  banner.href = promo.url;
-
-  await chrome.storage.local.set({ promoIndex: (idx + 1) % promos.length });
+  document.getElementById('promo-name').textContent = item.name;
+  document.getElementById('promo-desc').textContent = item.desc;
+  promoBanner.href = item.url;
 }

@@ -68,6 +68,9 @@ async function lockBrowser() {
 async function unlockBrowser() {
   await chrome.storage.local.set({ isLocked: false });
 
+  const { unlockCount } = await chrome.storage.local.get('unlockCount');
+  await chrome.storage.local.set({ unlockCount: (unlockCount || 0) + 1 });
+
   // Close all lock tabs
   const allTabs = await chrome.tabs.query({});
   const lockTabIds = allTabs.filter(t => isLockUrl(t.url)).map(t => t.id);
