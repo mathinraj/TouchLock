@@ -13,14 +13,11 @@ if [ "$VERSION" != "$FIREFOX_VERSION" ]; then
   echo "Using each manifest's own version for the zip filename."
 fi
 
-OUT_DIR="$REPO_ROOT/dist"
-mkdir -p "$OUT_DIR"
+# Clean any previously built zip files
+rm -f "$REPO_ROOT"/touchlock-*.zip
 
-CHROME_ZIP="$OUT_DIR/touchlock-for-chrome-${VERSION}.zip"
-FIREFOX_ZIP="$OUT_DIR/touchlock-for-firefox-${FIREFOX_VERSION}.zip"
-
-# Clean previous builds for these versions
-rm -f "$CHROME_ZIP" "$FIREFOX_ZIP"
+CHROME_ZIP="$REPO_ROOT/touchlock-for-chrome-${VERSION}.zip"
+FIREFOX_ZIP="$REPO_ROOT/touchlock-for-firefox-${FIREFOX_VERSION}.zip"
 
 # ── Chrome ──────────────────────────────────────────────────────────────────────
 echo "Packaging Chrome extension v${VERSION} ..."
@@ -49,5 +46,5 @@ echo "  → $FIREFOX_ZIP ($(du -h "$FIREFOX_ZIP" | cut -f1))"
 
 cd "$REPO_ROOT"
 echo ""
-echo "Done. Zips are in $OUT_DIR/"
-ls -lh "$OUT_DIR"/*.zip
+echo "Done. Zips are in $REPO_ROOT/"
+ls -lh "$REPO_ROOT"/touchlock-*.zip
