@@ -200,7 +200,7 @@
           <p class="shortcut-desc">Press this key combo on any web page to instantly lock the browser.</p>
           <div class="shortcut-row">
             <kbd class="shortcut-display" id="shortcut-display">Alt + L</kbd>
-            <button class="btn-shortcut-record" id="btn-record-shortcut">Change</button>
+            <button class="btn-shortcut-record" id="btn-record-shortcut">Change <span class="pro-badge">PRO</span></button>
           </div>
           <div class="shortcut-recording hidden" id="shortcut-recording">
             <span class="recording-pulse"></span>
@@ -322,8 +322,105 @@
 
     </div>
 
+    <!-- ── Upcoming Features ─────────────────── -->
+    <section class="card card-roadmap">
+      <div class="collapsible-header" id="roadmap-toggle">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+          Upcoming Features
+        </h2>
+        <svg class="chevron" id="roadmap-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <p class="description">Here's what's coming next to TouchLock.</p>
+
+      <div class="collapsible-body" id="roadmap-body">
+        <div class="roadmap-list">
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--free">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
+            <span class="roadmap-text">Lock screen clock</span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--free">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </span>
+            <span class="roadmap-text">Panic button</span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--free">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </span>
+            <span class="roadmap-text">Lock history log</span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--free">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </span>
+            <span class="roadmap-text">Export / import settings</span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            </span>
+            <span class="roadmap-text">Lock on specific sites <span class="pro-badge">PRO</span></span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </span>
+            <span class="roadmap-text">Intruder detection <span class="pro-badge">PRO</span></span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </span>
+            <span class="roadmap-text">Stealth mode <span class="pro-badge">PRO</span></span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            <span class="roadmap-text">Scheduled lock <span class="pro-badge">PRO</span></span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </span>
+            <span class="roadmap-text">Multiple profiles <span class="pro-badge">PRO</span></span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </span>
+            <span class="roadmap-text">Unlock notifications <span class="pro-badge">PRO</span></span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 8 14"/></svg>
+            </span>
+            <span class="roadmap-text">Break timer / focus mode <span class="pro-badge">PRO</span></span>
+          </div>
+          <div class="roadmap-item">
+            <span class="roadmap-icon roadmap-icon--pro">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5a15.54 15.54 0 0 0 5.06 12.05A15.49 15.49 0 0 0 17.5 6.5a3.5 3.5 0 0 0-5.5-2.84A3.5 3.5 0 0 0 6.5 6.5z"/></svg>
+            </span>
+            <span class="roadmap-text">Auto-lock on Bluetooth disconnect <span class="pro-badge">PRO</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <footer class="footer">
-      TouchLock v1.2.0 · Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj</a>
+      TouchLock v1.2.0 · Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj 💚</a>
     </footer>
   </div>
 

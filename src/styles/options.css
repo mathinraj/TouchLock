@@ -736,6 +736,73 @@ body {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
+/* ── Pro badge ─────────────────────────────── */
+
+.pro-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  line-height: 1.5;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+/* ── Roadmap / Upcoming Features ──────────── */
+
+.card-roadmap {
+  margin-bottom: 16px;
+  border-color: rgba(139, 92, 246, 0.15);
+}
+
+.roadmap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roadmap-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 9px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.roadmap-item:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.roadmap-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 7px;
+  color: #fff;
+}
+
+.roadmap-icon--free { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.roadmap-icon--pro  { background: rgba(245, 158, 11, 0.12); color: #fbbf24; }
+
+.roadmap-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .hidden { display: none !important; }
 
 /* ── Support / Buy me a coffee ────────────── */

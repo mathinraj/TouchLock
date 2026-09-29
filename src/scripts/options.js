@@ -381,6 +381,15 @@ async function init() {
     frChevron.classList.toggle('open', isOpen);
   });
 
+  const roadmapToggle  = document.getElementById('roadmap-toggle');
+  const roadmapBody    = document.getElementById('roadmap-body');
+  const roadmapChevron = document.getElementById('roadmap-chevron');
+
+  roadmapToggle.addEventListener('click', () => {
+    const isOpen = roadmapBody.classList.toggle('expanded');
+    roadmapChevron.classList.toggle('open', isOpen);
+  });
+
   btnSendFR.addEventListener('click', async () => {
     const message = frMessage.value.trim();
 
