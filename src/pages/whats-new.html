@@ -100,13 +100,56 @@
         </svg>
         View full changelog
       </a>
-      <button id="btn-got-it" class="btn btn-primary">
+      <button id="btn-request-feature" class="btn btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="20 6 9 17 4 12"/>
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
         </svg>
-        Got it
+        Request a Feature
       </button>
+    </div>
+
+    <!-- Feature Request Modal -->
+    <div class="modal-overlay hidden" id="fr-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Request a Feature</h3>
+          <button class="modal-close" id="modal-close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-field">
+            <label for="modal-email">Email</label>
+            <input type="email" id="modal-email" class="modal-input" placeholder="you@example.com" autocomplete="email">
+          </div>
+          <div class="modal-field">
+            <label for="modal-category">Category</label>
+            <select id="modal-category" class="modal-select">
+              <option value="feature">New Feature</option>
+              <option value="improvement">Improvement</option>
+              <option value="bug">Bug Report</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="modal-field">
+            <label for="modal-message">Your Message</label>
+            <textarea id="modal-message" class="modal-textarea" rows="3" placeholder="Describe your idea or issue…"></textarea>
+          </div>
+          <div class="modal-msg" id="modal-msg"></div>
+          <button id="modal-send" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+            Send
+          </button>
+        </div>
+      </div>
     </div>
 
     <footer class="footer">

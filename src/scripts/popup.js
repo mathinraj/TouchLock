@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnLock     = document.getElementById('btn-lock');
   const btnSetup    = document.getElementById('btn-setup');
   const btnSettings = document.getElementById('btn-settings');
+  const btnWhatsNew = document.getElementById('btn-whats-new');
 
   chrome.runtime.sendMessage({ action: 'getState' }, (res) => {
     if (chrome.runtime.lastError || !res) {
@@ -46,6 +47,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   btnSettings.addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
+    window.close();
+  });
+
+  btnWhatsNew.addEventListener('click', () => {
+    chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/whats-new.html') });
     window.close();
   });
 });
