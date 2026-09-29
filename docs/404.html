@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 – Page Not Found | TouchLock</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="128x128" href="/assets/logo-128.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #09090b;
+      --color-surface: #18181b;
+      --color-border: #3f3f46;
+      --color-text: #fafafa;
+      --color-text-muted: #a1a1aa;
+      --color-primary: #6366f1;
+      --color-primary-hover: #818cf8;
+      --color-accent: #a855f7;
+      --radius-md: 12px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--color-bg);
+      color: var(--color-text);
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .face {
+      display: block;
+      width: 10em;
+      height: auto;
+      color: var(--color-text);
+      filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.15));
+    }
+
+    .face__eyes,
+    .face__eye-lid,
+    .face__mouth-left,
+    .face__mouth-right,
+    .face__nose,
+    .face__pupil {
+      animation: eyes 1s 0.3s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+
+    .face__eye-lid,
+    .face__pupil {
+      animation-duration: 4s;
+      animation-delay: 1.3s;
+      animation-iteration-count: infinite;
+    }
+
+    .face__eye-lid {
+      animation-name: eye-lid;
+    }
+
+    .face__mouth-left,
+    .face__mouth-right {
+      animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    .face__mouth-left {
+      animation-name: mouth-left;
+    }
+
+    .face__mouth-right {
+      animation-name: mouth-right;
+    }
+
+    .face__nose {
+      animation-name: nose;
+    }
+
+    .face__pupil {
+      animation-name: pupil;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .info h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .info p {
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      max-width: 340px;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 0.5rem;
+      padding: 12px 28px;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @keyframes eye-lid {
+      from, 40%, 45%, to { transform: translateY(0); }
+      42.5% { transform: translateY(17.5px); }
+    }
+
+    @keyframes eyes {
+      from { transform: translateY(112.5px); }
+      to { transform: translateY(15px); }
+    }
+
+    @keyframes pupil {
+      from, 37.5%, 40%, 45%, 87.5%, to {
+        stroke-dashoffset: 0;
+        transform: translate(0, 0);
+      }
+      12.5%, 25%, 62.5%, 75% {
+        stroke-dashoffset: 0;
+        transform: translate(-35px, 0);
+      }
+      42.5% {
+        stroke-dashoffset: 35;
+        transform: translate(0, 17.5px);
+      }
+    }
+
+    @keyframes mouth-left {
+      from, 50% { stroke-dashoffset: -102; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes mouth-right {
+      from, 50% { stroke-dashoffset: 102; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes nose {
+      from { transform: translate(0, 0); }
+      to { transform: translate(0, 22.5px); }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <svg class="face" viewBox="0 0 320 380" width="320" height="380" aria-label="Animated 404 face">
+      <g fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="25">
+        <g class="face__eyes" transform="translate(0, 112.5)">
+          <g transform="translate(15, 0)">
+            <polyline class="face__eye-lid" points="37,0 0,120 75,120" />
+            <polyline class="face__pupil" points="55,120 55,155" stroke-dasharray="35 35" />
+          </g>
+          <g transform="translate(230, 0)">
+            <polyline class="face__eye-lid" points="37,0 0,120 75,120" />
+            <polyline class="face__pupil" points="55,120 55,155" stroke-dasharray="35 35" />
+          </g>
+        </g>
+        <rect class="face__nose" rx="4" ry="4" x="132.5" y="112.5" width="55" height="155" />
+        <g stroke-dasharray="102 102" transform="translate(65, 334)">
+          <path class="face__mouth-left" d="M 0 30 C 0 30 40 0 95 0" stroke-dashoffset="-102" />
+          <path class="face__mouth-right" d="M 95 0 C 150 0 190 30 190 30" stroke-dashoffset="102" />
+        </g>
+      </g>
+    </svg>
+    <div class="info">
+      <h1>Page Not Found</h1>
+      <p>The page you're looking for doesn't exist or has been moved.</p>
+      <a href="/" class="btn">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back to Home
+      </a>
+    </div>
+  </main>
+</body>
+</html>
