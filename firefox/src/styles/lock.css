@@ -250,6 +250,17 @@ body {
   text-decoration: underline;
 }
 
+/* ── Update hint ───────────────────────────── */
+
+.update-hint {
+  margin-top: 14px;
+  font-size: 11px;
+  color: #60a5fa;
+  opacity: 0.7;
+}
+
+.update-hint.hidden { display: none; }
+
 /* ── Footer ────────────────────────────────── */
 
 .footer {

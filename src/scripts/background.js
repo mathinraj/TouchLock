@@ -148,6 +148,38 @@ chrome.idle.onStateChanged.addListener(async (newState) => {
   await lockBrowser();
 });
 
+// ── Remote version check ─────────────────────────
+
+const VERSIONS_URL = 'https://raw.githubusercontent.com/mathinraj/mathinraj/main/promotions/versions.json';
+
+async function checkForUpdate() {
+  try {
+    const res = await fetch(VERSIONS_URL, { cache: 'no-cache' });
+    const versions = await res.json();
+    const latest = versions.touchlock;
+    if (!latest) return;
+
+    const current = chrome.runtime.getManifest().version;
+    if (isNewerVersion(latest, current)) {
+      await chrome.storage.local.set({ updateAvailable: true, latestVersion: latest });
+    } else {
+      await chrome.storage.local.remove(['updateAvailable', 'latestVersion']);
+    }
+  } catch (_) {}
+}
+
+function isNewerVersion(remote, local) {
+  const r = remote.split('.').map(Number);
+  const l = local.split('.').map(Number);
+  for (let i = 0; i < Math.max(r.length, l.length); i++) {
+    const rv = r[i] || 0;
+    const lv = l[i] || 0;
+    if (rv > lv) return true;
+    if (rv < lv) return false;
+  }
+  return false;
+}
+
 // ── Lifecycle events ─────────────────────────────
 
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -171,10 +203,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
 
   applyIdleSettings();
+  checkForUpdate();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
   applyIdleSettings();
+  checkForUpdate();
 
   const { lockOnStartup } = await chrome.storage.local.get('lockOnStartup');
   if (lockOnStartup === false) return;

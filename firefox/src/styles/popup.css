@@ -118,6 +118,51 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* ── Update banner ─────────────────────────── */
+
+.update-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  margin: 4px 0 6px;
+  background: rgba(59, 130, 246, 0.06);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 10px;
+}
+
+.update-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #60a5fa;
+}
+
+.update-left svg {
+  flex-shrink: 0;
+}
+
+.update-btn {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.update-btn:hover {
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
 /* ── Rate prompt ───────────────────────────── */
 
 .rate-prompt {

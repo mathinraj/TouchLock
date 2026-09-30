@@ -5,6 +5,13 @@
    ─────────────────────────────────────────────── */
 
 (async function init() {
+  const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
+  if (updateAvailable && latestVersion) {
+    const hint = document.getElementById('update-hint');
+    hint.textContent = `Update available: v${latestVersion}`;
+    hint.classList.remove('hidden');
+  }
+
   const pinInput      = document.getElementById('pin-input');
   const pinBtn        = document.getElementById('btn-pin');
   const bioBtn        = document.getElementById('btn-bio');

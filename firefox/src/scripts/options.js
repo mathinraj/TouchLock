@@ -84,7 +84,8 @@ async function init() {
   await loadLockSettings();
   await loadShortcut();
   await loadWhatsNew();
-  await loadRateBanner();
+  const hasUpdate = await loadUpdateBanner();
+  if (!hasUpdate) await loadRateBanner();
   await refreshStatus();
 
   // ── PIN strength indicator ──────────────────
@@ -389,6 +390,21 @@ async function init() {
     chrome.storage.local.set({ showWhatsNew: false });
   });
 
+  // ── Update Banner ──────────────────────────────
+
+  async function loadUpdateBanner() {
+    const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
+    if (!updateAvailable || !latestVersion) return false;
+
+    const banner = document.getElementById('update-banner');
+    const btnUpdate = document.getElementById('opt-update-btn');
+
+    document.getElementById('update-version').textContent = latestVersion;
+    btnUpdate.href = getStoreUrl();
+    banner.classList.remove('hidden');
+    return true;
+  }
+
   // ── Rate Banner + Rate Button ──────────────────
 
   async function loadRateBanner() {
@@ -692,6 +708,16 @@ const REVIEW_URLS = {
   firefox: 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/'
 };
 
+const STORE_URLS = {
+  chrome:  'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl',
+  edge:    'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln',
+  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/'
+};
+
 function getReviewUrl() {
   return REVIEW_URLS[TOUCHLOCK_STORE] || 'https://touchlock.vercel.app/rate.html';
+}
+
+function getStoreUrl() {
+  return STORE_URLS[TOUCHLOCK_STORE] || 'https://touchlock.vercel.app/#install';
 }

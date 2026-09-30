@@ -13,8 +13,18 @@ const REVIEW_URLS = {
   firefox: 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/'
 };
 
+const STORE_URLS = {
+  chrome:  'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl',
+  edge:    'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln',
+  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/'
+};
+
 function getReviewUrl() {
   return REVIEW_URLS[TOUCHLOCK_STORE] || 'https://touchlock.vercel.app/rate.html';
+}
+
+function getStoreUrl() {
+  return STORE_URLS[TOUCHLOCK_STORE] || 'https://touchlock.vercel.app/#install';
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -82,8 +92,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('rate-prompt').classList.add('hidden');
   });
 
+  document.getElementById('btn-update').addEventListener('click', () => {
+    chrome.tabs.create({ url: getStoreUrl() });
+    window.close();
+  });
+
+  await showUpdateBanner();
   loadBanner();
 });
+
+async function showUpdateBanner() {
+  const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
+  if (!updateAvailable || !latestVersion) return;
+
+  document.getElementById('update-version').textContent = latestVersion;
+  document.getElementById('update-banner').classList.remove('hidden');
+}
 
 async function shouldShowRate() {
   const data = await chrome.storage.local.get(['rated', 'remindRateAfter']);
