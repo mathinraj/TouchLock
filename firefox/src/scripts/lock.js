@@ -4,12 +4,32 @@
    registration, so WebAuthn works directly here.
    ─────────────────────────────────────────────── */
 
+const STORE_URLS = {
+  chrome:  'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl',
+  edge:    'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln',
+  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/'
+};
+
+let pendingUpdateRedirect = false;
+
 (async function init() {
   const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
   if (updateAvailable && latestVersion) {
-    const hint = document.getElementById('update-hint');
-    hint.textContent = `Update available: v${latestVersion}`;
-    hint.classList.remove('hidden');
+    const corner = document.getElementById('update-corner');
+    document.getElementById('update-corner-text').textContent = `v${latestVersion} available — Update now`;
+    corner.classList.remove('hidden');
+
+    corner.addEventListener('click', async () => {
+      pendingUpdateRedirect = true;
+      const store = typeof TOUCHLOCK_STORE !== 'undefined' ? TOUCHLOCK_STORE : 'chrome';
+      const url = STORE_URLS[store] || 'https://touchlock.vercel.app/#install';
+      await chrome.storage.local.set({ pendingUpdateUrl: url });
+      const card = document.querySelector('.card');
+      card.classList.remove('shake');
+      void card.offsetWidth;
+      card.classList.add('shake');
+      document.getElementById('pin-input').focus();
+    });
   }
 
   const pinInput      = document.getElementById('pin-input');
@@ -176,6 +196,8 @@
       <h1 class="title" style="margin-top:8px">Unlocked</h1>
       <p class="subtitle">Welcome back!</p>
     `;
+
+    
   }
 })();
 

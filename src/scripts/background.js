@@ -85,6 +85,13 @@ async function unlockBrowser() {
       await chrome.tabs.sendMessage(tab.id, { action: 'unlock' });
     } catch (_) {}
   }
+
+  // Handle pending update redirect from lock screen
+  const { pendingUpdateUrl } = await chrome.storage.local.get('pendingUpdateUrl');
+  if (pendingUpdateUrl) {
+    await chrome.storage.local.remove('pendingUpdateUrl');
+    chrome.tabs.create({ url: pendingUpdateUrl });
+  }
 }
 
 async function injectOverlay(tabId) {
@@ -400,6 +407,12 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       case 'getPinLength': {
         const { pinLength } = await chrome.storage.local.get('pinLength');
         sendResponse({ pinLength: pinLength || 6 });
+        break;
+      }
+
+      case 'openUrl': {
+        chrome.tabs.create({ url: msg.url });
+        sendResponse({ success: true });
         break;
       }
 
