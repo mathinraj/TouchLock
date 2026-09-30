@@ -118,6 +118,15 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 
 ## Changelog
 
+### v1.2.1
+- **Store-specific builds** – build script produces separate zips for Chrome, Edge, and Firefox with correct store links baked in
+- **Remote update check** – fetches latest version from a remote JSON on startup; shows update banner in popup, settings, and lock screen
+- **Rate prompt** – non-intrusive rating prompt rotates in the popup alongside cross-promotions; respects "Remind me" and "Rated" states
+- **Cross-promotion** – rotating banner in popup fetches projects from a remote JSON; self-exclusion prevents promoting the current extension
+- **Uninstall feedback** – opens a feedback page with contextual nudges when the extension is uninstalled
+- **Upcoming features roadmap** – collapsible section in Settings showing planned free and Pro features
+- **Pro badges** – visual Pro tags on premium features (custom shortcut, 1-min idle lock) for future monetization
+
 ### v1.2.0
 - **Variable PIN length** – PIN now supports 4–10 digits with a visual strength indicator (Weak / Fair / Good / Strong)
 - **Keyboard shortcut** – lock the browser instantly with Alt+L (customizable); reserved shortcuts are blocked
