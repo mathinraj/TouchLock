@@ -371,10 +371,22 @@ async function init() {
     chrome.storage.local.set({ showWhatsNew: false });
   });
 
-  // ── Rate Banner ────────────────────────────────
+  // ── Rate Banner + Rate Button ──────────────────
 
   async function loadRateBanner() {
     const data = await chrome.storage.local.get(['rated', 'remindRateAfter', 'unlockCount']);
+    const reviewUrl = getReviewUrl();
+
+    const rateBtn = document.getElementById('btn-rate-ext');
+    if (data.rated) {
+      rateBtn.classList.add('hidden');
+    } else {
+      rateBtn.href = reviewUrl;
+      rateBtn.addEventListener('click', async () => {
+        await chrome.storage.local.set({ rated: true });
+      });
+    }
+
     if (data.rated) return;
 
     const count = data.unlockCount || 0;
@@ -387,11 +399,12 @@ async function init() {
     const btnLater   = document.getElementById('opt-rate-later');
 
     banner.classList.remove('hidden');
-    btnRate.href = getReviewUrl();
+    btnRate.href = reviewUrl;
 
     btnRate.addEventListener('click', async () => {
       await chrome.storage.local.set({ rated: true });
       banner.classList.add('hidden');
+      rateBtn.classList.add('hidden');
     });
 
     btnLater.addEventListener('click', async () => {
@@ -655,16 +668,12 @@ function isReservedShortcut(combo, key) {
   return null;
 }
 
+const REVIEW_URLS = {
+  chrome:  'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews',
+  edge:    'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln',
+  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/'
+};
+
 function getReviewUrl() {
-  const ua = navigator.userAgent;
-  if (typeof browser !== 'undefined' && browser.runtime) {
-    return 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/';
-  }
-  if (ua.includes('Edg/')) {
-    return 'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln';
-  }
-  if (ua.includes('Chrome/')) {
-    return 'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews';
-  }
-  return 'https://touchlock.vercel.app/rate.html';
+  return REVIEW_URLS[TOUCHLOCK_STORE] || 'https://touchlock.vercel.app/rate.html';
 }

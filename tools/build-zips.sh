@@ -4,47 +4,67 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
-# Read version from the root manifest
 VERSION=$(python3 -c "import json; print(json.load(open('manifest.json'))['version'])")
-FIREFOX_VERSION=$(python3 -c "import json; print(json.load(open('firefox/manifest.json'))['version'])")
+DIST_DIR="$REPO_ROOT/dist"
+CONFIG_FILE="src/scripts/config.js"
+FIREFOX_CONFIG_FILE="firefox/src/scripts/config.js"
 
-if [ "$VERSION" != "$FIREFOX_VERSION" ]; then
-  echo "WARNING: Chrome manifest version ($VERSION) differs from Firefox manifest version ($FIREFOX_VERSION)"
-  echo "Using each manifest's own version for the zip filename."
-fi
+mkdir -p "$DIST_DIR"
+rm -f "$DIST_DIR"/touchlock-*.zip
 
-# Clean any previously built zip files
-rm -f "$REPO_ROOT"/touchlock-*.zip
+echo "TouchLock v${VERSION} — Building store packages"
+echo "================================================"
 
-CHROME_ZIP="$REPO_ROOT/touchlock-for-chrome-${VERSION}.zip"
-FIREFOX_ZIP="$REPO_ROOT/touchlock-for-firefox-${FIREFOX_VERSION}.zip"
+# ── Chrome ─────────────────────────────────────────
+echo ""
+echo "[1/3] Chrome Web Store ..."
+echo "const TOUCHLOCK_STORE = 'chrome';" > "$CONFIG_FILE"
 
-# ── Chrome ──────────────────────────────────────────────────────────────────────
-echo "Packaging Chrome extension v${VERSION} ..."
+CHROME_ZIP="$DIST_DIR/touchlock-for-chrome-${VERSION}.zip"
 zip -r "$CHROME_ZIP" \
   manifest.json \
-  icons/icon-16.png \
-  icons/icon-48.png \
-  icons/icon-128.png \
+  icons/icon-16.png icons/icon-48.png icons/icon-128.png \
   src/ \
-  -x "*.DS_Store"
+  -x "*.DS_Store" > /dev/null
 
 echo "  → $CHROME_ZIP ($(du -h "$CHROME_ZIP" | cut -f1))"
 
-# ── Firefox ─────────────────────────────────────────────────────────────────────
-echo "Packaging Firefox extension v${FIREFOX_VERSION} ..."
+# ── Edge ───────────────────────────────────────────
+echo ""
+echo "[2/3] Edge Add-ons ..."
+echo "const TOUCHLOCK_STORE = 'edge';" > "$CONFIG_FILE"
+
+EDGE_ZIP="$DIST_DIR/touchlock-for-edge-${VERSION}.zip"
+zip -r "$EDGE_ZIP" \
+  manifest.json \
+  icons/icon-16.png icons/icon-48.png icons/icon-128.png \
+  src/ \
+  -x "*.DS_Store" > /dev/null
+
+echo "  → $EDGE_ZIP ($(du -h "$EDGE_ZIP" | cut -f1))"
+
+# Reset Chrome config back to default
+echo "const TOUCHLOCK_STORE = 'chrome';" > "$CONFIG_FILE"
+
+# ── Firefox ────────────────────────────────────────
+echo ""
+echo "[3/3] Firefox Add-ons ..."
+echo "const TOUCHLOCK_STORE = 'firefox';" > "$FIREFOX_CONFIG_FILE"
+
+FIREFOX_ZIP="$DIST_DIR/touchlock-for-firefox-${VERSION}.zip"
 cd "$REPO_ROOT/firefox"
 zip -r "$FIREFOX_ZIP" \
   manifest.json \
-  icons/icon-16.png \
-  icons/icon-48.png \
-  icons/icon-128.png \
+  icons/icon-16.png icons/icon-48.png icons/icon-128.png \
   src/ \
-  -x "*.DS_Store"
-
-echo "  → $FIREFOX_ZIP ($(du -h "$FIREFOX_ZIP" | cut -f1))"
+  -x "*.DS_Store" > /dev/null
 
 cd "$REPO_ROOT"
+echo "  → $FIREFOX_ZIP ($(du -h "$FIREFOX_ZIP" | cut -f1))"
+
+# ── Done ───────────────────────────────────────────
 echo ""
-echo "Done. Zips are in $REPO_ROOT/"
-ls -lh "$REPO_ROOT"/touchlock-*.zip
+echo "================================================"
+echo "Done! All 3 zips are in $DIST_DIR/"
+echo ""
+ls -lh "$DIST_DIR"/touchlock-*.zip

@@ -6,20 +6,15 @@ const PROMO_URL    = 'https://raw.githubusercontent.com/mathinraj/mathinraj/main
 const SELF_ID      = 'touchlock';
 const RATE_ITEM_ID = '__rate__';
 const REMIND_DAYS  = 2;
-const RATE_URL     = 'https://touchlock.vercel.app/rate.html';
+
+const REVIEW_URLS = {
+  chrome:  'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews',
+  edge:    'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln',
+  firefox: 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/'
+};
 
 function getReviewUrl() {
-  const ua = navigator.userAgent;
-  if (typeof browser !== 'undefined' && browser.runtime) {
-    return 'https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/reviews/';
-  }
-  if (ua.includes('Edg/')) {
-    return 'https://microsoftedge.microsoft.com/addons/detail/aibbojojoeamjgikgailflpbhdpcjgln';
-  }
-  if (ua.includes('Chrome/')) {
-    return 'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews';
-  }
-  return RATE_URL;
+  return REVIEW_URLS[TOUCHLOCK_STORE] || 'https://touchlock.vercel.app/rate.html';
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
