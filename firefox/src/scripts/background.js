@@ -189,6 +189,8 @@ function isNewerVersion(remote, local) {
 
 // ── Lifecycle events ─────────────────────────────
 
+chrome.runtime.setUninstallURL('https://touchlock.vercel.app/uninstall.html');
+
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install') {
     await chrome.storage.local.set({

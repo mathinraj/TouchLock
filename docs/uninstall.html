@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – We'd love to hear from you</title>
+  <meta name="description" content="Help us improve TouchLock by sharing your feedback.">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="128x128" href="assets/logo-128.png">
+
+  <script src="https://kit.fontawesome.com/5432a717c1.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .uninstall-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .uninstall-card {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .uninstall-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .uninstall-emoji {
+      font-size: 3rem;
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+
+    .uninstall-header h1 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .uninstall-header p {
+      font-size: 0.9375rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .feedback-form {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 28px;
+    }
+
+    .feedback-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 12px;
+    }
+
+    .reason-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .reason-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .reason-item:hover {
+      border-color: var(--color-primary);
+    }
+
+    .reason-item.selected {
+      border-color: var(--color-primary);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .reason-item input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      border: 2px solid var(--color-border);
+      border-radius: 50%;
+      transition: all 0.15s;
+      cursor: pointer;
+    }
+
+    .reason-item input[type="radio"]:checked {
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      box-shadow: inset 0 0 0 3px var(--color-bg);
+    }
+
+    .reason-item label {
+      font-size: 0.875rem;
+      color: var(--color-text);
+      cursor: pointer;
+      flex: 1;
+    }
+
+    /* ── Nudge popup ──────────────── */
+
+    .nudge {
+      display: none;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      color: var(--color-text);
+      animation: nudge-in 0.25s ease;
+    }
+
+    .nudge.visible { display: block; }
+
+    @keyframes nudge-in {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .nudge-icon {
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .nudge strong {
+      color: var(--color-text);
+    }
+
+    .nudge-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .nudge--setup {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+    .nudge--setup .nudge-action {
+      background: var(--color-primary);
+      color: #fff;
+    }
+
+    .nudge--features {
+      background: rgba(34, 197, 94, 0.06);
+      border: 1px solid rgba(34, 197, 94, 0.15);
+    }
+    .nudge--features .nudge-action {
+      background: var(--color-success);
+      color: #000;
+    }
+
+    .nudge--issues {
+      background: rgba(245, 158, 11, 0.06);
+      border: 1px solid rgba(245, 158, 11, 0.15);
+    }
+    .nudge--issues .nudge-action {
+      background: #f59e0b;
+      color: #000;
+    }
+
+    .nudge--privacy {
+      background: rgba(59, 130, 246, 0.06);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+    }
+
+    .nudge--other {
+      background: rgba(139, 92, 246, 0.06);
+      border: 1px solid rgba(139, 92, 246, 0.15);
+    }
+
+    .feedback-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      color: var(--color-text);
+      font-family: var(--font);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      outline: none;
+      resize: vertical;
+      min-height: 70px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .feedback-textarea::placeholder { color: var(--color-text-dim); }
+    .feedback-textarea:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .feedback-msg {
+      min-height: 20px;
+      margin-bottom: 10px;
+      font-size: 0.8125rem;
+      text-align: center;
+    }
+    .feedback-msg.success { color: var(--color-success); }
+    .feedback-msg.error { color: #ef4444; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      font-size: 0.9375rem;
+    }
+
+    .reinstall-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.8125rem;
+      color: var(--color-text-dim);
+    }
+
+    .reinstall-note a {
+      color: var(--color-primary-hover);
+      transition: color 0.15s;
+    }
+    .reinstall-note a:hover { color: var(--color-text); }
+
+    .thank-you { text-align: center; padding: 32px 0; }
+    .thank-you-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .thank-you h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 6px; }
+    .thank-you p { font-size: 0.875rem; color: var(--color-text-muted); }
+  </style>
+</head>
+<body>
+
+  <main class="uninstall-page">
+    <div class="uninstall-card">
+      <div class="uninstall-header">
+        <div class="uninstall-emoji">👋</div>
+        <h1>We'd love to <span class="gradient-text">hear from you</span></h1>
+        <p>Your feedback helps us make TouchLock better. It only takes a few seconds.</p>
+      </div>
+
+      <div class="feedback-form" id="feedback-form">
+        <span class="feedback-label">What made you uninstall?</span>
+
+        <div class="reason-list" id="reason-list">
+          <div class="reason-item" data-reason="setup" data-value="Too hard to set up">
+            <input type="radio" name="reason" id="r1" value="Too hard to set up">
+            <label for="r1">Too hard to set up</label>
+          </div>
+          <div class="reason-item" data-reason="features" data-value="Missing features I need">
+            <input type="radio" name="reason" id="r2" value="Missing features I need">
+            <label for="r2">Missing features I need</label>
+          </div>
+          <div class="reason-item" data-reason="issues" data-value="Caused browser issues">
+            <input type="radio" name="reason" id="r3" value="Caused browser issues">
+            <label for="r3">Caused browser issues</label>
+          </div>
+          <div class="reason-item" data-reason="privacy" data-value="Privacy concerns">
+            <input type="radio" name="reason" id="r4" value="Privacy concerns">
+            <label for="r4">Privacy concerns</label>
+          </div>
+          <div class="reason-item" data-reason="other" data-value="Other">
+            <input type="radio" name="reason" id="r5" value="Other">
+            <label for="r5">Other reason</label>
+          </div>
+        </div>
+
+        <div class="nudge nudge--setup" id="nudge-setup">
+          <span class="nudge-icon">🛠️</span>
+          We hear you! We've simplified setup in our latest version — it takes under 60 seconds now. Want to give it another shot?
+          <br>
+          <a href="/#install" class="nudge-action"><i class="fa-solid fa-rotate-right"></i> Reinstall TouchLock</a>
+        </div>
+
+        <div class="nudge nudge--features" id="nudge-features">
+          <span class="nudge-icon">🚀</span>
+          We're actively building new features based on user feedback! Check out what's coming — your suggestion might already be on the roadmap.
+          <br>
+          <a href="/changelog.html" class="nudge-action"><i class="fa-solid fa-road"></i> View Roadmap</a>
+        </div>
+
+        <div class="nudge nudge--issues" id="nudge-issues">
+          <span class="nudge-icon">⚡</span>
+          Sorry about that! We take performance seriously. If you can describe the issue below, we'll prioritize a fix. Most issues are resolved within a few days.
+          <br>
+          <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener" class="nudge-action"><i class="fa-solid fa-bug"></i> Report the Issue</a>
+        </div>
+
+        <div class="nudge nudge--privacy" id="nudge-privacy">
+          <span class="nudge-icon">🔒</span>
+          TouchLock is <strong>fully open-source</strong> and stores everything locally. We never collect, transmit, or see your data — not even your hashed PIN leaves your device.
+          <br>
+          <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener" class="nudge-action"><i class="fa-brands fa-github"></i> View Source Code</a>
+        </div>
+
+        <div class="nudge nudge--other" id="nudge-other">
+          <span class="nudge-icon">💬</span>
+          We'd love to understand more. Please share your thoughts below — every piece of feedback shapes TouchLock's future.
+        </div>
+
+        <textarea class="feedback-textarea" id="feedback-detail" placeholder="Tell us more (optional) — what could we do better?"></textarea>
+
+        <div class="feedback-msg" id="feedback-msg"></div>
+
+        <button class="btn btn-primary btn-submit" id="btn-submit">
+          <i class="fa-solid fa-paper-plane"></i>
+          Submit Feedback
+        </button>
+      </div>
+
+      <p class="reinstall-note">
+        Changed your mind? <a href="/#install">Reinstall TouchLock</a>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const EMAILJS_SERVICE_ID  = 'service_em2o2a6';
+    const EMAILJS_TEMPLATE_ID = 'template_6595ut4';
+    const EMAILJS_PUBLIC_KEY  = 'R2Yro3gG1FbXS9fJm';
+
+    const reasonList = document.getElementById('reason-list');
+    const nudges = {
+      setup:    document.getElementById('nudge-setup'),
+      features: document.getElementById('nudge-features'),
+      issues:   document.getElementById('nudge-issues'),
+      privacy:  document.getElementById('nudge-privacy'),
+      other:    document.getElementById('nudge-other')
+    };
+
+    reasonList.addEventListener('click', (e) => {
+      const item = e.target.closest('.reason-item');
+      if (!item) return;
+
+      item.querySelector('input[type="radio"]').checked = true;
+
+      document.querySelectorAll('.reason-item').forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+
+      Object.values(nudges).forEach(n => n.classList.remove('visible'));
+      const key = item.dataset.reason;
+      if (nudges[key]) nudges[key].classList.add('visible');
+    });
+
+    document.getElementById('btn-submit').addEventListener('click', async () => {
+      const reason = document.querySelector('input[name="reason"]:checked');
+      const detail = document.getElementById('feedback-detail').value.trim();
+      const msgEl  = document.getElementById('feedback-msg');
+      const btn    = document.getElementById('btn-submit');
+
+      if (!reason) {
+        msgEl.textContent = 'Please select a reason.';
+        msgEl.className = 'feedback-msg error';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            service_id:  EMAILJS_SERVICE_ID,
+            template_id: EMAILJS_TEMPLATE_ID,
+            user_id:     EMAILJS_PUBLIC_KEY,
+            template_params: {
+              from_email: 'Uninstall feedback',
+              category:   'Uninstall Feedback',
+              message:    'Reason: ' + reason.value + '\n\nDetails: ' + (detail || 'None provided'),
+              timestamp:  new Date().toISOString(),
+              version:    'Uninstalled'
+            }
+          })
+        });
+
+        if (res.ok) {
+          document.getElementById('feedback-form').innerHTML = `
+            <div class="thank-you">
+              <div class="thank-you-icon">💚</div>
+              <h3>Thank you for your feedback!</h3>
+              <p>We'll use it to make TouchLock better. You're always welcome back.</p>
+            </div>
+          `;
+        } else {
+          throw new Error();
+        }
+      } catch (_) {
+        msgEl.textContent = 'Failed to send. Please try again.';
+        msgEl.className = 'feedback-msg error';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Feedback';
+      }
+    });
+  </script>
+
+</body>
+</html>
