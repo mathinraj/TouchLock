@@ -198,8 +198,17 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       setupComplete: false,
       lockOnStartup: true,
       idleLockEnabled: false,
-      idleLockTimeout: 300
+      idleLockTimeout: 300,
+      showPinToToolbar: true
     });
+
+    // Set a badge to draw attention to the extension icon in the toolbar
+    try {
+      chrome.action.setBadgeText({ text: 'PIN' });
+      chrome.action.setBadgeBackgroundColor({ color: '#6366f1' });
+      chrome.action.setBadgeTextColor({ color: '#ffffff' });
+    } catch (_) {}
+
     chrome.tabs.create({ url: WELCOME_URL });
   }
 
@@ -409,6 +418,30 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
       case 'getPinLength': {
         const { pinLength } = await chrome.storage.local.get('pinLength');
         sendResponse({ pinLength: pinLength || 6 });
+        break;
+      }
+
+      case 'checkPinToToolbar': {
+        const { showPinToToolbar } = await chrome.storage.local.get('showPinToToolbar');
+        let isPinned = false;
+        try {
+          const settings = await chrome.action.getUserSettings();
+          isPinned = settings.isOnToolbar === true;
+        } catch (_) {}
+
+        if (isPinned) {
+          await chrome.storage.local.set({ showPinToToolbar: false });
+          try { chrome.action.setBadgeText({ text: '' }); } catch (_) {}
+        }
+
+        sendResponse({ show: showPinToToolbar === true && !isPinned, isPinned });
+        break;
+      }
+
+      case 'dismissPinToToolbar': {
+        await chrome.storage.local.set({ showPinToToolbar: false });
+        try { chrome.action.setBadgeText({ text: '' }); } catch (_) {}
+        sendResponse({ success: true });
         break;
       }
 

@@ -9,6 +9,51 @@
 <body>
   <div class="page">
 
+    <!-- Pin to Toolbar notification -->
+    <div class="pin-toolbar-banner hidden" id="pin-toolbar-banner">
+      <div class="pin-toolbar-inner">
+        <div class="pin-toolbar-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="17" x2="12" y2="22"/>
+            <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/>
+          </svg>
+        </div>
+        <div class="pin-toolbar-content">
+          <h4>Pin TouchLock to your toolbar</h4>
+          <p>For quick access to lock &amp; unlock, pin the extension icon to your browser toolbar.</p>
+        </div>
+        <button class="pin-toolbar-dismiss" id="pin-toolbar-dismiss" title="Dismiss">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="pin-toolbar-steps" id="pin-toolbar-steps">
+        <div class="pin-step">
+          <span class="pin-step-num">1</span>
+          <span>Click the <strong>puzzle piece</strong> icon (🧩) in your browser toolbar</span>
+        </div>
+        <div class="pin-step">
+          <span class="pin-step-num">2</span>
+          <span>Find <strong>TouchLock</strong> in the list</span>
+        </div>
+        <div class="pin-step">
+          <span class="pin-step-num">3</span>
+          <span>Click the <strong>pin icon</strong> (📌) to pin it to the toolbar</span>
+        </div>
+      </div>
+      <div class="pin-toolbar-done hidden" id="pin-toolbar-done">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        <span>TouchLock is pinned to your toolbar!</span>
+      </div>
+    </div>
+
     <!-- Hero -->
     <section class="hero">
       <div class="hero-glow"></div>
