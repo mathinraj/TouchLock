@@ -1203,6 +1203,106 @@ body {
   color: #fbbf24;
 }
 
+/* ── Support strip ─────────────────────────── */
+
+.support-strip {
+  margin-top: 28px;
+}
+
+.support-strip-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(255, 221, 0, 0.04), rgba(239, 68, 68, 0.04));
+  border: 1px solid rgba(255, 221, 0, 0.1);
+  border-radius: var(--radius);
+}
+
+.support-strip-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.support-strip-text svg {
+  flex-shrink: 0;
+}
+
+.support-strip-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.strip-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.strip-btn--coffee {
+  background: #FFDD00;
+  color: #1a1a1a;
+  box-shadow: 0 2px 8px rgba(255, 221, 0, 0.15);
+}
+
+.strip-btn--coffee:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(255, 221, 0, 0.25);
+}
+
+.strip-btn--coffee svg {
+  stroke: #1a1a1a;
+}
+
+.strip-btn--rate {
+  background: rgba(250, 204, 21, 0.08);
+  border: 1px solid rgba(250, 204, 21, 0.15);
+  color: #fbbf24;
+}
+
+.strip-btn--rate:hover {
+  background: rgba(250, 204, 21, 0.14);
+  transform: translateY(-1px);
+}
+
+.strip-btn--rate svg {
+  stroke: #fbbf24;
+}
+
+@media (max-width: 620px) {
+  .support-strip-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .support-strip-text {
+    justify-content: center;
+  }
+
+  .support-strip-actions {
+    width: 100%;
+  }
+
+  .strip-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
 /* ── Footer ────────────────────────────────── */
 
 .footer {

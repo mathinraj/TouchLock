@@ -412,13 +412,21 @@ async function init() {
     const reviewUrl = getReviewUrl();
 
     const rateBtn = document.getElementById('btn-rate-ext');
+    const rateStrip = document.getElementById('btn-rate-strip');
     if (data.rated) {
       rateBtn.classList.add('hidden');
+      if (rateStrip) rateStrip.classList.add('hidden');
     } else {
       rateBtn.href = reviewUrl;
+      if (rateStrip) rateStrip.href = reviewUrl;
       rateBtn.addEventListener('click', async () => {
         await chrome.storage.local.set({ rated: true });
       });
+      if (rateStrip) {
+        rateStrip.addEventListener('click', async () => {
+          await chrome.storage.local.set({ rated: true });
+        });
+      }
     }
 
     if (data.rated) return;
