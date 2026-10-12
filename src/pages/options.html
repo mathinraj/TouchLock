@@ -3,277 +3,443 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TouchLock – Fingerprint Browser Lock | Settings</title>
+  <title>TouchLock – Settings</title>
   <link rel="stylesheet" href="../styles/options.css">
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="logo">
-        <img src="../../icons/icon.svg" width="32" height="32" alt="TouchLock">
+  <div class="app">
+
+    <!-- ── Sidebar ─────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../../icons/icon.svg" width="30" height="30" alt="TouchLock">
+        <div class="brand-text">
+          <span class="brand-name">TouchLock</span>
+          <span class="brand-sub">Settings</span>
+        </div>
       </div>
-      <div class="header-text">
-        <h1>TouchLock Settings</h1>
-        <p class="subtitle">Configure your screen lock preferences</p>
-      </div>
-      <button class="whats-new-btn" id="btn-whats-new">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 12v10H4V12"/>
-          <path d="M2 7h20v5H2z"/>
-          <path d="M12 22V7"/>
-          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-        </svg>
-        <span class="whats-new-dot hidden" id="whats-new-dot"></span>
-        <span class="whats-new-tooltip">What's New</span>
-      </button>
-    </header>
 
-    <!-- Update banner (priority over rate) -->
-    <div class="update-banner hidden" id="update-banner">
-      <div class="update-left">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="17 1 21 5 17 9"/>
-          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-          <polyline points="7 23 3 19 7 15"/>
-          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-        </svg>
-        <span>TouchLock v<span id="update-version"></span> is available!</span>
-      </div>
-      <a class="update-btn" id="opt-update-btn" href="#" target="_blank" rel="noopener">Update</a>
-    </div>
-
-    <!-- Rate banner (subtle, below header) -->
-    <div class="rate-banner hidden" id="rate-banner">
-      <span class="rate-banner-text">⭐ Enjoying TouchLock? Help others discover it!</span>
-      <div class="rate-banner-actions">
-        <a class="rate-banner-btn rate-banner-btn--primary" id="opt-rate-now" href="#" target="_blank" rel="noopener">Rate now</a>
-        <button class="rate-banner-btn rate-banner-btn--dismiss" id="opt-rate-later">Later</button>
-      </div>
-    </div>
-
-    <!-- ── Primary setup: 2-column grid ────── -->
-    <div class="grid-2">
-
-      <!-- PIN -->
-      <section class="card">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-          PIN Lock
-        </h2>
-        <p class="description">Set a 4–10 digit PIN for unlocking when biometrics are unavailable.</p>
-
-        <div class="field">
-          <label for="pin1">Enter PIN</label>
-          <input type="password" id="pin1" maxlength="10" inputmode="numeric"
-                 pattern="[0-9]*" placeholder="••••" autocomplete="off">
-        </div>
-        <div class="pin-strength" id="pin-strength">
-          <div class="pin-strength-bar">
-            <div class="pin-strength-fill" id="pin-strength-fill"></div>
-          </div>
-          <span class="pin-strength-label" id="pin-strength-label"></span>
-        </div>
-        <div class="field">
-          <label for="pin2">Confirm PIN</label>
-          <input type="password" id="pin2" maxlength="10" inputmode="numeric"
-                 pattern="[0-9]*" placeholder="••••" autocomplete="off">
-        </div>
-
-        <div class="msg" id="pin-msg"></div>
-        <button id="btn-save-pin" class="btn btn-primary">Save PIN</button>
-
-        <div class="status-row" id="pin-status">
-          <span class="dot gray"></span>
-          <span>Not configured</span>
-        </div>
-      </section>
-
-      <!-- Biometric -->
-      <section class="card">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
-            <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
-            <path d="M10 12c0 4-1 8-3 10"/>
-            <path d="M14 12c0 2.5-.5 5-1.5 7"/>
-            <path d="M18 12c0 1-.5 3-1 4.5"/>
-            <path d="M22 12a10 10 0 0 1-2 6"/>
-            <path d="M10 12a2 2 0 1 1 4 0"/>
-          </svg>
-          Biometric Authentication
-        </h2>
-        <p class="description">
-          Register Touch ID or Windows Hello as the primary unlock method.
-          Requires a platform authenticator.
-        </p>
-
-        <div class="msg" id="bio-msg"></div>
-        <button id="btn-register-bio" class="btn btn-secondary">Register Biometrics</button>
-        <button id="btn-remove-bio" class="btn btn-danger hidden">Remove Biometric Credential</button>
-
-        <div class="status-row" id="bio-status">
-          <span class="dot gray"></span>
-          <span>Not registered</span>
-        </div>
-      </section>
-
-      <!-- Security Questions -->
-      <section class="card">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          Security Questions
-        </h2>
-        <p class="description">
-          Select and answer 3 questions. Any 2 correct answers will let you reset a forgotten PIN.
-        </p>
-
-        <div class="sq-group" id="sq-group">
-          <div class="sq-item">
-            <label>Question 1</label>
-            <select class="sq-select" id="sq-select-1"><option value="">— Choose —</option></select>
-            <input type="text" class="sq-answer" id="sq-answer-1" placeholder="Your answer" autocomplete="off">
-          </div>
-          <div class="sq-item">
-            <label>Question 2</label>
-            <select class="sq-select" id="sq-select-2"><option value="">— Choose —</option></select>
-            <input type="text" class="sq-answer" id="sq-answer-2" placeholder="Your answer" autocomplete="off">
-          </div>
-          <div class="sq-item">
-            <label>Question 3</label>
-            <select class="sq-select" id="sq-select-3"><option value="">— Choose —</option></select>
-            <input type="text" class="sq-answer" id="sq-answer-3" placeholder="Your answer" autocomplete="off">
-          </div>
-        </div>
-
-        <div class="msg" id="sq-msg"></div>
-        <button id="btn-save-sq" class="btn btn-primary">Save Security Questions</button>
-
-        <div class="status-row" id="sq-status">
-          <span class="dot gray"></span>
-          <span>Not configured</span>
-        </div>
-      </section>
-
-      <!-- Lock Behavior -->
-      <section class="card">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
-          </svg>
-          Lock Behavior
-        </h2>
-        <p class="description">Control when your browser locks automatically.</p>
-
-        <div class="toggle-row">
-          <div class="toggle-info">
-            <span class="toggle-label">Lock on browser startup</span>
-            <span class="toggle-desc">Require auth every time the browser opens</span>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" id="toggle-startup" checked>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div class="toggle-info">
-            <span class="toggle-label">Auto-lock on idle</span>
-            <span class="toggle-desc">Lock after a period of inactivity</span>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" id="toggle-idle">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-
-        <div class="field-inline" id="idle-timeout-field" style="display:none">
-          <label for="idle-timeout">Lock after</label>
-          <select id="idle-timeout" class="sq-select">
-            <option value="60">1 minute</option>
-            <option value="300" selected>5 minutes</option>
-            <option value="900">15 minutes</option>
-            <option value="1800">30 minutes</option>
-            <option value="3600">1 hour</option>
-          </select>
-        </div>
-
-        <div class="shortcut-section">
-          <div class="shortcut-header">
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <span class="nav-group-title">Setup</span>
+          <a href="#section-pin" class="nav-link active" data-section="section-pin">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="4" width="20" height="16" rx="2"/>
-              <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
-            <span>Quick-lock shortcut</span>
-          </div>
-          <p class="shortcut-desc">Press this key combo on any web page to instantly lock the browser.</p>
-          <div class="shortcut-row">
-            <kbd class="shortcut-display" id="shortcut-display">Alt + L</kbd>
-            <button class="btn-shortcut-record" id="btn-record-shortcut">Change <span class="pro-badge">PRO</span></button>
-          </div>
-          <div class="shortcut-recording hidden" id="shortcut-recording">
-            <span class="recording-pulse"></span>
-            <span>Press your new shortcut…</span>
-            <button class="btn-shortcut-cancel" id="btn-cancel-shortcut">Cancel</button>
-          </div>
-          <div class="shortcut-note">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            <span class="nav-label">PIN Lock</span>
+            <span class="nav-dot" id="nav-dot-pin"></span>
+          </a>
+          <a href="#section-bio" class="nav-link" data-section="section-bio">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+              <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
+              <path d="M10 12a2 2 0 1 1 4 0"/>
+            </svg>
+            <span class="nav-label">Biometrics</span>
+            <span class="nav-dot" id="nav-dot-bio"></span>
+          </a>
+          <a href="#section-sq" class="nav-link" data-section="section-sq">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="16" x2="12" y2="12"/>
-              <line x1="12" y1="8" x2="12.01" y2="8"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-            <span>This shortcut works on all websites. For it to also work on browser pages
-              (new tab, homepage), <a href="#" id="open-browser-shortcuts">set it in browser shortcut settings</a>.</span>
-          </div>
+            <span class="nav-label">Recovery</span>
+            <span class="nav-dot" id="nav-dot-sq"></span>
+          </a>
         </div>
 
-        <div class="msg" id="lock-msg"></div>
-        <button id="btn-save-lock" class="btn btn-primary">Save Lock Settings</button>
-
-        <div class="status-row" id="lock-status">
-          <span class="dot gray"></span>
-          <span>Default settings</span>
+        <div class="nav-group">
+          <span class="nav-group-title">Behavior</span>
+          <a href="#section-lock" class="nav-link" data-section="section-lock">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="nav-label">Lock & Shortcut</span>
+            <span class="nav-dot" id="nav-dot-lock"></span>
+          </a>
         </div>
-      </section>
 
-    </div>
-
-    <!-- ── Bottom row: 3-column grid ───────── -->
-    <div class="grid-3">
-
-      <!-- Feature Request -->
-      <section class="card card-feature">
-        <div class="collapsible-header" id="fr-toggle">
-          <h2>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        <div class="nav-group">
+          <span class="nav-group-title">More</span>
+          <a href="#section-feedback" class="nav-link" data-section="section-feedback">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
             </svg>
-            Request a Feature
-          </h2>
+            <span class="nav-label">Feedback</span>
+          </a>
+          <a href="#section-roadmap" class="nav-link" data-section="section-roadmap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+            <span class="nav-label">Roadmap</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a href="https://coindrop.to/mathinraj" target="_blank" rel="noopener noreferrer" class="sidebar-action coffee">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+            <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+          </svg>
+          <span>Buy me a coffee</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" id="btn-rate-ext" class="sidebar-action rate">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+          <span>Rate TouchLock</span>
+        </a>
+        <button class="sidebar-action new" id="btn-whats-new">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/>
+            <path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+          <span>What's New</span>
+          <span class="whats-new-dot hidden" id="whats-new-dot"></span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Mobile header ───────────────────── -->
+    <header class="mobile-bar">
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      <img src="../../icons/icon.svg" width="22" height="22" alt="">
+      <span class="mobile-title">TouchLock Settings</span>
+    </header>
+    <div class="sidebar-overlay hidden" id="sidebar-overlay"></div>
+
+    <!-- ── Content ─────────────────────────── -->
+    <main class="content">
+      <div class="content-inner">
+
+      <!-- Update banner -->
+      <div class="update-banner hidden" id="update-banner">
+        <div class="update-left">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+            <polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+          </svg>
+          <span>TouchLock v<span id="update-version"></span> is available!</span>
+        </div>
+        <a class="update-btn" id="opt-update-btn" href="#" target="_blank" rel="noopener">Update</a>
+      </div>
+
+      <!-- Rate banner -->
+      <div class="rate-banner hidden" id="rate-banner">
+        <span class="rate-banner-text">⭐ Enjoying TouchLock? Help others discover it!</span>
+        <div class="rate-banner-actions">
+          <a class="rate-banner-btn rate-banner-btn--primary" id="opt-rate-now" href="#" target="_blank" rel="noopener">Rate now</a>
+          <button class="rate-banner-btn rate-banner-btn--dismiss" id="opt-rate-later">Later</button>
+        </div>
+      </div>
+
+      <!-- Setup progress -->
+      <div class="setup-progress">
+        <div class="progress-step" id="progress-pin">
+          <div class="progress-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <span>PIN</span>
+        </div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" id="progress-bio">
+          <div class="progress-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+              <path d="M10 12a2 2 0 1 1 4 0"/>
+            </svg>
+          </div>
+          <span>Biometrics</span>
+        </div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" id="progress-sq">
+          <div class="progress-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <span>Recovery</span>
+        </div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" id="progress-lock">
+          <div class="progress-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <span>Behavior</span>
+        </div>
+      </div>
+
+      <div class="sections-wrap" id="sections-wrap">
+
+      <!-- ═══════ PIN Lock ═══════ -->
+      <section class="section" id="section-pin">
+        <div class="section-top">
+          <div class="section-title-row">
+            <div class="section-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>PIN Lock</h2>
+              <p>Set a 4–10 digit PIN as your secure fallback unlock method.</p>
+            </div>
+          </div>
+          <div class="status-row" id="pin-status">
+            <span class="dot gray"></span>
+            <span>Not configured</span>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="form-row-2col">
+            <div class="field">
+              <label for="pin1">Enter PIN</label>
+              <input type="password" id="pin1" maxlength="10" inputmode="numeric"
+                     pattern="[0-9]*" placeholder="••••" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="pin2">Confirm PIN</label>
+              <input type="password" id="pin2" maxlength="10" inputmode="numeric"
+                     pattern="[0-9]*" placeholder="••••" autocomplete="off">
+            </div>
+          </div>
+          <div class="pin-strength" id="pin-strength">
+            <div class="pin-strength-bar">
+              <div class="pin-strength-fill" id="pin-strength-fill"></div>
+            </div>
+            <span class="pin-strength-label" id="pin-strength-label"></span>
+          </div>
+          <div class="msg" id="pin-msg"></div>
+          <button id="btn-save-pin" class="btn btn-primary">Save PIN</button>
+        </div>
+      </section>
+
+      <!-- ═══════ Biometrics ═══════ -->
+      <section class="section" id="section-bio">
+        <div class="section-top">
+          <div class="section-title-row">
+            <div class="section-icon accent-purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+                <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
+                <path d="M10 12c0 4-1 8-3 10"/>
+                <path d="M14 12c0 2.5-.5 5-1.5 7"/>
+                <path d="M18 12c0 1-.5 3-1 4.5"/>
+                <path d="M22 12a10 10 0 0 1-2 6"/>
+                <path d="M10 12a2 2 0 1 1 4 0"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Biometric Authentication</h2>
+              <p>Register Touch ID or Windows Hello as the primary unlock method.</p>
+            </div>
+          </div>
+          <div class="status-row" id="bio-status">
+            <span class="dot gray"></span>
+            <span>Not registered</span>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="msg" id="bio-msg"></div>
+          <div class="btn-row">
+            <button id="btn-register-bio" class="btn btn-secondary">Register Biometrics</button>
+            <button id="btn-remove-bio" class="btn btn-danger hidden">Remove Credential</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════ Security Questions ═══════ -->
+      <section class="section section--wide" id="section-sq">
+        <div class="section-top">
+          <div class="section-title-row">
+            <div class="section-icon accent-teal">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Security Questions</h2>
+              <p>Select and answer 3 questions. Any 2 correct answers will let you reset a forgotten PIN.</p>
+            </div>
+          </div>
+          <div class="status-row" id="sq-status">
+            <span class="dot gray"></span>
+            <span>Not configured</span>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="sq-group" id="sq-group">
+            <div class="sq-item">
+              <label>Question 1</label>
+              <select class="sq-select" id="sq-select-1"><option value="">— Choose a question —</option></select>
+              <input type="text" class="sq-answer" id="sq-answer-1" placeholder="Your answer" autocomplete="off">
+            </div>
+            <div class="sq-item">
+              <label>Question 2</label>
+              <select class="sq-select" id="sq-select-2"><option value="">— Choose a question —</option></select>
+              <input type="text" class="sq-answer" id="sq-answer-2" placeholder="Your answer" autocomplete="off">
+            </div>
+            <div class="sq-item">
+              <label>Question 3</label>
+              <select class="sq-select" id="sq-select-3"><option value="">— Choose a question —</option></select>
+              <input type="text" class="sq-answer" id="sq-answer-3" placeholder="Your answer" autocomplete="off">
+            </div>
+          </div>
+          <div class="msg" id="sq-msg"></div>
+          <button id="btn-save-sq" class="btn btn-primary">Save Security Questions</button>
+        </div>
+      </section>
+
+      <!-- ═══════ Lock & Shortcut ═══════ -->
+      <section class="section section--wide" id="section-lock">
+        <div class="section-top">
+          <div class="section-title-row">
+            <div class="section-icon accent-amber">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Lock Behavior</h2>
+              <p>Control when your browser locks automatically and set up a quick-lock shortcut.</p>
+            </div>
+          </div>
+          <div class="status-row" id="lock-status">
+            <span class="dot gray"></span>
+            <span>Default settings</span>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <span class="toggle-label">Lock on browser startup</span>
+              <span class="toggle-desc">Require auth every time the browser opens</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-startup" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <span class="toggle-label">Auto-lock on idle</span>
+              <span class="toggle-desc">Lock after a period of inactivity</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-idle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="field-inline" id="idle-timeout-field" style="display:none">
+            <label for="idle-timeout">Lock after</label>
+            <select id="idle-timeout" class="sq-select">
+              <option value="60">1 minute</option>
+              <option value="300" selected>5 minutes</option>
+              <option value="900">15 minutes</option>
+              <option value="1800">30 minutes</option>
+              <option value="3600">1 hour</option>
+            </select>
+          </div>
+
+          <div class="shortcut-section">
+            <div class="shortcut-header">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
+              </svg>
+              <span>Quick-lock shortcut</span>
+            </div>
+            <p class="shortcut-desc">Press this key combo on any web page to instantly lock the browser.</p>
+            <div class="shortcut-row">
+              <kbd class="shortcut-display" id="shortcut-display">Alt + L</kbd>
+              <button class="btn-shortcut-record" id="btn-record-shortcut">Change <span class="pro-badge">PRO</span></button>
+            </div>
+            <div class="shortcut-recording hidden" id="shortcut-recording">
+              <span class="recording-pulse"></span>
+              <span>Press your new shortcut…</span>
+              <button class="btn-shortcut-cancel" id="btn-cancel-shortcut">Cancel</button>
+            </div>
+            <div class="shortcut-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <span>This shortcut works on all websites. For it to also work on browser pages
+                (new tab, homepage), <a href="#" id="open-browser-shortcuts">set it in browser shortcut settings</a>.</span>
+            </div>
+          </div>
+
+          <div class="msg" id="lock-msg"></div>
+          <button id="btn-save-lock" class="btn btn-primary">Save Lock Settings</button>
+        </div>
+      </section>
+
+      <!-- ═══════ Feedback ═══════ -->
+      <section class="section" id="section-feedback">
+        <div class="collapsible-header" id="fr-toggle">
+          <div class="section-title-row">
+            <div class="section-icon accent-rose">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Request a Feature</h2>
+              <p>Have an idea? Expand to send your suggestion.</p>
+            </div>
+          </div>
           <svg class="chevron" id="fr-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"/>
           </svg>
         </div>
-        <p class="description">Have an idea? Expand to send your suggestion.</p>
-
         <div class="collapsible-body" id="fr-body">
           <div class="field-text">
             <label for="fr-email">Email</label>
@@ -292,7 +458,6 @@
             <label for="fr-message">Your Message</label>
             <textarea id="fr-message" class="fr-textarea" rows="3" placeholder="Describe your idea or issue…"></textarea>
           </div>
-
           <div class="msg" id="fr-msg"></div>
           <button id="btn-send-fr" class="btn btn-secondary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -305,154 +470,100 @@
         </div>
       </section>
 
-      <!-- Support -->
-      <section class="card card-support">
-        <div class="support-icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"
-                  fill="rgba(239,68,68,0.15)" stroke="#ef4444"/>
+      <!-- ═══════ Roadmap ═══════ -->
+      <section class="section" id="section-roadmap">
+        <div class="collapsible-header" id="roadmap-toggle">
+          <div class="section-title-row">
+            <div class="section-icon accent-violet">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Upcoming Features</h2>
+              <p>Here's what's coming next to TouchLock.</p>
+            </div>
+          </div>
+          <svg class="chevron" id="roadmap-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
           </svg>
         </div>
-        <p class="support-title">Enjoying TouchLock?</p>
-        <p class="support-desc">If this extension helps keep your browser safe, consider supporting its development.</p>
-        <a class="btn-coffee" href="https://coindrop.to/mathinraj" target="_blank" rel="noopener noreferrer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-            <line x1="6" y1="1" x2="6" y2="4"/>
-            <line x1="10" y1="1" x2="10" y2="4"/>
-            <line x1="14" y1="1" x2="14" y2="4"/>
-          </svg>
-          Buy me a coffee
-        </a>
-        <a class="btn-rate" id="btn-rate-ext" href="#" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
-          Rate TouchLock
-        </a>
-      </section>
-
-      <!-- Danger Zone -->
-      <section class="card card-danger">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-          Danger Zone
-        </h2>
-        <p class="description">Reset all TouchLock data. You will need to set up again.</p>
-        <button id="btn-reset" class="btn btn-danger">Reset All Data</button>
-      </section>
-
-    </div>
-
-    <!-- ── Upcoming Features ─────────────────── -->
-    <section class="card card-roadmap">
-      <div class="collapsible-header" id="roadmap-toggle">
-        <h2>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
-          </svg>
-          Upcoming Features
-        </h2>
-        <svg class="chevron" id="roadmap-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-      </div>
-      <p class="description">Here's what's coming next to TouchLock.</p>
-
-      <div class="collapsible-body" id="roadmap-body">
-        <div class="roadmap-list">
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--free">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </span>
-            <span class="roadmap-text">Lock screen clock</span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--free">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </span>
-            <span class="roadmap-text">Panic button</span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--free">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            </span>
-            <span class="roadmap-text">Lock history log</span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--free">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            </span>
-            <span class="roadmap-text">Export / import settings</span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-            </span>
-            <span class="roadmap-text">Lock on specific sites <span class="pro-badge">PRO</span> <span class="requested-badge">User Requested</span></span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </span>
-            <span class="roadmap-text">Intruder detection <span class="pro-badge">PRO</span></span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            </span>
-            <span class="roadmap-text">Stealth mode <span class="pro-badge">PRO</span></span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </span>
-            <span class="roadmap-text">Scheduled lock <span class="pro-badge">PRO</span></span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </span>
-            <span class="roadmap-text">Multiple profiles <span class="pro-badge">PRO</span></span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            </span>
-            <span class="roadmap-text">Unlock notifications <span class="pro-badge">PRO</span></span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 8 14"/></svg>
-            </span>
-            <span class="roadmap-text">Break timer / focus mode <span class="pro-badge">PRO</span></span>
-          </div>
-          <div class="roadmap-item">
-            <span class="roadmap-icon roadmap-icon--pro">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5a15.54 15.54 0 0 0 5.06 12.05A15.49 15.49 0 0 0 17.5 6.5a3.5 3.5 0 0 0-5.5-2.84A3.5 3.5 0 0 0 6.5 6.5z"/></svg>
-            </span>
-            <span class="roadmap-text">Auto-lock on Bluetooth disconnect <span class="pro-badge">PRO</span></span>
+        <div class="collapsible-body" id="roadmap-body">
+          <div class="roadmap-list">
+            <div class="roadmap-item"><span class="roadmap-tag free">Free</span><span>Lock screen clock</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag free">Free</span><span>Panic button</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag free">Free</span><span>Lock history log</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag free">Free</span><span>Export / import settings</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Lock on specific sites <span class="requested-badge">User Requested</span></span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Intruder detection</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Stealth mode</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Scheduled lock</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Multiple profiles</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Unlock notifications</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Break timer / focus mode</span></div>
+            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Auto-lock on Bluetooth disconnect</span></div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <footer class="footer">
-      TouchLock v1.2.1 · Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj 💚</a>
-    </footer>
+      <!-- ═══════ Danger Zone ═══════ -->
+      <section class="section section--danger" id="section-danger">
+        <div class="section-top">
+          <div class="section-title-row">
+            <div class="section-icon accent-red">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Danger Zone</h2>
+              <p>Reset all TouchLock data. You will need to set up again.</p>
+            </div>
+          </div>
+        </div>
+        <div class="section-body">
+          <button id="btn-reset" class="btn btn-danger">Reset All Data</button>
+        </div>
+      </section>
+
+      </div><!-- /sections-wrap -->
+
+      <footer class="footer">
+        TouchLock v1.2.1 · Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj 💚</a>
+      </footer>
+      </div><!-- /content-inner -->
+
+      <!-- Floating view toggle -->
+      <div class="view-fab" id="view-fab">
+        <button class="fab-btn active" id="btn-view-list" title="List view" aria-label="List view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </button>
+        <button class="fab-btn" id="btn-view-grid" title="Grid view" aria-label="Grid view">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </button>
+      </div>
+    </main>
   </div>
 
   <script src="../scripts/config.js"></script>

@@ -703,3 +703,137 @@ function getReviewUrl() {
 function getStoreUrl() {
   return STORE_URLS[TOUCHLOCK_STORE] || 'https://touchlock.vercel.app/#install';
 }
+
+// ── View toggle (grid / list) ─────────────────
+
+(function initViewToggle() {
+  const wrap     = document.getElementById('sections-wrap');
+  const btnList  = document.getElementById('btn-view-list');
+  const btnGrid  = document.getElementById('btn-view-grid');
+  if (!wrap || !btnList || !btnGrid) return;
+
+  chrome.storage.local.get('settingsView', ({ settingsView }) => {
+    if (settingsView === 'grid') applyView('grid');
+  });
+
+  btnList.addEventListener('click', () => applyView('list'));
+  btnGrid.addEventListener('click', () => applyView('grid'));
+
+  function applyView(mode) {
+    if (mode === 'grid') {
+      wrap.classList.add('view-grid');
+      btnGrid.classList.add('active');
+      btnList.classList.remove('active');
+    } else {
+      wrap.classList.remove('view-grid');
+      btnList.classList.add('active');
+      btnGrid.classList.remove('active');
+    }
+    chrome.storage.local.set({ settingsView: mode });
+  }
+})();
+
+// ── Sidebar navigation & scrollspy ────────────
+
+(function initSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const navLinks = document.querySelectorAll('.nav-link[data-section]');
+  const sections = document.querySelectorAll('.section[id]');
+
+  function openSidebar()  {
+    sidebar.classList.add('open');
+    overlay.classList.remove('hidden');
+    overlay.classList.add('visible');
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.add('hidden');
+    overlay.classList.remove('visible');
+  }
+
+  if (menuBtn) menuBtn.addEventListener('click', openSidebar);
+  if (overlay) overlay.addEventListener('click', closeSidebar);
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById(link.dataset.section);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      closeSidebar();
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const match = document.querySelector(`.nav-link[data-section="${entry.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+})();
+
+// ── Setup progress bar ────────────────────────
+
+async function updateProgress() {
+  const data = await chrome.storage.local.get([
+    'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured',
+    'lockOnStartup', 'idleLockEnabled'
+  ]);
+
+  const map = {
+    'progress-pin':  !!data.pinHash,
+    'progress-bio':  !!data.webauthnRegistered,
+    'progress-sq':   !!data.securityQuestionsConfigured,
+    'progress-lock': data.lockOnStartup !== false || data.idleLockEnabled === true
+  };
+
+  const navDotMap = {
+    'nav-dot-pin':  !!data.pinHash,
+    'nav-dot-bio':  !!data.webauthnRegistered,
+    'nav-dot-sq':   !!data.securityQuestionsConfigured,
+    'nav-dot-lock': data.lockOnStartup !== false || data.idleLockEnabled === true
+  };
+
+  const steps = document.querySelectorAll('.progress-step');
+  const connectors = document.querySelectorAll('.progress-connector');
+
+  Object.entries(map).forEach(([id, done]) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('done', done);
+  });
+
+  Object.entries(navDotMap).forEach(([id, done]) => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('configured', done);
+  });
+
+  let allDone = true;
+  steps.forEach((step, i) => {
+    if (!step.classList.contains('done')) allDone = false;
+    if (connectors[i]) {
+      connectors[i].classList.toggle('done', step.classList.contains('done'));
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(updateProgress, 300);
+});
+
+const _origRefreshStatus = (function() {
+  const origSetStatus = setStatus;
+  const origFn = setStatus;
+  return null;
+})();
+
+const origSetStatus = setStatus;
+setStatus = function(el, text, color) {
+  origSetStatus(el, text, color);
+  updateProgress();
+};
