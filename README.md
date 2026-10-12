@@ -118,6 +118,14 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 
 ## Changelog
 
+### v1.3.0
+- **Redesigned settings page** – completely rebuilt with sidebar navigation, centered content layout, setup progress bar, and clear visual hierarchy with colored section icons
+- **Pin-to-toolbar prompt** – on first install, a guided banner on the welcome page helps users pin the extension to their browser toolbar; auto-detects when pinned using `chrome.action.getUserSettings()`
+- **Grid & list view toggle** – floating bottom-right toggle lets users switch settings between a compact 2-column grid and a focused single-column list; preference is persisted
+- **Support strip** – slim, non-intrusive support banner at the bottom of settings for "Buy me a coffee" and "Rate" actions
+- **Responsive sidebar** – on smaller screens, the sidebar collapses into a hamburger menu overlay with smooth slide-in animation
+- **Scrollspy navigation** – active sidebar link updates automatically as you scroll through settings sections
+
 ### v1.2.1
 - **Store-specific builds** – build script produces separate zips for Chrome, Edge, and Firefox with correct store links baked in
 - **Remote update check** – fetches latest version from a remote JSON on startup; shows update banner in popup, settings, and lock screen
