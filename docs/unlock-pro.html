@@ -441,38 +441,56 @@
         .join('');
     }
 
-    // ── Ad playback ───────────────────────────
-    // TODO: Replace simulateAd() with Monetag rewarded ad.
-    // After signing up at monetag.com, you get a Zone ID.
-    // Replace the body of this function with:
-    //
-    //   return new Promise((resolve, reject) => {
-    //     show_8347291(); // Monetag provides this function name
-    //     window.addEventListener('message', function handler(e) {
-    //       if (e.data === 'monetag_reward') {
-    //         window.removeEventListener('message', handler);
-    //         resolve();
-    //       }
-    //     });
-    //   });
+    // ── Monetag Vignette Ad (Zone: 12024751) ──
 
-    function simulateAd() {
-      return new Promise((resolve) => {
-        adContainer.classList.add('visible');
-        adContainer.textContent = 'Ad is playing… please wait';
+    let monetagLoaded = false;
+
+    function loadMonetag() {
+      if (monetagLoaded) return;
+      monetagLoaded = true;
+      const s = document.createElement('script');
+      s.dataset.zone = '12024751';
+      s.src = 'https://n6wxm.com/vignette.min.js';
+      document.body.appendChild(s);
+    }
+
+    function showVignetteAd() {
+      return new Promise((resolve, reject) => {
         statusMsg.textContent = 'Loading ad…';
         statusMsg.className = 'status-msg loading';
 
-        let seconds = 3;
-        const countdown = setInterval(() => {
-          seconds--;
-          adContainer.textContent = `Ad playing… ${seconds}s remaining`;
-          if (seconds <= 0) {
-            clearInterval(countdown);
-            adContainer.classList.remove('visible');
-            resolve();
+        loadMonetag();
+
+        // Vignette ads auto-show when the script loads/re-triggers.
+        // We detect completion by watching for the vignette overlay
+        // to appear and then disappear (user closes after countdown).
+        let adDetected = false;
+        let checkCount = 0;
+        const maxChecks = 60; // 30 seconds timeout
+
+        const poller = setInterval(() => {
+          checkCount++;
+          const overlay = document.querySelector('iframe[src*="n6wxm"], div[id*="vignette"], div[class*="vignette"]');
+
+          if (overlay && !adDetected) {
+            adDetected = true;
           }
-        }, 1000);
+
+          if (adDetected && !document.querySelector('iframe[src*="n6wxm"], div[id*="vignette"], div[class*="vignette"]')) {
+            clearInterval(poller);
+            resolve();
+            return;
+          }
+
+          if (checkCount >= maxChecks) {
+            clearInterval(poller);
+            if (adDetected) {
+              resolve();
+            } else {
+              reject(new Error('Ad did not load'));
+            }
+          }
+        }, 500);
       });
     }
 
@@ -484,7 +502,7 @@
       btnWatchTxt.textContent = 'Loading ad…';
 
       try {
-        await simulateAd();
+        await showVignetteAd();
 
         adsWatched++;
         const days = getEarnedDays();
