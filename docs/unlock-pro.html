@@ -441,45 +441,55 @@
         .join('');
     }
 
-    // ── Monetag Vignette Ad (Zone: 12024751) ──
-
-    let monetagLoaded = false;
-
-    function loadMonetag() {
-      if (monetagLoaded) return;
-      monetagLoaded = true;
-      const s = document.createElement('script');
-      s.dataset.zone = '12024751';
-      s.src = 'https://n6wxm.com/vignette.min.js';
-      document.body.appendChild(s);
-    }
+    // ── Monetag Ad (Zone: 295352) ──
 
     function showVignetteAd() {
       return new Promise((resolve, reject) => {
-        statusMsg.textContent = 'Loading ad…';
+        statusMsg.textContent = 'Loading ad… this may take a moment';
         statusMsg.className = 'status-msg loading';
 
-        loadMonetag();
+        const initialIframes = document.querySelectorAll('iframe').length;
+        const initialDivs = document.body.children.length;
 
-        // Vignette ads auto-show when the script loads/re-triggers.
-        // We detect completion by watching for the vignette overlay
-        // to appear and then disappear (user closes after countdown).
+        // Always re-inject the script to trigger a new ad
+        const s = document.createElement('script');
+        s.dataset.zone = '295352';
+        s.dataset.cfasync = 'false';
+        s.src = 'https://quge5.com/88/tag.min.js';
+        s.async = true;
+        document.body.appendChild(s);
+
         let adDetected = false;
         let checkCount = 0;
-        const maxChecks = 60; // 30 seconds timeout
+        const maxChecks = 120; // 60 seconds timeout
 
         const poller = setInterval(() => {
           checkCount++;
-          const overlay = document.querySelector('iframe[src*="n6wxm"], div[id*="vignette"], div[class*="vignette"]');
 
-          if (overlay && !adDetected) {
+          const nowIframes = document.querySelectorAll('iframe').length;
+          const nowDivs = document.body.children.length;
+          const hasNewContent = nowIframes > initialIframes || nowDivs > initialDivs + 1;
+
+          if (hasNewContent && !adDetected) {
             adDetected = true;
+            statusMsg.textContent = 'Ad is playing…';
           }
 
-          if (adDetected && !document.querySelector('iframe[src*="n6wxm"], div[id*="vignette"], div[class*="vignette"]')) {
-            clearInterval(poller);
-            resolve();
-            return;
+          // Ad was closed — new elements are gone
+          if (adDetected) {
+            const stillIframes = document.querySelectorAll('iframe').length;
+            const stillDivs = document.body.children.length;
+            if (stillIframes <= initialIframes && stillDivs <= initialDivs + 2) {
+              clearInterval(poller);
+              resolve();
+              return;
+            }
+          }
+
+          // Loading indicator
+          if (!adDetected && checkCount % 4 === 0) {
+            const dots = '.'.repeat((checkCount / 4) % 4);
+            statusMsg.textContent = `Loading ad${dots} this may take a moment`;
           }
 
           if (checkCount >= maxChecks) {
