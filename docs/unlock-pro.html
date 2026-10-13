@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – Unlock Pro</title>
+  <meta name="description" content="Watch a short ad to unlock TouchLock Pro features for free.">
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="icon" type="image/png" sizes="128x128" href="assets/logo-128.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #09090b;
+      --surface: #18181b;
+      --border: #3f3f46;
+      --text: #fafafa;
+      --text-muted: #a1a1aa;
+      --text-dim: #71717a;
+      --accent: #f59e0b;
+      --accent-glow: rgba(245, 158, 11, 0.15);
+      --green: #22c55e;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .logo img { border-radius: 8px; }
+
+    .logo span {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    /* Progress section */
+    .progress-section {
+      margin-bottom: 28px;
+    }
+
+    .progress-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .progress-days {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      transition: color 0.3s;
+    }
+
+    .progress-days.complete { color: var(--green); }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f59e0b, #eab308);
+      border-radius: 4px;
+      transition: width 0.6s ease;
+    }
+
+    .progress-fill.complete {
+      background: linear-gradient(90deg, #22c55e, #16a34a);
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-dim);
+      transition: color 0.3s;
+    }
+
+    .step-label.active { color: var(--accent); }
+    .step-label.done { color: var(--green); }
+
+    /* Watch button */
+    .watch-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #f59e0b, #eab308);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .watch-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(245, 158, 11, 0.3);
+    }
+
+    .watch-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .watch-btn svg { stroke: #1a1a1a; }
+
+    /* Status messages */
+    .status-msg {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      min-height: 20px;
+      transition: color 0.2s;
+    }
+
+    .status-msg.success { color: var(--green); }
+    .status-msg.loading { color: var(--accent); }
+
+    /* Done state */
+    .done-card {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+      background: rgba(34, 197, 94, 0.06);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+    }
+
+    .done-card.visible { display: flex; }
+
+    .done-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .done-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #86efac;
+    }
+
+    .done-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Apply button */
+    .apply-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .apply-btn.visible { display: inline-flex; }
+
+    .apply-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+    }
+
+    /* Ad container */
+    .ad-container {
+      display: none;
+      width: 100%;
+      min-height: 250px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+
+    .ad-container.visible { display: flex; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo">
+      <img src="assets/logo-128.png" width="36" height="36" alt="TouchLock">
+      <span>TouchLock</span>
+      <span class="pro-badge">PRO</span>
+    </div>
+
+    <h1>Unlock Premium</h1>
+    <p class="subtitle">Watch short ads to unlock all Pro features — completely free.</p>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">Premium progress</span>
+        <span class="progress-days" id="progress-days"></span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-steps">
+        <span class="step-label" id="step-1" data-step="1">1 ad</span>
+        <span class="step-label" id="step-2" data-step="2">3 ads</span>
+        <span class="step-label" id="step-3" data-step="3">5 ads</span>
+      </div>
+    </div>
+
+    <!-- Ad container (Monetag injects here) -->
+    <div class="ad-container" id="ad-container">
+      Ad loading…
+    </div>
+
+    <button class="watch-btn" id="btn-watch">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      <span id="btn-watch-text">Watch Ad to Unlock Premium</span>
+    </button>
+
+    <p class="status-msg" id="status-msg"></p>
+
+    <div class="done-card" id="done-card">
+      <div class="done-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e"
+             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <span class="done-title" id="done-title">Premium Unlocked!</span>
+      <span class="done-sub" id="done-sub">Redirecting to TouchLock settings…</span>
+    </div>
+
+    <button class="apply-btn" id="btn-apply">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+      Apply &amp; Return to Settings
+    </button>
+  </div>
+
+  <script>
+    // ── Config ────────────────────────────────
+    const SIGN_SECRET = 'tl_pro_x7k9m2_2026';
+    const AD_STEPS = [
+      { ads: 1, days: 3,  label: '3 days unlocked' },
+      { ads: 3, days: 7,  label: '7 days unlocked — full week!' },
+      { ads: 5, days: 14, label: '14 days unlocked — best value!' }
+    ];
+    const MAX_ADS = AD_STEPS[AD_STEPS.length - 1].ads;
+
+    // ── State ─────────────────────────────────
+    let adsWatched = 0;
+    const params = new URLSearchParams(window.location.search);
+    const extId = params.get('extId');
+
+    const btnWatch     = document.getElementById('btn-watch');
+    const btnWatchTxt  = document.getElementById('btn-watch-text');
+    const btnApply     = document.getElementById('btn-apply');
+    const statusMsg    = document.getElementById('status-msg');
+    const progressFill = document.getElementById('progress-fill');
+    const progressDays = document.getElementById('progress-days');
+    const doneCard     = document.getElementById('done-card');
+    const doneTitle    = document.getElementById('done-title');
+    const doneSub      = document.getElementById('done-sub');
+    const adContainer  = document.getElementById('ad-container');
+    const stepLabels   = [
+      document.getElementById('step-1'),
+      document.getElementById('step-2'),
+      document.getElementById('step-3')
+    ];
+
+    function getCurrentReward() {
+      for (const step of AD_STEPS) {
+        if (adsWatched < step.ads) return step;
+      }
+      return AD_STEPS[AD_STEPS.length - 1];
+    }
+
+    function getEarnedDays() {
+      for (let i = AD_STEPS.length - 1; i >= 0; i--) {
+        if (adsWatched >= AD_STEPS[i].ads) return AD_STEPS[i].days;
+      }
+      return 0;
+    }
+
+    function updateUI() {
+      const pct = (adsWatched / MAX_ADS) * 100;
+      const days = getEarnedDays();
+      const complete = adsWatched >= MAX_ADS;
+
+      progressFill.style.width = pct + '%';
+      progressFill.classList.toggle('complete', complete);
+
+      if (days === 0) {
+        progressDays.textContent = '';
+        progressDays.classList.remove('complete');
+      } else {
+        progressDays.textContent = complete
+          ? '7 days unlocked ✓'
+          : `${days} day${days > 1 ? 's' : ''} unlocked`;
+        progressDays.classList.toggle('complete', complete);
+      }
+
+      stepLabels.forEach((el, i) => {
+        const step = AD_STEPS[i];
+        el.classList.remove('active', 'done');
+        if (adsWatched >= step.ads) {
+          el.classList.add('done');
+          el.textContent = `✓ ${step.days}d`;
+        } else if (adsWatched >= (i > 0 ? AD_STEPS[i - 1].ads : 0)) {
+          el.classList.add('active');
+          el.textContent = `${adsWatched}/${step.ads} ads`;
+        } else {
+          el.textContent = `${step.ads} ads`;
+        }
+      });
+
+      if (complete) {
+        btnWatch.disabled = true;
+        btnWatchTxt.textContent = 'All ads watched!';
+      } else {
+        btnWatch.disabled = false;
+        btnWatchTxt.textContent = 'Watch Ad to Unlock Premium';
+      }
+
+      if (adsWatched > 0) {
+        btnApply.classList.add('visible');
+      }
+    }
+
+    // ── SHA-256 helper ────────────────────────
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    // ── Ad playback ───────────────────────────
+    // TODO: Replace simulateAd() with Monetag rewarded ad.
+    // After signing up at monetag.com, you get a Zone ID.
+    // Replace the body of this function with:
+    //
+    //   return new Promise((resolve, reject) => {
+    //     show_8347291(); // Monetag provides this function name
+    //     window.addEventListener('message', function handler(e) {
+    //       if (e.data === 'monetag_reward') {
+    //         window.removeEventListener('message', handler);
+    //         resolve();
+    //       }
+    //     });
+    //   });
+
+    function simulateAd() {
+      return new Promise((resolve) => {
+        adContainer.classList.add('visible');
+        adContainer.textContent = 'Ad is playing… please wait';
+        statusMsg.textContent = 'Loading ad…';
+        statusMsg.className = 'status-msg loading';
+
+        let seconds = 3;
+        const countdown = setInterval(() => {
+          seconds--;
+          adContainer.textContent = `Ad playing… ${seconds}s remaining`;
+          if (seconds <= 0) {
+            clearInterval(countdown);
+            adContainer.classList.remove('visible');
+            resolve();
+          }
+        }, 1000);
+      });
+    }
+
+    // ── Watch button handler ──────────────────
+    btnWatch.addEventListener('click', async () => {
+      if (adsWatched >= MAX_ADS) return;
+
+      btnWatch.disabled = true;
+      btnWatchTxt.textContent = 'Loading ad…';
+
+      try {
+        await simulateAd();
+
+        adsWatched++;
+        const days = getEarnedDays();
+        const step = AD_STEPS.find(s => s.ads === adsWatched);
+        statusMsg.textContent = step ? `✓ ${step.label}` : `+1 ad watched`;
+        statusMsg.className = 'status-msg success';
+        updateUI();
+      } catch (err) {
+        statusMsg.textContent = 'Ad failed to load. Please try again.';
+        statusMsg.className = 'status-msg';
+        btnWatch.disabled = false;
+        btnWatchTxt.textContent = 'Watch Ad to Unlock Premium';
+      }
+    });
+
+    // ── Apply & return (with signed token) ────
+    btnApply.addEventListener('click', async () => {
+      const days = getEarnedDays();
+      if (days <= 0) return;
+
+      doneCard.classList.add('visible');
+      doneTitle.textContent = `${days} Day${days > 1 ? 's' : ''} of Premium Unlocked!`;
+      doneSub.textContent = 'Redirecting to TouchLock settings…';
+      btnWatch.style.display = 'none';
+      btnApply.style.display = 'none';
+      statusMsg.textContent = '';
+
+      // Build signed payload so extension can verify
+      const ts = Date.now();
+      const payload = btoa(JSON.stringify({ days, ts }));
+      const sig = await sha256(payload + SIGN_SECRET);
+
+      setTimeout(() => {
+        if (extId) {
+          window.location.href = `chrome-extension://${extId}/src/pages/options.html?proData=${payload}&proSig=${sig}`;
+        } else {
+          doneSub.textContent = 'Close this tab and open TouchLock settings to see your Pro status.';
+        }
+      }, 1500);
+    });
+
+    updateUI();
+  </script>
+</body>
+</html>

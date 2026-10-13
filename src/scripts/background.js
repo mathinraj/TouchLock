@@ -445,6 +445,32 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
         break;
       }
 
+      case 'getProStatus': {
+        const { proUnlockedUntil } = await chrome.storage.local.get('proUnlockedUntil');
+        const now = Date.now();
+        const active = proUnlockedUntil && now < proUnlockedUntil;
+        sendResponse({
+          active: !!active,
+          expiresAt: proUnlockedUntil || 0,
+          remainingMs: active ? proUnlockedUntil - now : 0
+        });
+        break;
+      }
+
+      case 'activatePro': {
+        const days = Math.min(Math.max(parseInt(msg.days, 10) || 0, 0), 14);
+        if (days <= 0) {
+          sendResponse({ success: false, error: 'Invalid days.' });
+          break;
+        }
+        const { proUnlockedUntil: existing } = await chrome.storage.local.get('proUnlockedUntil');
+        const base = (existing && existing > Date.now()) ? existing : Date.now();
+        const newExpiry = base + (days * 24 * 60 * 60 * 1000);
+        await chrome.storage.local.set({ proUnlockedUntil: newExpiry });
+        sendResponse({ success: true, expiresAt: newExpiry });
+        break;
+      }
+
       case 'openUrl': {
         chrome.tabs.create({ url: msg.url });
         sendResponse({ success: true });

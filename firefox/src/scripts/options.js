@@ -86,6 +86,8 @@ async function init() {
   await loadWhatsNew();
   const hasUpdate = await loadUpdateBanner();
   if (!hasUpdate) await loadRateBanner();
+  await handleProReturn();
+  await loadProStatus();
   await refreshStatus();
 
   // ── PIN strength indicator ──────────────────
@@ -527,6 +529,100 @@ async function init() {
         <polygon points="22 2 15 22 11 13 2 9 22 2"/>
       </svg>
       Send Request`;
+  });
+
+  // ── Pro Features ─────────────────────────────
+
+  const btnProWatch = document.getElementById('btn-pro-watch');
+  const btnProWatchText = document.getElementById('btn-pro-watch-text');
+  const proActive   = document.getElementById('pro-active');
+  const proLocked   = document.getElementById('pro-locked');
+  const proExpires  = document.getElementById('pro-expires');
+  const proFill     = document.getElementById('pro-active-fill');
+  const proBadge    = document.getElementById('pro-status-badge');
+  const proText     = document.getElementById('pro-status-text');
+  const navDotPro   = document.getElementById('nav-dot-pro');
+
+  async function handleProReturn() {
+    const params = new URLSearchParams(window.location.search);
+    const proData = params.get('proData');
+    const proSig  = params.get('proSig');
+    if (!proData || !proSig) return;
+
+    window.history.replaceState({}, '', window.location.pathname);
+
+    try {
+      const SIGN_SECRET = 'tl_pro_x7k9m2_2026';
+      const expectedSig = await sha256Hex(proData + SIGN_SECRET);
+      if (expectedSig !== proSig) {
+        console.warn('TouchLock: invalid Pro signature');
+        return;
+      }
+
+      const payload = JSON.parse(atob(proData));
+      const age = Date.now() - payload.ts;
+      if (age < 0 || age > 5 * 60 * 1000) {
+        console.warn('TouchLock: Pro token expired');
+        return;
+      }
+
+      const days = Math.min(Math.max(parseInt(payload.days, 10) || 0, 0), 14);
+      if (days <= 0) return;
+
+      await new Promise((resolve) => {
+        chrome.runtime.sendMessage({ action: 'activatePro', days }, resolve);
+      });
+    } catch (_) {
+      console.warn('TouchLock: Pro activation failed');
+    }
+  }
+
+  async function sha256Hex(message) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(message));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function loadProStatus() {
+    const res = await new Promise((resolve) => {
+      chrome.runtime.sendMessage({ action: 'getProStatus' }, resolve);
+    });
+
+    if (!res) return;
+
+    if (res.active) {
+      const expDate = new Date(res.expiresAt);
+      const daysLeft = Math.ceil(res.remainingMs / (24 * 60 * 60 * 1000));
+      const totalDays = 14;
+      const pct = Math.min((daysLeft / totalDays) * 100, 100);
+
+      proActive.classList.remove('hidden');
+      proLocked.classList.add('hidden');
+      proExpires.textContent = `Expires ${expDate.toLocaleDateString()} (${daysLeft} day${daysLeft !== 1 ? 's' : ''} left)`;
+      proFill.style.width = pct + '%';
+
+      proBadge.querySelector('.dot').className = 'dot gold';
+      proText.textContent = `${daysLeft}d left`;
+
+      btnProWatchText.textContent = 'Watch Ads to Extend';
+
+      if (navDotPro) navDotPro.classList.add('configured');
+    } else {
+      proActive.classList.add('hidden');
+      proLocked.classList.remove('hidden');
+      proFill.style.width = '0%';
+
+      proBadge.querySelector('.dot').className = 'dot gray';
+      proText.textContent = 'Locked';
+
+      btnProWatchText.textContent = 'Watch Ads to Unlock';
+
+      if (navDotPro) navDotPro.classList.remove('configured');
+    }
+  }
+
+  btnProWatch.addEventListener('click', () => {
+    const extId = chrome.runtime.id;
+    chrome.tabs.create({ url: `https://touchlock.vercel.app/unlock-pro.html?extId=${extId}` });
   });
 
   // ── Reset All ────────────────────────────────
