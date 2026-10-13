@@ -278,6 +278,43 @@
     }
 
     .ad-container.visible { display: flex; }
+
+    /* Ad blocker warning */
+    .adblocker-warn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .adblocker-warn.hidden { display: none; }
+
+    .adblocker-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .adblocker-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .adblocker-text strong {
+      font-size: 13px;
+      color: #fbbf24;
+    }
+
+    .adblocker-text span {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
   </style>
 </head>
 <body>
@@ -304,6 +341,22 @@
         <span class="step-label" id="step-1" data-step="1">1 ad</span>
         <span class="step-label" id="step-2" data-step="2">3 ads</span>
         <span class="step-label" id="step-3" data-step="3">5 ads</span>
+      </div>
+    </div>
+
+    <!-- Ad blocker warning -->
+    <div class="adblocker-warn hidden" id="adblocker-warn">
+      <div class="adblocker-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div class="adblocker-text">
+        <strong>Ad blocker detected</strong>
+        <span>Please disable your ad blocker on this page to watch ads and unlock Pro features. Then refresh.</span>
       </div>
     </div>
 
@@ -553,6 +606,27 @@
         }
       }, 1500);
     });
+
+    // ── Ad blocker detection ─────────────────
+    (function detectAdBlocker() {
+      const testAd = document.createElement('div');
+      testAd.innerHTML = '&nbsp;';
+      testAd.className = 'adsbox ad-placement ad-banner textads banner-ads';
+      testAd.style.cssText = 'position:absolute;top:-9999px;left:-9999px;width:1px;height:1px;';
+      document.body.appendChild(testAd);
+
+      setTimeout(() => {
+        const blocked = testAd.offsetHeight === 0 || testAd.clientHeight === 0
+                     || getComputedStyle(testAd).display === 'none';
+        testAd.remove();
+
+        if (blocked) {
+          document.getElementById('adblocker-warn').classList.remove('hidden');
+          btnWatch.disabled = true;
+          btnWatchTxt.textContent = 'Ad blocker detected';
+        }
+      }, 200);
+    })();
 
     updateUI();
   </script>
