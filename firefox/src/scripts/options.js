@@ -895,6 +895,11 @@ setStatus = function(el, text, color) {
       desc: 'Fine-tune when your browser locks: automatically on startup, after a period of inactivity (1 min to 1 hour), or instantly with the Alt+L (Option+L on Mac) keyboard shortcut from any webpage.'
     },
     {
+      target: '#section-feedback',
+      title: '💡 Feature Request & Bug Report',
+      desc: 'Got an idea or found a bug? Expand this section to send a feature request, improvement suggestion, or bug report directly to the developer. Your feedback shapes what gets built next!'
+    },
+    {
       target: '#sidebar',
       title: '🧭 Sidebar Navigation',
       desc: 'Jump between sections instantly using the sidebar. Green dots next to each item show which steps you\'ve completed. You\'ll also find links to rate TouchLock, see what\'s new, and replay this tour anytime.',
