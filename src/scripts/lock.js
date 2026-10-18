@@ -83,6 +83,23 @@ let pendingUpdateRedirect = false;
   pinBtn.addEventListener('click', submitPin);
   bioBtn.addEventListener('click', () => triggerBiometrics(false, MAX_AUTO_RETRIES));
 
+  // ── Fullscreen lock mode ─────────────────────
+
+  const { fullscreenLock } = await chrome.storage.local.get('fullscreenLock');
+  if (fullscreenLock) {
+    try {
+      await document.documentElement.requestFullscreen().catch(() => {});
+    } catch (_) {}
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement && fullscreenLock) {
+        setTimeout(() => {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }, 200);
+      }
+    });
+  }
+
   // ── Auto-trigger biometrics if registered ──
 
   if (hasBiometrics) {
@@ -186,6 +203,10 @@ let pendingUpdateRedirect = false;
   }
 
   function showSuccess() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+
     document.querySelector('.card').innerHTML = `
       <div class="icon" style="background:linear-gradient(135deg,#34d399,#059669)">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff"
@@ -196,8 +217,6 @@ let pendingUpdateRedirect = false;
       <h1 class="title" style="margin-top:8px">Unlocked</h1>
       <p class="subtitle">Welcome back!</p>
     `;
-
-    
   }
 })();
 

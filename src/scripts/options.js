@@ -56,13 +56,13 @@ async function init() {
   const sqMsg         = document.getElementById('sq-msg');
   const sqStatus      = document.getElementById('sq-status');
 
-  const toggleStartup = document.getElementById('toggle-startup');
-  const toggleIdle    = document.getElementById('toggle-idle');
-  const idleField     = document.getElementById('idle-timeout-field');
-  const idleTimeout   = document.getElementById('idle-timeout');
-  const btnSaveLock   = document.getElementById('btn-save-lock');
-  const lockMsg       = document.getElementById('lock-msg');
-  const lockStatus    = document.getElementById('lock-status');
+  const toggleStartup    = document.getElementById('toggle-startup');
+  const toggleIdle       = document.getElementById('toggle-idle');
+  const toggleFullscreen = document.getElementById('toggle-fullscreen');
+  const idleField        = document.getElementById('idle-timeout-field');
+  const idleTimeout      = document.getElementById('idle-timeout');
+  const lockMsg          = document.getElementById('lock-msg');
+  const lockStatus       = document.getElementById('lock-status');
 
   const shortcutDisplay   = document.getElementById('shortcut-display');
   const btnRecordShortcut = document.getElementById('btn-record-shortcut');
@@ -261,32 +261,36 @@ async function init() {
     await refreshStatus();
   });
 
-  // ── Lock Behavior Settings ──────────────────
+  // ── Lock Behavior Settings (auto-save) ──────
 
-  toggleIdle.addEventListener('change', () => {
-    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
-  });
-
-  btnSaveLock.addEventListener('click', async () => {
+  async function saveLockSettings() {
     await chrome.storage.local.set({
       lockOnStartup: toggleStartup.checked,
       idleLockEnabled: toggleIdle.checked,
-      idleLockTimeout: parseInt(idleTimeout.value, 10)
+      idleLockTimeout: parseInt(idleTimeout.value, 10),
+      fullscreenLock: toggleFullscreen.checked
     });
-
     chrome.runtime.sendMessage({ action: 'updateIdleSettings' });
-
     showMsg(lockMsg, 'Lock settings saved.', 'success');
     await refreshStatus();
+  }
+
+  toggleStartup.addEventListener('change', saveLockSettings);
+  toggleFullscreen.addEventListener('change', saveLockSettings);
+  toggleIdle.addEventListener('change', () => {
+    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
+    saveLockSettings();
   });
+  idleTimeout.addEventListener('change', saveLockSettings);
 
   async function loadLockSettings() {
     const data = await chrome.storage.local.get([
-      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout'
+      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout', 'fullscreenLock'
     ]);
 
     toggleStartup.checked = data.lockOnStartup !== false;
     toggleIdle.checked = data.idleLockEnabled === true;
+    toggleFullscreen.checked = data.fullscreenLock === true;
     idleField.style.display = toggleIdle.checked ? 'block' : 'none';
 
     if (data.idleLockTimeout) {
@@ -874,7 +878,7 @@ setStatus = function(el, text, color) {
     {
       target: '#section-lock',
       title: '⏱️ Lock Behavior & Shortcut',
-      desc: 'Fine-tune when your browser locks: automatically on startup, after a period of inactivity (1 min to 1 hour), or instantly with the Alt+L (Option+L on Mac) keyboard shortcut from any webpage.'
+      desc: 'Fine-tune when your browser locks: on startup, after idle time, or via the Alt+L shortcut. We highly recommend enabling "Fullscreen lock screen" — it hides the address bar and tabs so nobody can bypass the lock!'
     },
     {
       target: '#section-feedback',

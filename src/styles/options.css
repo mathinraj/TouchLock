@@ -823,6 +823,30 @@ body {
 
 .toggle-row:first-of-type { padding-top: 0; }
 
+.toggle-row--recommended {
+  background: rgba(52, 211, 153, 0.04);
+  border: 1px solid rgba(52, 211, 153, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 14px 12px !important;
+  margin: 4px -12px 0;
+}
+
+.recommended-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  background: rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #34d399;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
 .toggle-info {
   display: flex;
   flex-direction: column;
