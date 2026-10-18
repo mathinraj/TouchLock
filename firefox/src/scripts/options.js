@@ -863,3 +863,209 @@ setStatus = function(el, text, color) {
   origSetStatus(el, text, color);
   updateProgress();
 };
+
+// ── Guided Tour ────────────────────────────────
+
+(function initGuidedTour() {
+
+  const TOUR_STEPS = [
+    {
+      target: '.setup-progress',
+      title: '📊 Setup Progress',
+      desc: 'This bar tracks your security setup at a glance. Each circle turns green as you complete a step — PIN, Biometrics, Recovery, and Lock Behavior. Complete all four to fully protect your browser profile.'
+    },
+    {
+      target: '#section-pin',
+      title: '🔒 PIN Lock',
+      desc: 'Start here! Create a 4–10 digit PIN as your secure fallback unlock method. This is required to activate browser locking. A longer PIN means stronger security — aim for 6+ digits for the best protection.'
+    },
+    {
+      target: '#section-bio',
+      title: '👆 Biometric Authentication',
+      desc: 'Register your fingerprint via Touch ID (Mac) or Windows Hello (PC) for instant, one-touch unlocking. No need to type your PIN every time — your biometric data stays securely on your device and is never transmitted.'
+    },
+    {
+      target: '#section-sq',
+      title: '🛟 Recovery Questions',
+      desc: 'Your safety net! Select 3 security questions and provide answers. If you ever forget your PIN, answering any 2 questions correctly will let you reset it and regain access to your browser.'
+    },
+    {
+      target: '#section-lock',
+      title: '⏱️ Lock Behavior & Shortcut',
+      desc: 'Fine-tune when your browser locks: automatically on startup, after a period of inactivity (1 min to 1 hour), or instantly with the Alt+L (Option+L on Mac) keyboard shortcut from any webpage.'
+    },
+    {
+      target: '#sidebar',
+      title: '🧭 Sidebar Navigation',
+      desc: 'Jump between sections instantly using the sidebar. Green dots next to each item show which steps you\'ve completed. You\'ll also find links to rate TouchLock, see what\'s new, and replay this tour anytime.',
+      desktopOnly: true
+    }
+  ];
+
+  const overlay  = document.getElementById('tour-overlay');
+  const tooltip  = document.getElementById('tour-tooltip');
+  const titleEl  = document.getElementById('tour-title');
+  const descEl   = document.getElementById('tour-desc');
+  const badge    = document.getElementById('tour-step-badge');
+  const btnBack  = document.getElementById('tour-back');
+  const btnNext  = document.getElementById('tour-next');
+  const btnSkip  = document.getElementById('tour-skip');
+  const btnReplay = document.getElementById('btn-replay-tour');
+
+  if (!overlay || !tooltip) return;
+
+  let currentStep = 0;
+  let activeSteps = [];
+  let scrollListener = null;
+
+  function getActiveSteps() {
+    const isMobile = window.innerWidth <= 860;
+    return TOUR_STEPS.filter(s => !(s.desktopOnly && isMobile));
+  }
+
+  function buildProgressDots() {
+    let existing = tooltip.querySelector('.tour-progress');
+    if (existing) existing.remove();
+
+    const wrap = document.createElement('div');
+    wrap.className = 'tour-progress';
+    activeSteps.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'tour-dot';
+      if (i < currentStep) dot.classList.add('done');
+      if (i === currentStep) dot.classList.add('active');
+      wrap.appendChild(dot);
+    });
+    tooltip.appendChild(wrap);
+  }
+
+  function showStep(index) {
+    document.querySelectorAll('.tour-highlight').forEach(
+      el => el.classList.remove('tour-highlight')
+    );
+
+    const step = activeSteps[index];
+    const targetEl = document.querySelector(step.target);
+    if (!targetEl) { endTour(); return; }
+
+    if (step.target !== '#sidebar') {
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    targetEl.classList.add('tour-highlight');
+
+    titleEl.textContent = step.title;
+    descEl.textContent  = step.desc;
+    badge.textContent   = `${index + 1} / ${activeSteps.length}`;
+
+    btnBack.style.display = index === 0 ? 'none' : '';
+    btnNext.innerHTML = index === activeSteps.length - 1 ? '✓ Got it!' : 'Next →';
+
+    buildProgressDots();
+
+    tooltip.style.animation = 'none';
+    tooltip.offsetHeight;
+    tooltip.style.animation = '';
+
+    setTimeout(() => positionTooltip(targetEl, step), 380);
+  }
+
+  function positionTooltip(targetEl, step) {
+    const rect     = targetEl.getBoundingClientRect();
+    const tW       = Math.min(360, window.innerWidth - 32);
+    const pad      = 16;
+
+    tooltip.style.width = `${tW}px`;
+    tooltip.style.display = 'block';
+    const tH = tooltip.offsetHeight;
+
+    let top, left;
+
+    if (step.target === '#sidebar') {
+      left = rect.right + pad;
+      top  = rect.top + (rect.height / 2) - (tH / 2);
+    } else {
+      top  = rect.bottom + pad;
+      left = rect.left + (rect.width / 2) - (tW / 2);
+    }
+
+    left = Math.max(pad, Math.min(left, window.innerWidth - tW - pad));
+
+    if (top + tH > window.innerHeight - pad) {
+      top = rect.top - tH - pad;
+    }
+    top = Math.max(pad, top);
+
+    tooltip.style.top  = `${top}px`;
+    tooltip.style.left = `${left}px`;
+  }
+
+  function repositionCurrent() {
+    const step = activeSteps[currentStep];
+    if (!step) return;
+    const targetEl = document.querySelector(step.target);
+    if (targetEl) positionTooltip(targetEl, step);
+  }
+
+  function startTour() {
+    activeSteps = getActiveSteps();
+    currentStep = 0;
+    overlay.classList.remove('hidden');
+    tooltip.classList.remove('hidden');
+    showStep(0);
+
+    scrollListener = () => {
+      clearTimeout(scrollListener._timer);
+      scrollListener._timer = setTimeout(repositionCurrent, 60);
+    };
+    window.addEventListener('scroll', scrollListener, true);
+  }
+
+  function endTour() {
+    overlay.classList.add('hidden');
+    tooltip.classList.add('hidden');
+    document.querySelectorAll('.tour-highlight').forEach(
+      el => el.classList.remove('tour-highlight')
+    );
+    chrome.storage.local.set({ tourCompleted: true });
+    if (scrollListener) {
+      window.removeEventListener('scroll', scrollListener, true);
+      scrollListener = null;
+    }
+  }
+
+  btnNext.addEventListener('click', () => {
+    if (currentStep < activeSteps.length - 1) {
+      currentStep++;
+      showStep(currentStep);
+    } else {
+      endTour();
+    }
+  });
+
+  btnBack.addEventListener('click', () => {
+    if (currentStep > 0) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  });
+
+  btnSkip.addEventListener('click', endTour);
+
+  document.addEventListener('keydown', (e) => {
+    if (!activeSteps.length || overlay.classList.contains('hidden')) return;
+    if (e.key === 'Escape') endTour();
+    if (e.key === 'ArrowRight' || e.key === 'Enter') btnNext.click();
+    if (e.key === 'ArrowLeft') btnBack.click();
+  });
+
+  if (btnReplay) {
+    btnReplay.addEventListener('click', startTour);
+  }
+
+  chrome.storage.local.get('tourCompleted', ({ tourCompleted }) => {
+    if (!tourCompleted) {
+      setTimeout(startTour, 1200);
+    }
+  });
+})();

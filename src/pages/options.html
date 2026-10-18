@@ -88,6 +88,14 @@
       </nav>
 
       <div class="sidebar-bottom">
+        <button class="sidebar-action tour" id="btn-replay-tour" title="Replay guided tour">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+          </svg>
+          <span>Guided Tour</span>
+        </button>
         <a href="https://coindrop.to/mathinraj" target="_blank" rel="noopener noreferrer" class="sidebar-action coffee">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -596,6 +604,21 @@
         </button>
       </div>
     </main>
+  </div>
+
+  <!-- Guided Tour -->
+  <div class="tour-overlay hidden" id="tour-overlay"></div>
+  <div class="tour-tooltip hidden" id="tour-tooltip">
+    <div class="tour-tooltip-header">
+      <span class="tour-step-badge" id="tour-step-badge">1 / 6</span>
+      <button class="tour-skip" id="tour-skip">Skip tour</button>
+    </div>
+    <h3 class="tour-title" id="tour-title"></h3>
+    <p class="tour-desc" id="tour-desc"></p>
+    <div class="tour-actions">
+      <button class="tour-btn tour-btn--back" id="tour-back">← Back</button>
+      <button class="tour-btn tour-btn--next" id="tour-next">Next →</button>
+    </div>
   </div>
 
   <script src="../scripts/config.js"></script>
