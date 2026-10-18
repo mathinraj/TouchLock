@@ -12,33 +12,40 @@ echo "=================================="
 echo ""
 
 # Get all local branches
-mapfile -t BRANCHES < <(git branch --format='%(refname:short)')
+BRANCHES=()
+while IFS= read -r b; do
+  BRANCHES+=("$b")
+done < <(git branch --format='%(refname:short)')
 
-if [[ ${#BRANCHES[@]} -eq 0 ]]; then
+if [ ${#BRANCHES[@]} -eq 0 ]; then
   echo "Error: No branches found."
   exit 1
 fi
 
+CURRENT_BRANCH=$(git branch --show-current)
+
 echo "Available branches:"
 echo ""
-for i in "${!BRANCHES[@]}"; do
-  CURRENT=""
-  if git branch --show-current 2>/dev/null | grep -qx "${BRANCHES[$i]}"; then
-    CURRENT=" ← current"
+i=1
+for b in "${BRANCHES[@]}"; do
+  MARKER=""
+  if [ "$b" = "$CURRENT_BRANCH" ]; then
+    MARKER=" ← current"
   fi
-  printf "  %d) %s%s\n" $((i + 1)) "${BRANCHES[$i]}" "$CURRENT"
+  printf "  %d) %s%s\n" "$i" "$b" "$MARKER"
+  i=$((i + 1))
 done
 
+COUNT=${#BRANCHES[@]}
 echo ""
-read -rp "Select branch to build [1-${#BRANCHES[@]}]: " CHOICE
+read -rp "Select branch to build [1-${COUNT}]: " CHOICE
 
-if ! [[ "$CHOICE" =~ ^[0-9]+$ ]] || (( CHOICE < 1 || CHOICE > ${#BRANCHES[@]} )); then
+if ! echo "$CHOICE" | grep -qE '^[0-9]+$' || [ "$CHOICE" -lt 1 ] || [ "$CHOICE" -gt "$COUNT" ]; then
   echo "Error: Invalid selection."
   exit 1
 fi
 
 SELECTED_BRANCH="${BRANCHES[$((CHOICE - 1))]}"
-CURRENT_BRANCH=$(git branch --show-current)
 
 echo ""
 echo "Building from branch: $SELECTED_BRANCH"
