@@ -86,18 +86,24 @@ let pendingUpdateRedirect = false;
   // ── Fullscreen lock mode ─────────────────────
 
   const { fullscreenLock } = await chrome.storage.local.get('fullscreenLock');
-  if (fullscreenLock) {
-    try {
-      await document.documentElement.requestFullscreen().catch(() => {});
-    } catch (_) {}
+  const isFullscreen = fullscreenLock !== false;
 
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement && fullscreenLock) {
-        setTimeout(() => {
-          document.documentElement.requestFullscreen().catch(() => {});
-        }, 200);
+  console.log('[TouchLock] fullscreenLock value:', fullscreenLock, '| isFullscreen:', isFullscreen);
+
+  if (isFullscreen) {
+    setTimeout(async () => {
+      try {
+        const win = await chrome.windows.getCurrent();
+        console.log('[TouchLock] window id:', win.id, '| current state:', win.state);
+
+        await chrome.windows.update(win.id, { focused: true });
+
+        const updated = await chrome.windows.update(win.id, { state: 'fullscreen' });
+        console.log('[TouchLock] after update, state:', updated.state);
+      } catch (e) {
+        console.error('[TouchLock] fullscreen error:', e);
       }
-    });
+    }, 500);
   }
 
   // ── Auto-trigger biometrics if registered ──
@@ -203,8 +209,13 @@ let pendingUpdateRedirect = false;
   }
 
   function showSuccess() {
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
+    if (isFullscreen) {
+      chrome.storage.local.get('savedWindowStates', ({ savedWindowStates }) => {
+        chrome.windows.getCurrent(win => {
+          const prevState = (savedWindowStates && savedWindowStates[win.id]) || 'maximized';
+          chrome.windows.update(win.id, { state: prevState });
+        });
+      });
     }
 
     document.querySelector('.card').innerHTML = `
