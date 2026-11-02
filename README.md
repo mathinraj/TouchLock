@@ -56,7 +56,7 @@ node generate-icons.js
 - **PIN:** Enter your PIN on the lock screen (4–10 digits, matching your configured length)
 - **Forgot PIN:** Click "Forgot PIN?" → answer 2 of your 3 security questions → credentials reset → re-setup
 
-### Locked Sites
+### Lock Specific Sites
 - Each locked site gets a `declarativeNetRequest` dynamic rule that redirects its pages to `site-lock.html` before any request is sent; a `tabs.onUpdated` check catches navigations without a request (back/forward cache, `view-source:`)
 - Unlocking a site adds a higher-priority session "allow" rule; session rules and unlock state (`storage.session`) are cleared automatically when the browser restarts
 - Site locking is paused while no PIN or biometrics are set up, so you can't be locked out of a site
@@ -126,7 +126,7 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 ## Changelog
 
 ### v1.4.0
-- **Lock on specific sites (PRO)** – add sites in Settings → Locked Sites or via "Lock this site" in the popup; locked sites are redirected to a TouchLock unlock page before they load (declarativeNetRequest), even while the browser is unlocked
+- **Lock on specific sites (PRO)** – add sites in Settings → Lock Specific Sites or via "Lock this site" in the popup; locked sites are redirected to a TouchLock unlock page before they load (declarativeNetRequest), even while the browser is unlocked
 - **Re-lock options** – an unlocked site locks again when you leave it or close all its tabs (default), after 5–60 minutes, or only when the browser locks; sites always re-lock on browser lock and restart
 - **Subdomain and browser-unlock options** – choose whether locking `google.com` also covers `mail.google.com` (default on), and whether unlocking the browser also unlocks sites (default off)
 - **Re-authentication for sensitive settings** – changing PIN, biometrics or security questions, removing a locked site, changing locked-site settings, and Reset All now require your PIN or biometrics

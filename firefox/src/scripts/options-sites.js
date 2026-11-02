@@ -1,5 +1,5 @@
 /* ───────────────────────────────────────────────
-   TouchLock – Settings: Locked Sites section
+   TouchLock – Settings: Lock Specific Sites section
    Writes lockedSites / siteLockSettings to storage;
    the background applies the lock rules.
    ─────────────────────────────────────────────── */

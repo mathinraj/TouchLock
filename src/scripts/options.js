@@ -891,7 +891,7 @@ setStatus = function(el, text, color) {
     },
     {
       target: '#section-sites',
-      title: '🌐 Locked Sites',
+      title: '🌐 Lock Specific Sites',
       desc: 'Keep sensitive sites like banking or email locked even after you unlock the browser. Add a site here (or use "Lock this site" in the toolbar popup) and it will ask for your PIN or fingerprint every time it opens. Choose when an unlocked site locks again.'
     },
     {
