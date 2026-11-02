@@ -120,6 +120,8 @@ async function init() {
       return;
     }
 
+    if (!(await requireAuth('Changing your PIN'))) return;
+
     const salt = crypto.randomUUID();
     const hash = await hashValue(p1, salt);
 
@@ -162,6 +164,8 @@ async function init() {
       return;
     }
 
+    if (!(await requireAuth('Changing your security questions'))) return;
+
     const stored = [];
     for (let i = 0; i < 3; i++) {
       const q = SECURITY_QUESTIONS.find(q => String(q.id) === selectedIds[i]);
@@ -198,6 +202,8 @@ async function init() {
       showMsg(bioMsg, 'No platform authenticator found (Touch ID / Windows Hello).', 'error');
       return;
     }
+
+    if (!(await requireAuth('Registering a biometric credential'))) return;
 
     try {
       showMsg(bioMsg, 'Waiting for biometric verification…', 'success');
@@ -256,6 +262,7 @@ async function init() {
   // ── Remove Biometric ─────────────────────────
 
   btnRemoveBio.addEventListener('click', async () => {
+    if (!(await requireAuth('Removing your biometric credential'))) return;
     await chrome.storage.local.remove(['webauthnCredentialId', 'webauthnRegistered']);
     showMsg(bioMsg, 'Biometric credential removed.', 'success');
     await refreshStatus();
@@ -518,7 +525,8 @@ async function init() {
   // ── Reset All ────────────────────────────────
 
   btnReset.addEventListener('click', async () => {
-    if (!confirm('This will erase your PIN, biometric credentials, and security questions. Continue?')) return;
+    if (!confirm('This will erase your PIN, biometric credentials, security questions, and locked sites. Continue?')) return;
+    if (!(await requireAuth('Resetting all data'))) return;
 
     await chrome.storage.local.clear();
     showMsg(pinMsg, '', '');
@@ -795,7 +803,7 @@ function getStoreUrl() {
 async function updateProgress() {
   const data = await chrome.storage.local.get([
     'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured',
-    'lockOnStartup', 'idleLockEnabled'
+    'lockOnStartup', 'idleLockEnabled', 'lockedSites'
   ]);
 
   const map = {
@@ -809,7 +817,8 @@ async function updateProgress() {
     'nav-dot-pin':  !!data.pinHash,
     'nav-dot-bio':  !!data.webauthnRegistered,
     'nav-dot-sq':   !!data.securityQuestionsConfigured,
-    'nav-dot-lock': data.lockOnStartup !== false || data.idleLockEnabled === true
+    'nav-dot-lock': data.lockOnStartup !== false || data.idleLockEnabled === true,
+    'nav-dot-sites': Array.isArray(data.lockedSites) && data.lockedSites.length > 0
   };
 
   const steps = document.querySelectorAll('.progress-step');
@@ -879,6 +888,11 @@ setStatus = function(el, text, color) {
       target: '#section-lock',
       title: '⏱️ Lock Behavior & Shortcut',
       desc: 'Fine-tune when your browser locks: on startup, after idle time, or via the Alt+L shortcut. We highly recommend enabling "Fullscreen lock screen" — it hides the address bar and tabs so nobody can bypass the lock!'
+    },
+    {
+      target: '#section-sites',
+      title: '🌐 Locked Sites',
+      desc: 'Keep sensitive sites like banking or email locked even after you unlock the browser. Add a site here (or use "Lock this site" in the toolbar popup) and it will ask for your PIN or fingerprint every time it opens. Choose when an unlocked site locks again.'
     },
     {
       target: '#section-feedback',

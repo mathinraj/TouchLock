@@ -293,6 +293,50 @@ body {
   animation: shake 0.5s ease;
 }
 
+/* ── Site lock page ────────────────────────── */
+
+.site-host {
+  display: inline-block;
+  max-width: 100%;
+  margin: -2px 0 12px;
+  padding: 4px 12px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a5b4fc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-host:empty { display: none; }
+
+.site-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.close-tab-link {
+  margin-top: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.close-tab-link:hover {
+  color: #e4e4e7;
+  text-decoration: underline;
+}
+
 /* ── Footer ────────────────────────────────── */
 
 .footer {

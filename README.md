@@ -13,8 +13,9 @@ A browser extension for Chromium (Edge, Chrome, Brave, etc.) and Firefox that lo
 - **Auto-lock on idle** – optionally lock after a configurable period of inactivity (1 min – 1 hour)
 - **Manual lock** – one-click lock from the toolbar popup
 - **Tab guards** – prevents switching to other tabs, opening new tabs, or closing the lock tab while locked
+- **Lock on specific sites (PRO)** – keep sites like banking or email locked even while the browser is unlocked, with configurable re-lock timing and subdomain matching
 - **Manifest V3** – modern service-worker architecture, works on Chrome 110+, Edge 110+, and other Chromium browsers
-- **Firefox support** – full Manifest V3 support for Firefox 109+, including auto-updating browser shortcuts via `browser.commands.update()`
+- **Firefox support** – full Manifest V3 support for Firefox 115+, including auto-updating browser shortcuts via `browser.commands.update()`
 
 ## Installation (Developer Mode)
 
@@ -54,6 +55,12 @@ node generate-icons.js
 - **Biometrics (auto):** If registered, Touch ID / Windows Hello triggers automatically when the lock screen loads
 - **PIN:** Enter your PIN on the lock screen (4–10 digits, matching your configured length)
 - **Forgot PIN:** Click "Forgot PIN?" → answer 2 of your 3 security questions → credentials reset → re-setup
+
+### Locked Sites
+- Each locked site gets a `declarativeNetRequest` dynamic rule that redirects its pages to `site-lock.html` before any request is sent; a `tabs.onUpdated` check catches navigations without a request (back/forward cache, `view-source:`)
+- Unlocking a site adds a higher-priority session "allow" rule; session rules and unlock state (`storage.session`) are cleared automatically when the browser restarts
+- Site locking is paused while no PIN or biometrics are set up, so you can't be locked out of a site
+- Limitation: someone with access to an unlocked browser can still disable or remove the extension itself from the browser's extensions page
 
 ### Keyboard Shortcut
 
@@ -117,6 +124,13 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 | Firefox 109+ | Supported |
 
 ## Changelog
+
+### v1.4.0
+- **Lock on specific sites (PRO)** – add sites in Settings → Locked Sites or via "Lock this site" in the popup; locked sites are redirected to a TouchLock unlock page before they load (declarativeNetRequest), even while the browser is unlocked
+- **Re-lock options** – an unlocked site locks again when you leave it or close all its tabs (default), after 5–60 minutes, or only when the browser locks; sites always re-lock on browser lock and restart
+- **Subdomain and browser-unlock options** – choose whether locking `google.com` also covers `mail.google.com` (default on), and whether unlocking the browser also unlocks sites (default off)
+- **Re-authentication for sensitive settings** – changing PIN, biometrics or security questions, removing a locked site, changing locked-site settings, and Reset All now require your PIN or biometrics
+- **Firefox** – minimum version is now Firefox 115 (needed for `storage.session`)
 
 ### v1.3.6
 - **Fix: missing logo** – the TouchLock logo now displays in Settings (top-left corner), the popup, Welcome, and What's New pages; store builds previously omitted `icons/icon.svg`

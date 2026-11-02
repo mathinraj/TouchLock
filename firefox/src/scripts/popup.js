@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       badge.classList.add('unlocked');
       badge.querySelector('.label').textContent = 'Unlocked';
       actions.classList.remove('hidden');
+      initSiteCard();
     }
   });
 
@@ -100,6 +101,58 @@ document.addEventListener('DOMContentLoaded', async () => {
   await showUpdateBanner();
   loadBanner();
 });
+
+async function initSiteCard() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const host = tab && normalizeSiteHost(toHttpUrl(tab.url) || '');
+  if (!host) return;
+
+  const card    = document.getElementById('site-card');
+  const hostEl  = document.getElementById('site-card-host');
+  const stateEl = document.getElementById('site-card-state');
+  const btn     = document.getElementById('btn-site-action');
+
+  const { lockedSites, siteLockSettings } = await chrome.storage.local.get(['lockedSites', 'siteLockSettings']);
+  const sites = Array.isArray(lockedSites) ? lockedSites : [];
+  const settings = getSiteLockSettings(siteLockSettings);
+  const site = findLockedSite(sites, tab.url, settings.includeSubdomains);
+
+  card.classList.remove('hidden');
+
+  if (!site) {
+    hostEl.textContent = host;
+    stateEl.textContent = 'Not locked';
+    btn.innerHTML = 'Lock this site <span class="pro-badge">PRO</span>';
+    btn.addEventListener('click', async () => {
+      if (sites.length >= MAX_LOCKED_SITES) {
+        stateEl.textContent = `Limit of ${MAX_LOCKED_SITES} sites reached`;
+        return;
+      }
+      await chrome.storage.local.set({ lockedSites: [...sites, createSiteEntry(sites, host)] });
+      window.close();
+    });
+    return;
+  }
+
+  hostEl.textContent = site.host;
+  const grants = await new Promise((resolve) => {
+    chrome.runtime.sendMessage({ action: 'getSiteGrants' }, (res) => {
+      resolve((!chrome.runtime.lastError && res && res.grants) || {});
+    });
+  });
+
+  if (grants[site.id]) {
+    stateEl.textContent = 'Unlocked for now';
+    stateEl.classList.add('unlocked');
+    btn.textContent = 'Lock now';
+    btn.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ action: 'relockSite', siteId: site.id }, () => window.close());
+    });
+  } else {
+    stateEl.textContent = 'Locked';
+    btn.classList.add('hidden');
+  }
+}
 
 async function showUpdateBanner() {
   const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);

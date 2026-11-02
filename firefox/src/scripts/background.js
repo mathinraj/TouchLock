@@ -2,6 +2,11 @@
    TouchLock – Background Service Worker (MV3)
    ─────────────────────────────────────────────── */
 
+// Firefox loads these through manifest background.scripts instead.
+if (typeof importScripts === 'function') {
+  importScripts('site-lock-shared.js', 'site-lock-bg.js');
+}
+
 const LOCK_URL     = chrome.runtime.getURL('src/pages/lock.html');
 const RECOVERY_URL = chrome.runtime.getURL('src/pages/recovery.html');
 const OPTIONS_URL  = chrome.runtime.getURL('src/pages/options.html');
@@ -43,6 +48,7 @@ async function hashPin(pin, salt) {
 
 async function lockBrowser() {
   await chrome.storage.local.set({ isLocked: true });
+  await onBrowserLocking();
 
   // Save window states before locking (for fullscreen restore)
   const windows = await chrome.windows.getAll({ populate: true });
@@ -106,6 +112,8 @@ async function unlockBrowser() {
     } catch (_) {}
   }
 
+  await onBrowserUnlocked();
+
   // Handle pending update redirect from lock screen
   const { pendingUpdateUrl } = await chrome.storage.local.get('pendingUpdateUrl');
   if (pendingUpdateUrl) {
@@ -134,19 +142,21 @@ async function injectOverlay(tabId) {
 
 // ── PIN verification ─────────────────────────────
 
-async function verifyPin(pin) {
+async function checkPin(pin) {
   const { pinHash, pinSalt, pinLength } = await chrome.storage.local.get(['pinHash', 'pinSalt', 'pinLength']);
   if (!pinHash || !pinSalt) return { success: false, error: 'PIN not configured.' };
 
   const expectedLen = pinLength || 6;
-  if (pin.length !== expectedLen) return { success: false, error: 'Incorrect PIN.' };
+  if (typeof pin !== 'string' || pin.length !== expectedLen) return { success: false, error: 'Incorrect PIN.' };
 
   const hash = await hashPin(pin, pinSalt);
-  if (hash === pinHash) {
-    await unlockBrowser();
-    return { success: true };
-  }
-  return { success: false, error: 'Incorrect PIN.' };
+  return hash === pinHash ? { success: true } : { success: false, error: 'Incorrect PIN.' };
+}
+
+async function verifyPin(pin) {
+  const result = await checkPin(pin);
+  if (result.success) await unlockBrowser();
+  return result;
 }
 
 // ── Idle detection (auto-lock on inactivity) ────
@@ -242,11 +252,13 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
   applyIdleSettings();
   checkForUpdate();
+  reconcileSiteLocks();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
   applyIdleSettings();
   checkForUpdate();
+  reconcileSiteLocks();
 
   const { lockOnStartup } = await chrome.storage.local.get('lockOnStartup');
   if (lockOnStartup === false) return;
@@ -363,8 +375,14 @@ chrome.windows.onCreated.addListener(async (window) => {
 
 // ── Message router ───────────────────────────────
 
-chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
+    const siteResponse = await handleSiteLockMessage(msg, sender, checkPin);
+    if (siteResponse !== undefined) {
+      sendResponse(siteResponse);
+      return;
+    }
+
     switch (msg.action) {
 
       case 'getState': {

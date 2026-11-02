@@ -64,6 +64,16 @@
             <span class="nav-label">Lock & Shortcut</span>
             <span class="nav-dot" id="nav-dot-lock"></span>
           </a>
+          <a href="#section-sites" class="nav-link" data-section="section-sites">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span class="nav-label">Locked Sites</span>
+            <span class="nav-dot" id="nav-dot-sites"></span>
+          </a>
         </div>
 
         <div class="nav-group">
@@ -440,6 +450,81 @@
         </div>
       </section>
 
+      <!-- ═══════ Locked Sites ═══════ -->
+      <section class="section section--wide" id="section-sites">
+        <div class="section-top">
+          <div class="section-title-row">
+            <div class="section-icon accent-blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Locked Sites <span class="pro-badge">PRO</span></h2>
+              <p>Keep sensitive sites like banking or email locked, even after you unlock the browser.</p>
+            </div>
+          </div>
+          <div class="status-row" id="sites-status">
+            <span class="dot gray"></span>
+            <span>No sites</span>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="sites-setup-note hidden" id="sites-setup-note">
+            Set up a PIN or biometrics above first. Locked sites need a way to unlock them.
+          </div>
+
+          <div class="site-add">
+            <input type="text" id="site-input" class="sq-answer" placeholder="e.g. bank.com or https://mail.google.com/"
+                   autocomplete="off" spellcheck="false" aria-label="Website to lock">
+            <button id="btn-add-site" class="btn btn-primary site-add-btn">Lock site</button>
+          </div>
+          <p class="site-hint" id="site-hint">Enter a website address. Open tabs on it lock right away.</p>
+          <div class="msg" id="sites-msg"></div>
+
+          <ul class="site-list" id="site-list"></ul>
+          <p class="site-empty" id="site-empty">No locked sites yet. Tip: open a site and choose "Lock this site" in the TouchLock popup.</p>
+
+          <div class="sites-settings">
+            <div class="field-inline">
+              <label for="site-relock">Lock an unlocked site again</label>
+              <select id="site-relock" class="sq-select">
+                <option value="tabs-closed">When I leave it or close all its tabs</option>
+                <option value="timer-5">5 minutes after unlocking</option>
+                <option value="timer-15">15 minutes after unlocking</option>
+                <option value="timer-30">30 minutes after unlocking</option>
+                <option value="timer-60">1 hour after unlocking</option>
+                <option value="browser-lock">Only when the browser locks</option>
+              </select>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <span class="toggle-label">Include subdomains</span>
+                <span class="toggle-desc">Example: locking google.com also locks mail.google.com and drive.google.com</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="toggle-site-subdomains" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <span class="toggle-label">Ask again after unlocking the browser</span>
+                <span class="toggle-desc">When off, unlocking the browser also unlocks your locked sites</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="toggle-site-separate" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <p class="site-hint">Sites always lock again when the browser locks or restarts. Changing these settings asks for your PIN.</p>
+          </div>
+        </div>
+      </section>
+
       <!-- ═══════ Feedback ═══════ -->
       <section class="section" id="section-feedback">
         <div class="collapsible-header" id="fr-toggle">
@@ -518,7 +603,6 @@
             <div class="roadmap-item"><span class="roadmap-tag free">Free</span><span>Panic button</span></div>
             <div class="roadmap-item"><span class="roadmap-tag free">Free</span><span>Lock history log</span></div>
             <div class="roadmap-item"><span class="roadmap-tag free">Free</span><span>Export / import settings</span></div>
-            <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Lock on specific sites <span class="requested-badge">User Requested</span></span></div>
             <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Intruder detection</span></div>
             <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Stealth mode</span></div>
             <div class="roadmap-item"><span class="roadmap-tag pro">Pro</span><span>Scheduled lock</span></div>
@@ -588,7 +672,7 @@
       </div>
 
       <footer class="footer">
-        TouchLock v1.3.6 · Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj 💚</a>
+        TouchLock v1.4.0 · Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj 💚</a>
       </footer>
       </div><!-- /content-inner -->
 
@@ -634,6 +718,9 @@
   </div>
 
   <script src="../scripts/config.js"></script>
+  <script src="../scripts/site-lock-shared.js"></script>
+  <script src="../scripts/reauth.js"></script>
   <script src="../scripts/options.js"></script>
+  <script src="../scripts/options-sites.js"></script>
 </body>
 </html>

@@ -160,6 +160,19 @@
     .change-icon.improve { background: rgba(34, 197, 94, 0.12);  color: var(--color-success); }
     .change-icon.fix     { background: rgba(245, 158, 11, 0.12); color: var(--color-warning); }
 
+    .pro-tag {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 1px 7px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      border-radius: 4px;
+      font-size: 0.625rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.8px;
+      vertical-align: middle;
+    }
+
     .change-content h4 {
       font-size: 0.9375rem;
       font-weight: 600;
@@ -223,12 +236,52 @@
 
     <section class="timeline container">
 
-      <!-- v1.3.6 -->
+      <!-- v1.4.0 -->
       <div class="version-block latest">
         <div class="version-dot"></div>
         <div class="version-header">
-          <span class="version-tag">v1.3.6</span>
+          <span class="version-tag">v1.4.0</span>
           <span class="version-badge latest">Latest</span>
+          <span class="version-date">November 2026</span>
+        </div>
+        <p class="version-desc">Lock specific sites like banking or email, even while the browser is unlocked.</p>
+        <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-globe"></i></div>
+            <div class="change-content">
+              <h4>Lock on Specific Sites <span class="pro-tag">PRO</span></h4>
+              <p>Add sites in Settings → Locked Sites, or click "Lock this site" in the toolbar popup. A locked site asks for your PIN or fingerprint before it opens — the page never loads until you unlock it. Works in Chrome, Edge, and Firefox.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon feat"><i class="fa-solid fa-rotate-left"></i></div>
+            <div class="change-content">
+              <h4>Choose When Sites Lock Again</h4>
+              <p>Re-lock an unlocked site when you leave it or close all its tabs (default), after 5–60 minutes, or only when the browser locks. Sites always lock again when the browser locks or restarts.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon improve"><i class="fa-solid fa-sitemap"></i></div>
+            <div class="change-content">
+              <h4>Subdomain &amp; Browser-Unlock Options</h4>
+              <p>Decide whether locking google.com also locks mail.google.com, and whether unlocking the browser should also unlock your locked sites (off by default).</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon improve"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="change-content">
+              <h4>Settings Changes Need Your PIN</h4>
+              <p>Changing your PIN, biometrics, or security questions, removing a locked site, changing locked-site settings, or resetting all data now asks for your PIN or fingerprint first.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.3.6 -->
+      <div class="version-block">
+        <div class="version-dot"></div>
+        <div class="version-header">
+          <span class="version-tag">v1.3.6</span>
           <span class="version-date">November 2026</span>
         </div>
         <p class="version-desc">Patch release fixing the missing TouchLock logo.</p>

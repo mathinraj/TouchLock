@@ -12,9 +12,21 @@ const STORE_URLS = {
 
 let pendingUpdateRedirect = false;
 
+// site-lock.html reuses this script to unlock a single locked site.
+const SITE_MODE = document.body.dataset.mode === 'site';
+
 (async function init() {
+  let site = null;
+  let returnUrl = null;
+
+  if (SITE_MODE) {
+    const ctx = await resolveSiteContext();
+    if (!ctx) return;
+    ({ site, returnUrl } = ctx);
+  }
+
   const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
-  if (updateAvailable && latestVersion) {
+  if (!SITE_MODE && updateAvailable && latestVersion) {
     const corner = document.getElementById('update-corner');
     document.getElementById('update-corner-text').textContent = `v${latestVersion} available — Update now`;
     corner.classList.remove('hidden');
@@ -57,10 +69,25 @@ let pendingUpdateRedirect = false;
     dots.appendChild(document.createElement('span'));
   }
 
+  const idleSubtitle = SITE_MODE
+    ? 'Enter your PIN or use biometrics to open this site'
+    : 'Enter your PIN or use biometrics to unlock';
+
   if (!hasBiometrics) {
     bioBtn.style.display = 'none';
     bioBtn.previousElementSibling.style.display = 'none';
-    subtitleEl.textContent = `Enter your ${currentPinLength}-digit PIN to unlock`;
+    subtitleEl.textContent = SITE_MODE
+      ? `Enter your ${currentPinLength}-digit PIN to open this site`
+      : `Enter your ${currentPinLength}-digit PIN to unlock`;
+  }
+
+  if (SITE_MODE) {
+    document.getElementById('close-tab').addEventListener('click', () => {
+      chrome.tabs.getCurrent((tab) => {
+        if (tab) chrome.tabs.remove(tab.id);
+        else window.close();
+      });
+    });
   }
 
   if (!securityQuestionsConfigured) {
@@ -86,7 +113,7 @@ let pendingUpdateRedirect = false;
   // ── Fullscreen lock mode ─────────────────────
 
   const { fullscreenLock } = await chrome.storage.local.get('fullscreenLock');
-  const isFullscreen = fullscreenLock !== false;
+  const isFullscreen = !SITE_MODE && fullscreenLock !== false;
 
   console.log('[TouchLock] fullscreenLock value:', fullscreenLock, '| isFullscreen:', isFullscreen);
 
@@ -108,10 +135,22 @@ let pendingUpdateRedirect = false;
 
   // ── Auto-trigger biometrics if registered ──
 
-  if (hasBiometrics) {
+  function autoTriggerBiometrics() {
     bioAutoStatus.style.display = 'flex';
     subtitleEl.textContent = 'Verifying your identity…';
-    setTimeout(() => triggerBiometrics(true, 0), 1000);
+    setTimeout(() => triggerBiometrics(true, 0), SITE_MODE ? 300 : 1000);
+  }
+
+  if (hasBiometrics && SITE_MODE && document.visibilityState !== 'visible') {
+    // Background tabs can't show the biometric prompt; wait until the user opens this tab.
+    setTimeout(() => pinInput.focus(), 100);
+    document.addEventListener('visibilitychange', function onVisible() {
+      if (document.visibilityState !== 'visible') return;
+      document.removeEventListener('visibilitychange', onVisible);
+      autoTriggerBiometrics();
+    });
+  } else if (hasBiometrics) {
+    autoTriggerBiometrics();
   } else {
     setTimeout(() => pinInput.focus(), 100);
   }
@@ -127,7 +166,11 @@ let pendingUpdateRedirect = false;
     pinBtn.disabled = true;
     pinBtn.textContent = 'Verifying…';
 
-    chrome.runtime.sendMessage({ action: 'verifyPin', pin }, (res) => {
+    const message = SITE_MODE
+      ? { action: 'unlockSite', siteId: site.id, pin }
+      : { action: 'verifyPin', pin };
+
+    chrome.runtime.sendMessage(message, (res) => {
       if (chrome.runtime.lastError || !res) {
         pinBtn.disabled = false;
         pinBtn.textContent = 'Unlock with PIN';
@@ -174,7 +217,12 @@ let pendingUpdateRedirect = false;
         mediation: 'optional'
       });
 
-      if (assertion) {
+      if (assertion && SITE_MODE) {
+        chrome.runtime.sendMessage({ action: 'unlockSiteBiometric', siteId: site.id }, (res) => {
+          if (!chrome.runtime.lastError && res && res.success) showSuccess();
+          else showError('Could not unlock this site. Try again.');
+        });
+      } else if (assertion) {
         chrome.runtime.sendMessage({ action: 'biometricUnlock' }, () => showSuccess());
       }
     } catch (err) {
@@ -186,7 +234,7 @@ let pendingUpdateRedirect = false;
       }
 
       bioAutoStatus.style.display = 'none';
-      subtitleEl.textContent = 'Enter your PIN or use biometrics to unlock';
+      subtitleEl.textContent = idleSubtitle;
 
       if (isAutoTrigger) {
         pinInput.focus();
@@ -226,10 +274,52 @@ let pendingUpdateRedirect = false;
         </svg>
       </div>
       <h1 class="title" style="margin-top:8px">Unlocked</h1>
-      <p class="subtitle">Welcome back!</p>
+      <p class="subtitle">${SITE_MODE ? 'Opening the site…' : 'Welcome back!'}</p>
     `;
+
+    if (SITE_MODE) setTimeout(() => location.replace(returnUrl), 400);
   }
 })();
+
+// Returns { site, returnUrl }, or null when the page has already handled itself.
+async function resolveSiteContext() {
+  if (window.top !== window.self) {
+    document.body.innerHTML = '';
+    return null;
+  }
+
+  const titleEl = document.getElementById('title');
+  const subtitleEl = document.getElementById('subtitle');
+  const returnUrl = toHttpUrl(decodeHashUrl(location.hash.slice(1)));
+
+  if (!returnUrl) {
+    titleEl.textContent = 'Nothing to unlock';
+    subtitleEl.textContent = 'This lock page was opened without a valid site address.';
+    document.getElementById('pin-section').style.display = 'none';
+    document.getElementById('forgot-link').style.display = 'none';
+    return null;
+  }
+
+  const { lockedSites, siteLockSettings, setupComplete } =
+    await chrome.storage.local.get(['lockedSites', 'siteLockSettings', 'setupComplete']);
+  const settings = getSiteLockSettings(siteLockSettings);
+  const site = findLockedSite(lockedSites || [], returnUrl, settings.includeSubdomains);
+
+  const grants = await new Promise((resolve) => {
+    chrome.runtime.sendMessage({ action: 'getSiteGrants' }, (res) => {
+      resolve((!chrome.runtime.lastError && res && res.grants) || {});
+    });
+  });
+
+  if (setupComplete !== true || !site || grants[site.id]) {
+    location.replace(returnUrl);
+    return null;
+  }
+
+  document.getElementById('site-host').textContent = site.host;
+  document.title = `${site.host} is locked – TouchLock`;
+  return { site, returnUrl };
+}
 
 function base64ToBuffer(base64) {
   const binary = atob(base64);

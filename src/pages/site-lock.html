@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Locked – TouchLock</title>
+  <link rel="stylesheet" href="../styles/lock.css">
+</head>
+<body data-mode="site">
+  <div class="lock-screen">
+    <div class="card">
+      <div class="icon">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <h1 class="title" id="title">Site Locked</h1>
+      <p class="site-host" id="site-host"></p>
+      <p class="subtitle" id="subtitle">Enter your PIN or use biometrics to open this site</p>
+
+      <!-- Biometric auto-trigger status -->
+      <div class="bio-status" id="bio-auto-status" style="display:none">
+        <div class="spinner"></div>
+        <span>Waiting for biometric verification…</span>
+      </div>
+
+      <!-- PIN input -->
+      <div class="pin-section" id="pin-section">
+        <div class="pin-dots" id="pin-dots"></div>
+        <input type="password" id="pin-input" class="pin-input"
+               maxlength="10" inputmode="numeric" pattern="[0-9]*"
+               placeholder="••••" autocomplete="off" />
+
+        <div class="error" id="error"></div>
+
+        <button id="btn-pin" class="btn btn-primary">Unlock with PIN</button>
+
+        <div class="divider"><span>or</span></div>
+
+        <button id="btn-bio" class="btn btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+            <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
+            <path d="M10 12c0 4-1 8-3 10"/>
+            <path d="M14 12c0 2.5-.5 5-1.5 7"/>
+            <path d="M18 12c0 1-.5 3-1 4.5"/>
+            <path d="M22 12a10 10 0 0 1-2 6"/>
+            <path d="M10 12a2 2 0 1 1 4 0"/>
+          </svg>
+          Unlock with Biometrics
+        </button>
+      </div>
+
+      <div class="site-links">
+        <a href="recovery.html" class="forgot-link" id="forgot-link">Forgot PIN?</a>
+        <button class="close-tab-link" id="close-tab">Close tab</button>
+      </div>
+
+      <p class="footer">TouchLock – Fingerprint Browser Lock</p>
+    </div>
+  </div>
+
+  <script src="../scripts/site-lock-shared.js"></script>
+  <script src="../scripts/lock.js"></script>
+</body>
+</html>

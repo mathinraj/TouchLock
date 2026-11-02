@@ -39,6 +39,16 @@
         </svg>
         Lock Now
       </button>
+
+      <!-- Current site (shown on http/https tabs) -->
+      <div class="site-card hidden" id="site-card">
+        <div class="site-card-info">
+          <span class="site-card-host" id="site-card-host"></span>
+          <span class="site-card-state" id="site-card-state"></span>
+        </div>
+        <button class="site-card-btn" id="btn-site-action"></button>
+      </div>
+
       <button id="btn-settings" class="btn btn-ghost">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -131,6 +141,7 @@
   </div>
 
   <script src="../scripts/config.js"></script>
+  <script src="../scripts/site-lock-shared.js"></script>
   <script src="../scripts/popup.js"></script>
 </body>
 </html>

@@ -608,6 +608,10 @@ body {
   background: linear-gradient(135deg, rgba(248, 113, 113, 0.12), rgba(248, 113, 113, 0.06));
   color: #f87171;
 }
+.section-icon.accent-blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(59, 130, 246, 0.06));
+  color: #60a5fa;
+}
 
 .section-title-text h2 {
   font-size: 16px;
@@ -900,6 +904,213 @@ body {
 /* ── Idle timeout ──────────────────────────── */
 
 .field-inline { padding: 14px 0 6px; }
+
+/* ── Locked Sites ──────────────────────────── */
+
+.sites-setup-note {
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.18);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: #fbbf24;
+}
+
+.site-add {
+  display: flex;
+  gap: 10px;
+}
+
+.site-add .sq-answer { flex: 1; min-width: 0; }
+
+.site-add-btn {
+  width: auto;
+  flex-shrink: 0;
+  padding: 10px 18px;
+}
+
+.site-add .sq-answer:disabled,
+.site-add-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.site-hint {
+  margin: 8px 0 6px;
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+.site-hint.error { color: #f87171; }
+
+.site-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.site-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.site-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: rgba(59, 130, 246, 0.14);
+  color: #93c5fd;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.site-item-host {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-state {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.site-state.locked   { background: rgba(248, 113, 113, 0.1); color: #f87171; }
+.site-state.unlocked { background: rgba(52, 211, 153, 0.1); color: #34d399; }
+
+.site-btn {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.site-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+.site-btn--remove:hover {
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.25);
+  color: #f87171;
+}
+
+.site-empty {
+  padding: 14px;
+  margin-bottom: 6px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.sites-settings {
+  margin-top: 10px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+
+.sites-settings .toggle-row:first-of-type { padding-top: 14px; }
+
+/* ── Re-auth dialog ────────────────────────── */
+
+.reauth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.reauth-card {
+  width: 360px;
+  max-width: 100%;
+  padding: 24px;
+  background: linear-gradient(160deg, #1a1a30, #151525);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 18px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.reauth-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #fff;
+}
+
+.reauth-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.reauth-reason {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.reauth-pin {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: 4px;
+  text-align: center;
+  outline: none;
+}
+
+.reauth-pin::placeholder { letter-spacing: 0; color: rgba(255, 255, 255, 0.25); font-size: 13px; }
+.reauth-pin:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+.reauth-bio { margin-top: 10px; }
 
 /* ── Security Questions ────────────────────── */
 
