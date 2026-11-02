@@ -118,6 +118,9 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 
 ## Changelog
 
+### v1.3.6
+- **Fix: missing logo** – the TouchLock logo now displays in Settings (top-left corner), the popup, Welcome, and What's New pages; store builds previously omitted `icons/icon.svg`
+
 ### v1.3.5
 - **Guided tour** – step-by-step interactive tour auto-starts on first install, walking users through every settings section with detailed explanations; includes a "Guided Tour" button in the sidebar to replay anytime
 - **Fullscreen lock screen** – new option (on by default) that puts the browser into fullscreen when locked, hiding the address bar, tabs, and all browser UI to prevent bypassing

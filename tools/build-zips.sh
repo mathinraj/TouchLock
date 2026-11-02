@@ -87,7 +87,7 @@ echo "const TOUCHLOCK_STORE = 'chrome';" > "$CONFIG_FILE"
 CHROME_ZIP="$REPO_ROOT/touchlock-for-chrome-${VERSION}.zip"
 zip -r "$CHROME_ZIP" \
   manifest.json \
-  icons/icon-16.png icons/icon-48.png icons/icon-128.png \
+  icons/icon-16.png icons/icon-48.png icons/icon-128.png icons/icon.svg \
   src/ \
   -x "*.DS_Store" > /dev/null
 
@@ -101,7 +101,7 @@ echo "const TOUCHLOCK_STORE = 'edge';" > "$CONFIG_FILE"
 EDGE_ZIP="$REPO_ROOT/touchlock-for-edge-${VERSION}.zip"
 zip -r "$EDGE_ZIP" \
   manifest.json \
-  icons/icon-16.png icons/icon-48.png icons/icon-128.png \
+  icons/icon-16.png icons/icon-48.png icons/icon-128.png icons/icon.svg \
   src/ \
   -x "*.DS_Store" > /dev/null
 
@@ -119,7 +119,7 @@ FIREFOX_ZIP="$REPO_ROOT/touchlock-for-firefox-${VERSION}.zip"
 cd "$REPO_ROOT/firefox"
 zip -r "$FIREFOX_ZIP" \
   manifest.json \
-  icons/icon-16.png icons/icon-48.png icons/icon-128.png \
+  icons/icon-16.png icons/icon-48.png icons/icon-128.png icons/icon.svg \
   src/ \
   -x "*.DS_Store" > /dev/null
 
