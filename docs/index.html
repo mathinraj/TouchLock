@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TouchLock – Lock Your Browser with Fingerprint, Touch ID & PIN</title>
-  <meta name="description" content="TouchLock is a free, open-source browser extension that locks your browser profile with Touch ID, Windows Hello, or a secure PIN. Protect your history, bookmarks, passwords, and downloads on Edge, Firefox, Chrome, and Brave.">
-  <meta name="keywords" content="browser lock extension, fingerprint browser lock, Touch ID browser, Windows Hello browser lock, lock browser with PIN, browser privacy extension, protect browser history, browser security extension, Edge lock extension, Firefox lock extension, Chrome lock extension, biometric browser lock, lock browser profile, open source browser lock">
+  <meta name="description" content="TouchLock is a free, open-source browser extension that locks your browser profile — or just specific sites like banking and email — with Touch ID, Windows Hello, or a secure PIN. Works on Edge, Firefox, Chrome, and Brave.">
+  <meta name="keywords" content="browser lock extension, fingerprint browser lock, Touch ID browser, Windows Hello browser lock, lock browser with PIN, lock specific websites, password protect website, lock site with fingerprint, browser privacy extension, protect browser history, browser security extension, Edge lock extension, Firefox lock extension, Chrome lock extension, biometric browser lock, lock browser profile, open source browser lock">
   <meta name="author" content="Mathinraj">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="theme-color" content="#10b981">
@@ -80,11 +80,14 @@
       "4–10 digit PIN with SHA-256 hashing and strength indicator",
       "Keyboard shortcut to lock instantly (customizable)",
       "Profile-level browser lock",
+      "Lock specific sites like banking or email, even while the browser is unlocked",
       "Auto-lock on startup and idle",
+      "Fullscreen lock screen",
       "Tab guard protection",
+      "PIN-protected settings changes",
       "PIN recovery via security questions"
     ],
-    "browserRequirements": "Chromium 110+ (Manifest V3) or Firefox 109+ (Manifest V2)"
+    "browserRequirements": "Chromium 110+ or Firefox 115+ (Manifest V3)"
   }
   </script>
 
@@ -107,7 +110,15 @@
         "name": "Which browsers does TouchLock support?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "TouchLock supports Microsoft Edge, Google Chrome, Brave, Opera, Vivaldi, and Firefox. It requires Chromium 110+ (Manifest V3) or Firefox 109+ (Manifest V2)."
+          "text": "TouchLock supports Microsoft Edge, Google Chrome, Brave, Opera, Vivaldi, and Firefox. It requires Chromium 110+ or Firefox 115+ (Manifest V3)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I lock only specific websites?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Since v1.4.0 you can lock specific sites such as your bank or email. A locked site asks for your fingerprint or PIN before it opens, even while the rest of the browser is unlocked. You choose whether subdomains are included and when an unlocked site locks again: when you leave it, after a set time, or when the browser locks."
         }
       },
       {
@@ -167,7 +178,8 @@
       <h1>Lock your browser<br>with a <span class="gradient-text">fingerprint</span></h1>
       <p class="hero-subtitle">
         Protect your browser profile with Touch ID, Windows Hello, or a secure PIN.
-        No one sees your history, bookmarks, or passwords without your permission.
+        No one sees your history, bookmarks, or passwords without your permission —
+        and your bank or email stays locked even after the browser is unlocked.
       </p>
       <div class="hero-actions">
         <a href="#install" class="btn btn-primary">
@@ -258,6 +270,27 @@
           <h3>PIN Recovery</h3>
           <p>Forgot your PIN? Answer 2 of 3 security questions to reset. Your data stays safe.</p>
         </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-globe fa-lg"></i>
+          </div>
+          <h3>Lock Specific Sites</h3>
+          <p>Keep banking, email, or any site locked even while the browser is unlocked. One click from the popup.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-expand fa-lg"></i>
+          </div>
+          <h3>Fullscreen Lock Screen</h3>
+          <p>Hides the address bar, tabs, and browser UI while locked so nothing can be reached around the lock.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa-solid fa-user-shield fa-lg"></i>
+          </div>
+          <h3>PIN-Protected Settings</h3>
+          <p>Changing your PIN, biometrics, recovery questions, or locked sites requires your PIN or fingerprint.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -290,7 +323,7 @@
           <div class="step-number">3</div>
           <div class="step-content">
             <h3>You're protected</h3>
-            <p>Your browser locks automatically on every startup. Unlock with your fingerprint or PIN.</p>
+            <p>Your browser locks automatically on every startup. Unlock with your fingerprint or PIN. Optionally lock specific sites too.</p>
           </div>
         </div>
       </div>
@@ -369,7 +402,7 @@
             <i class="fa-solid fa-globe"></i>
           </div>
           <div class="wn-content">
-            <h3>Lock on Specific Sites <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
+            <h3>Lock Specific Sites <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
             <p>Keep banking, email, or any site locked even while the browser is unlocked. Add sites in Settings or with "Lock this site" in the popup.</p>
           </div>
         </div>
@@ -526,7 +559,7 @@
           <span class="browser-status-badge">Supported</span>
         </div>
       </div>
-      <p class="compat-note">Chromium 110+ (Manifest V3) &amp; Firefox 109+ (Manifest V2)</p>
+      <p class="compat-note">Chromium 110+ &amp; Firefox 115+ (Manifest V3)</p>
     </div>
   </section>
 

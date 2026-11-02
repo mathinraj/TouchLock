@@ -12,8 +12,11 @@ A browser extension for Chromium (Edge, Chrome, Brave, etc.) and Firefox that lo
 - **Auto-lock on startup** – every browser launch requires authentication
 - **Auto-lock on idle** – optionally lock after a configurable period of inactivity (1 min – 1 hour)
 - **Manual lock** – one-click lock from the toolbar popup
+- **Fullscreen lock screen** – optionally hides the address bar, tabs, and browser UI while locked (on by default)
 - **Tab guards** – prevents switching to other tabs, opening new tabs, or closing the lock tab while locked
-- **Lock on specific sites (PRO)** – keep sites like banking or email locked even while the browser is unlocked, with configurable re-lock timing and subdomain matching
+- **Lock specific sites (PRO)** – keep sites like banking or email locked even while the browser is unlocked; add them in Settings or with "Lock this site" in the popup, with configurable re-lock timing and subdomain matching
+- **PIN-protected settings** – changing credentials, removing locked sites, changing site-lock settings, or resetting data requires your PIN or biometrics
+- **Guided tour** – an interactive walkthrough of Settings on first install, replayable from the sidebar
 - **Manifest V3** – modern service-worker architecture, works on Chrome 110+, Edge 110+, and other Chromium browsers
 - **Firefox support** – full Manifest V3 support for Firefox 115+, including auto-updating browser shortcuts via `browser.commands.update()`
 
@@ -40,7 +43,8 @@ node generate-icons.js
 1. **Set a PIN** – choose a 4–10 digit PIN as your fallback unlock method (the strength indicator shows how secure it is)
 2. **Set up 3 security questions** – choose from 9 predefined questions and provide answers (used for PIN recovery)
 3. **Register biometrics** *(optional but recommended)* – click "Register Biometrics" and verify with Touch ID or Windows Hello
-4. You're ready! The extension will auto-lock on the next browser startup
+4. **Lock specific sites** *(optional)* – in **Settings → Lock Specific Sites**, add sites such as `bank.com`, or open a site and click **Lock this site** in the toolbar popup
+5. You're ready! The extension will auto-lock on the next browser startup
 
 ## How It Works
 
@@ -57,6 +61,12 @@ node generate-icons.js
 - **Forgot PIN:** Click "Forgot PIN?" → answer 2 of your 3 security questions → credentials reset → re-setup
 
 ### Lock Specific Sites
+- Opening a locked site shows a TouchLock unlock page instead of the site; unlock with biometrics (auto-triggers when the tab is visible) or your PIN, and you're taken to the page you were opening
+- An unlocked site locks again based on **Lock an unlocked site again**: when you leave it or close all its tabs (default), 5 / 15 / 30 / 60 minutes after unlocking, or only when the browser locks
+- **Include subdomains** (default on): locking `google.com` also locks `mail.google.com` and `drive.google.com`; `www.` is always included
+- **Keep sites locked after unlocking the browser** (default on): when off, unlocking the browser also unlocks your locked sites
+- Sites always lock again when the browser locks or restarts
+- The popup shows the current site with **Lock this site**, or **Lock now** while it's unlocked
 - Each locked site gets a `declarativeNetRequest` dynamic rule that redirects its pages to `site-lock.html` before any request is sent; a `tabs.onUpdated` check catches navigations without a request (back/forward cache, `view-source:`)
 - Unlocking a site adds a higher-priority session "allow" rule; session rules and unlock state (`storage.session`) are cleared automatically when the browser restarts
 - Site locking is paused while no PIN or biometrics are set up, so you can't be locked out of a site
@@ -86,10 +96,15 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 |------|------|
 | `manifest.json` | Extension manifest (Manifest V3) |
 | `background.js` | Service worker – lock state, tab guards, message routing, PIN verification, keyboard shortcut command |
+| `site-lock-bg.js` | Per-site lock in the background – declarativeNetRequest rules, unlock grants, re-lock alarms, tab checks |
+| `site-lock-shared.js` | Site matching and settings helpers shared by the background, popup, Settings, and site lock page |
 | `lock.html/js/css` | Full-page lock screen with auto-biometric trigger, dynamic PIN dots, and PIN input |
+| `site-lock.html` | Unlock page for a single locked site (reuses `lock.js` / `lock.css`) |
 | `content.js/css` | Content script – visual overlay safety net on web pages, keyboard shortcut listener |
-| `popup.html/js/css` | Toolbar popup – status display and Lock button |
+| `popup.html/js/css` | Toolbar popup – status, Lock button, and "Lock this site" / "Lock now" for the current site |
 | `options.html/js/css` | Settings – PIN setup with strength indicator, security questions, WebAuthn registration, shortcut configuration |
+| `options-sites.js` | Settings – Lock Specific Sites section |
+| `reauth.js` | PIN / biometric confirmation dialog for sensitive settings changes |
 | `recovery.html/js/css` | PIN recovery – verifies 2 security question answers, resets credentials |
 | `auth.html/js` | Biometric auth popup – WebAuthn in extension origin context |
 
@@ -98,7 +113,9 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 - PIN is hashed with **SHA-256 + random salt** before storage (never stored in plaintext)
 - Security question answers are **individually hashed** with unique salts (case-normalized before hashing)
 - WebAuthn credentials use `authenticatorAttachment: 'platform'` to ensure on-device biometrics
-- All data is stored in `chrome.storage.local` (profile-scoped, not synced)
+- All data is stored in `chrome.storage.local` (profile-scoped, not synced); which sites are currently unlocked lives in `chrome.storage.session` and is cleared on browser restart
+- Site unlock messages are only accepted from the extension's own site lock page, never from web pages or content scripts
+- Changing PIN, biometrics or security questions, removing a locked site, changing site-lock settings, and Reset All require PIN or biometric confirmation (valid for 2 minutes)
 - Tab guards use 5 listeners (`onActivated`, `onCreated`, `onUpdated`, `onRemoved`, `windows.onCreated`) to prevent access to any browser feature while locked
 - The content overlay uses `z-index: 2147483647` and event capture to block interaction
 - Keyboard shortcut recorder blocks reserved browser shortcuts and warns about macOS Option key conflicts
@@ -107,11 +124,15 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 
 | Permission | Why |
 |-----------|-----|
-| `storage` | Store hashed PIN, security questions, WebAuthn credential ID, and shortcut preferences |
-| `tabs` | Query and message all open tabs for lock/unlock, tab guards |
+| `storage` | Store hashed PIN, security questions, WebAuthn credential ID, shortcut preferences, and locked sites |
+| `tabs` | Query and message all open tabs for lock/unlock, tab guards, and locking open tabs of a locked site |
 | `scripting` | Inject lock overlay into tabs that load before the content script |
 | `idle` | Detect user inactivity for auto-lock on idle |
-| `host_permissions: <all_urls>` | Required for scripting injection on any page |
+| `alarms` | Re-lock a site after the chosen number of minutes |
+| `declarativeNetRequestWithHostAccess` | Redirect locked sites to the unlock page before they load |
+| `host_permissions: <all_urls>` | Required for scripting injection and site-lock redirects on any page |
+
+`src/pages/site-lock.html` is listed in `web_accessible_resources` because the browser only lets redirect rules send a page to extension pages listed there; it refuses to run inside a frame.
 
 ## Browser Compatibility
 
@@ -121,15 +142,17 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 | Microsoft Edge 110+ | Supported |
 | Brave | Supported |
 | Opera / Vivaldi | Should work (Chromium-based) |
-| Firefox 109+ | Supported |
+| Firefox 115+ | Supported |
 
 ## Changelog
 
 ### v1.4.0
-- **Lock on specific sites (PRO)** – add sites in Settings → Lock Specific Sites or via "Lock this site" in the popup; locked sites are redirected to a TouchLock unlock page before they load (declarativeNetRequest), even while the browser is unlocked
+- **Lock specific sites (PRO)** – add sites in Settings → Lock Specific Sites or via "Lock this site" in the popup; locked sites are redirected to a TouchLock unlock page before they load (declarativeNetRequest), even while the browser is unlocked
 - **Re-lock options** – an unlocked site locks again when you leave it or close all its tabs (default), after 5–60 minutes, or only when the browser locks; sites always re-lock on browser lock and restart
 - **Subdomain and browser-unlock options** – choose whether locking `google.com` also covers `mail.google.com` (default on), and whether unlocking the browser also unlocks sites (default off)
 - **Re-authentication for sensitive settings** – changing PIN, biometrics or security questions, removing a locked site, changing locked-site settings, and Reset All now require your PIN or biometrics
+- **Cleaner popup** – status moved into the header; on websites, Settings becomes a gear icon next to Lock Now to make room for the current-site card; slightly larger layout overall
+- **Guided tour** – new step for Lock Specific Sites
 - **Firefox** – minimum version is now Firefox 115 (needed for `storage.session`)
 
 ### v1.3.6
