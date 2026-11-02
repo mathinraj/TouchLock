@@ -5,14 +5,14 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  width: 300px;
+  width: 340px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: #0f1117;
   color: #e4e4e7;
 }
 
 .popup {
-  padding: 20px 20px 0;
+  padding: 24px 22px 0;
 }
 
 /* ── Header ────────────────────────────────── */
@@ -20,16 +20,16 @@ body {
 .header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 22px;
 }
 
 .logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -41,7 +41,7 @@ body {
 }
 
 .header h1 {
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 700;
   letter-spacing: -0.3px;
 }
@@ -53,11 +53,11 @@ body {
   align-items: center;
   gap: 6px;
   margin-left: auto;
-  padding: 4px 10px;
+  padding: 5px 12px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
   white-space: nowrap;
@@ -76,7 +76,7 @@ body {
 
 /* ── Sections ──────────────────────────────── */
 
-.section { margin-top: 4px; margin-bottom: 8px; }
+.section { margin-top: 4px; margin-bottom: 10px; }
 .hidden  { display: none !important; }
 
 .muted {
@@ -93,14 +93,14 @@ body {
   justify-content: center;
   gap: 6px;
   width: 100%;
-  padding: 12px 14px;
+  padding: 15px 16px;
   border: none;
-  border-radius: 10px;
-  font-size: 13px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .btn-primary {
@@ -122,8 +122,8 @@ body {
 
 .lock-row {
   display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .lock-row .btn {
@@ -135,10 +135,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
+  width: 52px;
   flex-shrink: 0;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
@@ -157,11 +157,11 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 8px 8px 8px 12px;
-  margin-bottom: 8px;
+  padding: 12px 10px 12px 14px;
+  margin-bottom: 10px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .site-card-info {
@@ -172,7 +172,7 @@ body {
 }
 
 .site-card-host {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
   overflow: hidden;
@@ -181,7 +181,7 @@ body {
 }
 
 .site-card-state {
-  font-size: 10px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.4);
 }
 
@@ -191,13 +191,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 7px;
+  border-radius: 8px;
   color: #e4e4e7;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -272,11 +272,11 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   margin: 4px 0 6px;
   background: rgba(250, 204, 21, 0.05);
   border: 1px solid rgba(250, 204, 21, 0.12);
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 .rate-left {
@@ -292,7 +292,7 @@ body {
 }
 
 .rate-text {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.75);
 }
@@ -338,12 +338,12 @@ body {
 .promo-banner {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
+  gap: 12px;
+  padding: 12px 14px;
   margin: 4px 0 6px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
+  border-radius: 12px;
   text-decoration: none;
   transition: all 0.2s;
 }
@@ -382,13 +382,13 @@ body {
 }
 
 .promo-name {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.85);
 }
 
 .promo-desc {
-  font-size: 10px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.35);
   white-space: nowrap;
   overflow: hidden;
@@ -413,8 +413,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin: 12px -20px 0;
-  padding: 10px 8px;
+  margin: 16px -22px 0;
+  padding: 12px 8px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(255, 255, 255, 0.02);
 }
@@ -423,14 +423,14 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  padding: 6px 10px;
+  gap: 4px;
+  padding: 6px 12px;
   border: none;
   border-radius: 8px;
   background: none;
   color: rgba(255, 255, 255, 0.35);
   font-family: inherit;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
