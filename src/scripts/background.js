@@ -44,10 +44,14 @@ async function hashPin(pin, salt) {
 async function lockBrowser() {
   await chrome.storage.local.set({ isLocked: true });
 
-  // Open a lock tab in every open window
+  // Save window states before locking (for fullscreen restore)
   const windows = await chrome.windows.getAll({ populate: true });
+  const savedWindowStates = {};
+
   for (const win of windows) {
     if (win.type !== 'normal') continue;
+    savedWindowStates[win.id] = win.state;
+
     const hasLockTab = win.tabs.some(t => isLockUrl(t.url) || isLockUrl(t.pendingUrl));
     if (!hasLockTab) {
       try {
@@ -55,6 +59,8 @@ async function lockBrowser() {
       } catch (_) {}
     }
   }
+
+  await chrome.storage.local.set({ savedWindowStates });
 
   // Inject content overlay on all non-lock tabs (visual safety net)
   const tabs = await chrome.tabs.query({});
@@ -68,8 +74,22 @@ async function lockBrowser() {
 async function unlockBrowser() {
   await chrome.storage.local.set({ isLocked: false });
 
-  const { unlockCount } = await chrome.storage.local.get('unlockCount');
+  const { unlockCount, savedWindowStates } = await chrome.storage.local.get(['unlockCount', 'savedWindowStates']);
   await chrome.storage.local.set({ unlockCount: (unlockCount || 0) + 1 });
+
+  // Restore windows to their pre-lock state
+  if (savedWindowStates) {
+    const windows = await chrome.windows.getAll();
+    for (const win of windows) {
+      const prevState = savedWindowStates[win.id];
+      if (prevState && win.state === 'fullscreen') {
+        try {
+          await chrome.windows.update(win.id, { state: prevState });
+        } catch (_) {}
+      }
+    }
+    await chrome.storage.local.remove('savedWindowStates');
+  }
 
   // Close all lock tabs
   const allTabs = await chrome.tabs.query({});
@@ -197,6 +217,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       isLocked: false,
       setupComplete: false,
       lockOnStartup: true,
+      fullscreenLock: true,
       idleLockEnabled: false,
       idleLockTimeout: 300,
       showPinToToolbar: true

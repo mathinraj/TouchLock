@@ -83,6 +83,29 @@ let pendingUpdateRedirect = false;
   pinBtn.addEventListener('click', submitPin);
   bioBtn.addEventListener('click', () => triggerBiometrics(false, MAX_AUTO_RETRIES));
 
+  // ── Fullscreen lock mode ─────────────────────
+
+  const { fullscreenLock } = await chrome.storage.local.get('fullscreenLock');
+  const isFullscreen = fullscreenLock !== false;
+
+  console.log('[TouchLock] fullscreenLock value:', fullscreenLock, '| isFullscreen:', isFullscreen);
+
+  if (isFullscreen) {
+    setTimeout(async () => {
+      try {
+        const win = await chrome.windows.getCurrent();
+        console.log('[TouchLock] window id:', win.id, '| current state:', win.state);
+
+        await chrome.windows.update(win.id, { focused: true });
+
+        const updated = await chrome.windows.update(win.id, { state: 'fullscreen' });
+        console.log('[TouchLock] after update, state:', updated.state);
+      } catch (e) {
+        console.error('[TouchLock] fullscreen error:', e);
+      }
+    }, 500);
+  }
+
   // ── Auto-trigger biometrics if registered ──
 
   if (hasBiometrics) {
@@ -186,6 +209,15 @@ let pendingUpdateRedirect = false;
   }
 
   function showSuccess() {
+    if (isFullscreen) {
+      chrome.storage.local.get('savedWindowStates', ({ savedWindowStates }) => {
+        chrome.windows.getCurrent(win => {
+          const prevState = (savedWindowStates && savedWindowStates[win.id]) || 'maximized';
+          chrome.windows.update(win.id, { state: prevState });
+        });
+      });
+    }
+
     document.querySelector('.card').innerHTML = `
       <div class="icon" style="background:linear-gradient(135deg,#34d399,#059669)">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff"
@@ -196,8 +228,6 @@ let pendingUpdateRedirect = false;
       <h1 class="title" style="margin-top:8px">Unlocked</h1>
       <p class="subtitle">Welcome back!</p>
     `;
-
-    
   }
 })();
 

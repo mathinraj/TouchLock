@@ -118,7 +118,10 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 
 ## Changelog
 
-### v1.3.0
+### v1.3.5
+- **Guided tour** – step-by-step interactive tour auto-starts on first install, walking users through every settings section with detailed explanations; includes a "Guided Tour" button in the sidebar to replay anytime
+- **Fullscreen lock screen** – new option (on by default) that puts the browser into fullscreen when locked, hiding the address bar, tabs, and all browser UI to prevent bypassing
+- **Auto-save lock settings** – lock behavior toggles (startup lock, fullscreen, idle lock, idle timeout) now save instantly on change; no more "Save" button needed
 - **Redesigned settings page** – completely rebuilt with sidebar navigation, centered content layout, setup progress bar, and clear visual hierarchy with colored section icons
 - **Pin-to-toolbar prompt** – on first install, a guided banner on the welcome page helps users pin the extension to their browser toolbar; auto-detects when pinned using `chrome.action.getUserSettings()`
 - **Grid & list view toggle** – floating bottom-right toggle lets users switch settings between a compact 2-column grid and a focused single-column list; preference is persisted
