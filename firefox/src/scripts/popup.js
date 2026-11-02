@@ -71,10 +71,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.close();
   });
 
-  btnSettings.addEventListener('click', () => {
+  const openSettings = () => {
     chrome.runtime.openOptionsPage();
     window.close();
-  });
+  };
+  btnSettings.addEventListener('click', openSettings);
+  document.getElementById('btn-settings-icon').addEventListener('click', openSettings);
 
   btnWhatsNew.addEventListener('click', () => {
     chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/whats-new.html') });
@@ -118,6 +120,8 @@ async function initSiteCard() {
   const site = findLockedSite(sites, tab.url, settings.includeSubdomains);
 
   card.classList.remove('hidden');
+  document.getElementById('btn-settings').classList.add('hidden');
+  document.getElementById('btn-settings-icon').classList.remove('hidden');
 
   if (!site) {
     hostEl.textContent = host;
