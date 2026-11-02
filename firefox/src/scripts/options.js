@@ -519,7 +519,9 @@ async function init() {
       });
 
       if (res.ok) {
-        showMsg(frMsg, 'Thank you! Your request has been sent.', 'success');
+        showMsg(frMsg, frEmail.value.trim()
+          ? 'Thank you! Your request has been sent. We\'ll email you when it\'s done.'
+          : 'Thank you! Your request has been sent. Follow its progress on the feedback tracker.', 'success');
         frEmail.value = '';
         frMessage.value = '';
         frCategory.value = 'feature';

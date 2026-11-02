@@ -154,6 +154,7 @@
       align-items: center;
       gap: 4px;
       margin-top: 8px;
+      margin-right: 6px;
       padding: 5px 12px;
       border-radius: 6px;
       font-size: 0.75rem;
@@ -250,10 +251,109 @@
     }
     .reinstall-note a:hover { color: var(--color-text); }
 
-    .thank-you { text-align: center; padding: 32px 0; }
+    .thank-you { text-align: center; padding: 24px 0 8px; }
     .thank-you-icon { font-size: 2.5rem; margin-bottom: 12px; }
     .thank-you h3 { font-size: 1.125rem; font-weight: 700; margin-bottom: 6px; }
-    .thank-you p { font-size: 0.875rem; color: var(--color-text-muted); }
+    .thank-you p { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.6; }
+    .thank-you strong { color: var(--color-text); }
+
+    /* ── Commitment banner ────────── */
+
+    .promise {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(99, 102, 241, 0.06));
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: var(--radius-md);
+    }
+
+    .promise-icon {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--color-success);
+    }
+
+    .promise strong {
+      display: block;
+      font-size: 0.875rem;
+      margin-bottom: 2px;
+    }
+
+    .promise p {
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+
+    .promise a {
+      color: var(--color-primary-hover);
+      font-weight: 600;
+    }
+
+    .promise a:hover { color: var(--color-text); }
+
+    /* ── Email ────────────────────── */
+
+    .feedback-email {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      color: var(--color-text);
+      font-family: var(--font);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .feedback-email::placeholder { color: var(--color-text-dim); }
+    .feedback-email:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .email-hint {
+      margin: 6px 0 14px;
+      font-size: 0.75rem;
+      color: var(--color-text-dim);
+      line-height: 1.5;
+    }
+
+    /* ── Follow-up links ──────────── */
+
+    .follow-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .follow-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 14px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      transition: all 0.15s;
+    }
+
+    .follow-link:hover { color: var(--color-text); border-color: var(--color-primary); }
   </style>
 </head>
 <body>
@@ -264,6 +364,14 @@
         <div class="uninstall-emoji">👋</div>
         <h1>We'd love to <span class="gradient-text">hear from you</span></h1>
         <p>Your feedback helps us make TouchLock better. It only takes a few seconds.</p>
+      </div>
+
+      <div class="promise">
+        <div class="promise-icon"><i class="fa-solid fa-stopwatch"></i></div>
+        <div>
+          <strong>We act on every piece of feedback</strong>
+          <p>Each reported bug is fixed and each requested feature is built within 7 days at most — often sooner, depending on how many reports are in the queue. <a href="/feedback.html">See what we've fixed so far →</a></p>
+        </div>
       </div>
 
       <div class="feedback-form" id="feedback-form">
@@ -301,14 +409,15 @@
 
         <div class="nudge nudge--features" id="nudge-features">
           <span class="nudge-icon">🚀</span>
-          We're actively building new features based on user feedback! Check out what's coming — your suggestion might already be on the roadmap.
+          We're actively building new features based on user feedback! Tell us what you need below — your suggestion might already be on the roadmap.
           <br>
-          <a href="/changelog.html" class="nudge-action"><i class="fa-solid fa-road"></i> View Roadmap</a>
+          <a href="/#roadmap" class="nudge-action"><i class="fa-solid fa-road"></i> View Roadmap</a>
+          <a href="/feedback.html" class="nudge-action"><i class="fa-solid fa-list-check"></i> See built requests</a>
         </div>
 
         <div class="nudge nudge--issues" id="nudge-issues">
           <span class="nudge-icon">⚡</span>
-          Sorry about that! We take performance seriously. If you can describe the issue below, we'll prioritize a fix. Most issues are resolved within a few days.
+          Sorry about that! If you can describe the issue below, we'll prioritize a fix — every reported bug is fixed within 7 days at most. Leave your email and we'll tell you when it's done.
           <br>
           <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener" class="nudge-action"><i class="fa-solid fa-bug"></i> Report the Issue</a>
         </div>
@@ -327,12 +436,21 @@
 
         <textarea class="feedback-textarea" id="feedback-detail" placeholder="Tell us more (optional) — what could we do better?"></textarea>
 
+        <label class="feedback-label" for="feedback-email" style="margin-bottom:8px">Your email (optional)</label>
+        <input type="email" class="feedback-email" id="feedback-email" placeholder="you@example.com" autocomplete="email">
+        <p class="email-hint">We'll email you once your bug is fixed or your feature is built. We won't use it for anything else.</p>
+
         <div class="feedback-msg" id="feedback-msg"></div>
 
         <button class="btn btn-primary btn-submit" id="btn-submit">
           <i class="fa-solid fa-paper-plane"></i>
           Submit Feedback
         </button>
+      </div>
+
+      <div class="follow-links">
+        <a href="/feedback.html" class="follow-link"><i class="fa-solid fa-list-check"></i> Feedback tracker</a>
+        <a href="/changelog.html" class="follow-link"><i class="fa-solid fa-clock-rotate-left"></i> Changelog</a>
       </div>
 
       <p class="reinstall-note">
@@ -369,14 +487,26 @@
       if (nudges[key]) nudges[key].classList.add('visible');
     });
 
+    // The extension sets these when it registers the uninstall URL.
+    const params  = new URLSearchParams(location.search);
+    const version = (params.get('v') || '').replace(/[^0-9.]/g, '').slice(0, 20) || 'unknown';
+    const browser = (params.get('b') || '').replace(/[^a-z]/g, '').slice(0, 20) || 'unknown';
+
     document.getElementById('btn-submit').addEventListener('click', async () => {
       const reason = document.querySelector('input[name="reason"]:checked');
       const detail = document.getElementById('feedback-detail').value.trim();
+      const email  = document.getElementById('feedback-email').value.trim();
       const msgEl  = document.getElementById('feedback-msg');
       const btn    = document.getElementById('btn-submit');
 
       if (!reason) {
         msgEl.textContent = 'Please select a reason.';
+        msgEl.className = 'feedback-msg error';
+        return;
+      }
+
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msgEl.textContent = 'That email address doesn\'t look right — fix it or leave it empty.';
         msgEl.className = 'feedback-msg error';
         return;
       }
@@ -393,23 +523,36 @@
             template_id: EMAILJS_TEMPLATE_ID,
             user_id:     EMAILJS_PUBLIC_KEY,
             template_params: {
-              from_email: 'Uninstall feedback',
+              from_email: email || 'Not provided',
               category:   'Uninstall Feedback',
-              message:    'Reason: ' + reason.value + '\n\nDetails: ' + (detail || 'None provided'),
+              message:    'Reason: ' + reason.value +
+                          '\n\nDetails: ' + (detail || 'None provided') +
+                          '\n\nBrowser: ' + browser +
+                          '\nNotify when fixed: ' + (email ? 'Yes — ' + email : 'No email given'),
               timestamp:  new Date().toISOString(),
-              version:    'Uninstalled'
+              version:    version + ' (uninstalled)'
             }
           })
         });
 
         if (res.ok) {
-          document.getElementById('feedback-form').innerHTML = `
+          const form = document.getElementById('feedback-form');
+          form.innerHTML = `
             <div class="thank-you">
               <div class="thank-you-icon">💚</div>
               <h3>Thank you for your feedback!</h3>
-              <p>We'll use it to make TouchLock better. You're always welcome back.</p>
+              <p id="thank-you-text"></p>
             </div>
           `;
+          const text = form.querySelector('#thank-you-text');
+          if (email) {
+            text.append('We\'ll work on it right away and email you at ');
+            const strong = document.createElement('strong');
+            strong.textContent = email;
+            text.append(strong, ' as soon as it\'s fixed. You can also follow progress on the feedback tracker.');
+          } else {
+            text.textContent = 'We\'ll work on it right away. Follow its progress on the feedback tracker — you\'re always welcome back.';
+          }
         } else {
           throw new Error();
         }

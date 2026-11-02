@@ -219,7 +219,16 @@ function isNewerVersion(remote, local) {
 
 // ── Lifecycle events ─────────────────────────────
 
-chrome.runtime.setUninstallURL('https://touchlock.vercel.app/uninstall.html');
+function browserName() {
+  const ua = navigator.userAgent;
+  if (ua.includes('Firefox/')) return 'firefox';
+  if (ua.includes('Edg/')) return 'edge';
+  return 'chrome';
+}
+
+chrome.runtime.setUninstallURL(
+  `https://touchlock.vercel.app/uninstall.html?v=${chrome.runtime.getManifest().version}&b=${browserName()}`
+);
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install') {
