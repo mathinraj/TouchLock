@@ -244,8 +244,22 @@
           <span class="version-badge latest">Latest</span>
           <span class="version-date">November 2026</span>
         </div>
-        <p class="version-desc">Patch release fixing biometric registration in Firefox.</p>
+        <p class="version-desc">Patch release fixing fullscreen getting stuck and biometric registration in Firefox.</p>
         <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-compress"></i></div>
+            <div class="change-content">
+              <h4>Browser No Longer Stuck in Fullscreen</h4>
+              <p>After unlocking, Chrome could stay in fullscreen with the back, forward, and address bar hidden — especially after the browser was closed while locked. TouchLock now remembers which windows it made fullscreen and always brings them back out on unlock, while leaving your own fullscreen (F11) alone.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon improve"><i class="fa-solid fa-toggle-off"></i></div>
+            <div class="change-content">
+              <h4>Fullscreen Lock Is Now Opt-In</h4>
+              <p>The fullscreen lock screen is off by default and was turned off once for existing users. Turn it back on in Settings → Lock Behavior. If a window is still stuck in fullscreen, press F11 (Windows) or Ctrl+Cmd+F (Mac).</p>
+            </div>
+          </div>
           <div class="change-item">
             <div class="change-icon fix"><i class="fa-solid fa-fingerprint"></i></div>
             <div class="change-content">

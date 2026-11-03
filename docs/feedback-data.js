@@ -14,6 +14,18 @@
 const FEEDBACK_ITEMS = [
   {
     type: 'bug',
+    title: 'Chrome stuck in fullscreen after unlocking',
+    feedback: 'The navigation buttons keep disappearing after unlocking the browser, and websites fail to load. It keeps forcing Chrome to be full screen.',
+    source: 'Store review',
+    browser: 'Chrome',
+    reportedOn: '2026-11-03',
+    status: 'rolling-out',
+    resolution: 'Unlocking now always brings windows TouchLock made fullscreen back to their normal size, including after the browser was closed while locked. Fullscreen lock is also off by default now and was switched off once for existing users. If a window is still stuck, press F11 once.',
+    version: '1.4.1',
+    resolvedOn: '2026-11-03'
+  },
+  {
+    type: 'bug',
     title: 'Windows Hello registration fails in Firefox',
     feedback: 'Registering Windows Hello consistently fails with "Registration failed: The operation is insecure." Windows Hello is set up and available.',
     source: 'Email',

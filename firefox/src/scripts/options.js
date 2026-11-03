@@ -310,7 +310,7 @@ async function init() {
 
     toggleStartup.checked = data.lockOnStartup !== false;
     toggleIdle.checked = data.idleLockEnabled === true;
-    toggleFullscreen.checked = data.fullscreenLock !== false;
+    toggleFullscreen.checked = data.fullscreenLock === true;
     idleField.style.display = toggleIdle.checked ? 'block' : 'none';
 
     if (data.idleLockTimeout) {

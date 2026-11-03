@@ -32,7 +32,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 - Locks every tab and window behind a full-screen lock screen
 - Locks automatically on startup and, optionally, after 1 minute to 1 hour of inactivity
 - Lock instantly from the toolbar or with <kbd>Alt</kbd>+<kbd>L</kbd> (customizable; <kbd>Ctrl</kbd>+<kbd>L</kbd> on Mac)
-- Fullscreen mode hides the address bar and tabs while locked
+- Optional fullscreen mode hides the address bar and tabs while locked
 - Tab guards block new tabs, tab switching, and browser pages until you unlock
 
 **Lock specific sites** <sup>PRO</sup>
@@ -109,6 +109,7 @@ To run TouchLock from source:
 Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.vercel.app/changelog.html) · [GitHub Releases](https://github.com/mathinraj/TouchLock/releases)
 
 **v1.4.1**
+- Fixed the browser staying in fullscreen after unlocking; fullscreen lock is now off by default
 - Fixed biometric registration in Firefox ("The operation is insecure"); requires Firefox 150+
 - Clearer message when Firefox blocks registration because website access is off
 

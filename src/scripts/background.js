@@ -50,13 +50,10 @@ async function lockBrowser() {
   await chrome.storage.local.set({ isLocked: true });
   await onBrowserLocking();
 
-  // Save window states before locking (for fullscreen restore)
   const windows = await chrome.windows.getAll({ populate: true });
-  const savedWindowStates = {};
 
   for (const win of windows) {
     if (win.type !== 'normal') continue;
-    savedWindowStates[win.id] = win.state;
 
     const hasLockTab = win.tabs.some(t => isLockUrl(t.url) || isLockUrl(t.pendingUrl));
     if (!hasLockTab) {
@@ -65,8 +62,6 @@ async function lockBrowser() {
       } catch (_) {}
     }
   }
-
-  await chrome.storage.local.set({ savedWindowStates });
 
   // Inject content overlay on all non-lock tabs (visual safety net)
   const tabs = await chrome.tabs.query({});
@@ -80,22 +75,10 @@ async function lockBrowser() {
 async function unlockBrowser() {
   await chrome.storage.local.set({ isLocked: false });
 
-  const { unlockCount, savedWindowStates } = await chrome.storage.local.get(['unlockCount', 'savedWindowStates']);
+  const { unlockCount } = await chrome.storage.local.get('unlockCount');
   await chrome.storage.local.set({ unlockCount: (unlockCount || 0) + 1 });
 
-  // Restore windows to their pre-lock state
-  if (savedWindowStates) {
-    const windows = await chrome.windows.getAll();
-    for (const win of windows) {
-      const prevState = savedWindowStates[win.id];
-      if (prevState && win.state === 'fullscreen') {
-        try {
-          await chrome.windows.update(win.id, { state: prevState });
-        } catch (_) {}
-      }
-    }
-    await chrome.storage.local.remove('savedWindowStates');
-  }
+  await restoreLockFullscreen();
 
   // Close all lock tabs
   const allTabs = await chrome.tabs.query({});
@@ -120,6 +103,63 @@ async function unlockBrowser() {
     await chrome.storage.local.remove('pendingUpdateUrl');
     chrome.tabs.create({ url: pendingUpdateUrl });
   }
+}
+
+// ── Lock-screen fullscreen ───────────────────────
+// lockFullscreenWindows maps windowId → state to restore on unlock. Only windows
+// TouchLock itself put into fullscreen are listed, so a user's own fullscreen
+// (F11) is left alone.
+
+let fullscreenChain = Promise.resolve();
+
+function enterLockFullscreen(windowId) {
+  fullscreenChain = fullscreenChain.then(async () => {
+    const { fullscreenLock, lockFullscreenWindows } =
+      await chrome.storage.local.get(['fullscreenLock', 'lockFullscreenWindows']);
+    if (fullscreenLock !== true || !(await getIsLocked())) return;
+
+    const win = await chrome.windows.get(windowId);
+    if (win.state === 'fullscreen') return;
+
+    const map = lockFullscreenWindows || {};
+    map[windowId] = win.state === 'minimized' ? 'normal' : win.state;
+    await chrome.storage.local.set({ lockFullscreenWindows: map });
+    await chrome.windows.update(windowId, { focused: true });
+    await chrome.windows.update(windowId, { state: 'fullscreen' });
+  }).catch(() => {});
+  return fullscreenChain;
+}
+
+function restoreLockFullscreen() {
+  fullscreenChain = fullscreenChain.then(async () => {
+    const { lockFullscreenWindows } = await chrome.storage.local.get('lockFullscreenWindows');
+    await chrome.storage.local.remove(['lockFullscreenWindows', 'savedWindowStates']);
+    for (const [id, prevState] of Object.entries(lockFullscreenWindows || {})) {
+      try {
+        const win = await chrome.windows.get(Number(id));
+        if (win.state === 'fullscreen') {
+          await chrome.windows.update(win.id, { state: prevState || 'maximized' });
+        }
+      } catch (_) {}
+    }
+  }).catch(() => {});
+  return fullscreenChain;
+}
+
+// Window IDs change across restarts. If the previous session ended while locked
+// in fullscreen (savedWindowStates is the pre-1.4.1 marker for that), the browser
+// reopens those windows fullscreen; claim them so unlock brings them back out.
+async function adoptRestoredFullscreen() {
+  const { lockFullscreenWindows, savedWindowStates } =
+    await chrome.storage.local.get(['lockFullscreenWindows', 'savedWindowStates']);
+  if (!lockFullscreenWindows && !savedWindowStates) return;
+
+  const adopted = {};
+  for (const win of await chrome.windows.getAll()) {
+    if (win.type === 'normal' && win.state === 'fullscreen') adopted[win.id] = 'maximized';
+  }
+  await chrome.storage.local.remove('savedWindowStates');
+  await chrome.storage.local.set({ lockFullscreenWindows: adopted });
 }
 
 async function injectOverlay(tabId) {
@@ -236,7 +276,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       isLocked: false,
       setupComplete: false,
       lockOnStartup: true,
-      fullscreenLock: true,
+      fullscreenLock: false,
+      fullscreenOffMigrated: true,
       idleLockEnabled: false,
       idleLockTimeout: 300,
       showPinToToolbar: true
@@ -258,6 +299,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       updatedFrom: details.previousVersion,
       updatedTo: chrome.runtime.getManifest().version
     });
+
+    // Fullscreen could leave windows stuck in fullscreen before 1.4.1; turn it
+    // off once so affected users aren't forced back into it.
+    const { fullscreenOffMigrated } = await chrome.storage.local.get('fullscreenOffMigrated');
+    if (!fullscreenOffMigrated) {
+      await chrome.storage.local.set({ fullscreenLock: false, fullscreenOffMigrated: true });
+    }
+    if (await getIsLocked()) await adoptRestoredFullscreen();
   }
 
   applyIdleSettings();
@@ -269,6 +318,7 @@ chrome.runtime.onStartup.addListener(async () => {
   applyIdleSettings();
   checkForUpdate();
   reconcileSiteLocks();
+  await adoptRestoredFullscreen();
 
   const { lockOnStartup } = await chrome.storage.local.get('lockOnStartup');
   if (lockOnStartup === false) return;
@@ -430,6 +480,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         break;
       }
 
+      case 'lockFullscreen': {
+        if (sender.tab && isLockUrl(sender.url)) await enterLockFullscreen(sender.tab.windowId);
+        sendResponse({ success: true });
+        break;
+      }
+
       case 'openBiometricAuth': {
         chrome.windows.create({
           url: chrome.runtime.getURL('src/pages/auth.html'),
@@ -501,6 +557,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
       case 'recoveryComplete': {
         await chrome.storage.local.set({ isLocked: false });
+        await restoreLockFullscreen();
         // Remove content overlays from all tabs
         const allTabs = await chrome.tabs.query({});
         for (const tab of allTabs) {

@@ -112,26 +112,8 @@ const SITE_MODE = document.body.dataset.mode === 'site';
 
   // ── Fullscreen lock mode ─────────────────────
 
-  const { fullscreenLock } = await chrome.storage.local.get('fullscreenLock');
-  const isFullscreen = !SITE_MODE && fullscreenLock !== false;
-
-  console.log('[TouchLock] fullscreenLock value:', fullscreenLock, '| isFullscreen:', isFullscreen);
-
-  if (isFullscreen) {
-    setTimeout(async () => {
-      try {
-        const win = await chrome.windows.getCurrent();
-        console.log('[TouchLock] window id:', win.id, '| current state:', win.state);
-
-        await chrome.windows.update(win.id, { focused: true });
-
-        const updated = await chrome.windows.update(win.id, { state: 'fullscreen' });
-        console.log('[TouchLock] after update, state:', updated.state);
-      } catch (e) {
-        console.error('[TouchLock] fullscreen error:', e);
-      }
-    }, 500);
-  }
+  // The background records which windows it made fullscreen and restores them on unlock.
+  if (!SITE_MODE) chrome.runtime.sendMessage({ action: 'lockFullscreen' });
 
   // ── Auto-trigger biometrics if registered ──
 
@@ -257,15 +239,6 @@ const SITE_MODE = document.body.dataset.mode === 'site';
   }
 
   function showSuccess() {
-    if (isFullscreen) {
-      chrome.storage.local.get('savedWindowStates', ({ savedWindowStates }) => {
-        chrome.windows.getCurrent(win => {
-          const prevState = (savedWindowStates && savedWindowStates[win.id]) || 'maximized';
-          chrome.windows.update(win.id, { state: prevState });
-        });
-      });
-    }
-
     document.querySelector('.card').innerHTML = `
       <div class="icon" style="background:linear-gradient(135deg,#34d399,#059669)">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff"
