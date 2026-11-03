@@ -15,7 +15,7 @@ const FEEDBACK_ITEMS = [
   {
     type: 'feature',
     title: 'Keep specific sites locked after unlocking the browser',
-    feedback: 'Missing lock on specific sites after unlocking, which makes it completely unusable for my daily needs. Hopefully it will get a fix in the future.',
+    feedback: 'Missing lock on specific sites after unlocking. Hopefully it will get a fix in the future.',
     source: 'Store review',
     browser: 'Chrome & Firefox',
     reportedOn: '2026-11-02',

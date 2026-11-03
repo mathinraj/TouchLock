@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .tracker-hero {
-      padding: 140px 0 32px;
+      padding: 140px 0 60px;
       text-align: center;
     }
 
@@ -33,121 +33,136 @@
       max-width: 560px;
       margin: 0 auto;
       line-height: 1.6;
+      text-wrap: balance;
     }
 
-    .tracker-wrap {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 0 0 80px;
-    }
-
-    /* ── Promise ───────────────────────────── */
-
-    .promise {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      padding: 18px 20px;
-      margin: 28px 0 24px;
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.08), rgba(99, 102, 241, 0.06));
-      border: 1px solid rgba(34, 197, 94, 0.2);
-      border-radius: var(--radius-md);
-    }
-
-    .promise-icon {
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(34, 197, 94, 0.15);
-      color: var(--color-success);
-      font-size: 1.125rem;
-    }
-
-    .promise h2 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .promise p {
-      font-size: 0.875rem;
-      color: var(--color-text-muted);
-      line-height: 1.6;
-    }
-
-    /* ── Stats ─────────────────────────────── */
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-
-    .stat {
-      padding: 14px 16px;
+    .tracker-stats {
+      display: inline-flex;
+      margin-top: 28px;
       background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
+    }
+
+    .tracker-stat {
+      min-width: 120px;
+      padding: 12px 20px;
       text-align: center;
     }
 
-    .stat-value {
-      display: block;
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+    .tracker-stat + .tracker-stat {
+      border-left: 1px solid var(--color-border);
     }
 
-    .stat-label {
+    .tracker-stat-value {
+      display: block;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .tracker-stat-label {
+      display: block;
+      margin-top: 2px;
       font-size: 0.75rem;
       color: var(--color-text-dim);
     }
 
-    /* ── Filters ───────────────────────────── */
+    .tracker-empty {
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--color-text-dim);
+    }
 
-    .filters {
+    /* ── Timeline ──────────────────────────── */
+
+    .timeline {
+      position: relative;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 0 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 28px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--color-primary), var(--color-accent), var(--color-border));
+    }
+
+    .fb-block {
+      position: relative;
+      padding-left: 72px;
+      margin-bottom: 44px;
+    }
+
+    .fb-dot {
+      position: absolute;
+      left: 17px;
+      top: 2px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--color-bg);
+      border: 3px solid var(--color-primary);
+      z-index: 1;
+    }
+
+    .fb-block.done .fb-dot {
+      background: var(--color-primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    }
+
+    .fb-header {
       display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
     }
 
-    .filter-btn {
-      padding: 7px 14px;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
+    .fb-date {
+      font-size: 1.0625rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .fb-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
       border-radius: 100px;
-      color: var(--color-text-muted);
-      font-family: var(--font);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--color-warning);
+    }
+
+    .fb-block.done .fb-badge {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--color-success);
+    }
+
+    .fb-version {
       font-size: 0.8125rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
+      color: var(--color-text-dim);
+      transition: color 0.15s;
     }
 
-    .filter-btn:hover { color: var(--color-text); border-color: var(--color-primary); }
+    .fb-version:hover { color: var(--color-primary-hover); }
 
-    .filter-btn.active {
-      background: rgba(99, 102, 241, 0.12);
-      border-color: var(--color-primary);
-      color: var(--color-text);
-    }
-
-    /* ── Feedback cards ────────────────────── */
-
-    .fb-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+    /* ── Card ──────────────────────────────── */
 
     .fb-card {
-      padding: 20px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px 18px;
       background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
@@ -156,156 +171,72 @@
 
     .fb-card:hover { border-color: rgba(99, 102, 241, 0.3); }
 
-    .fb-top {
+    .fb-icon {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 8px;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
+      justify-content: center;
+      font-size: 0.875rem;
+      margin-top: 1px;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-size: 0.6875rem;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-    }
+    .fb-icon.feature     { background: rgba(99, 102, 241, 0.12); color: var(--color-primary-hover); }
+    .fb-icon.improvement { background: rgba(34, 197, 94, 0.12);  color: var(--color-success); }
+    .fb-icon.bug         { background: rgba(245, 158, 11, 0.12); color: var(--color-warning); }
 
-    .badge--bug         { background: rgba(239, 68, 68, 0.12);  color: #f87171; }
-    .badge--feature     { background: rgba(99, 102, 241, 0.14); color: var(--color-primary-hover); }
-    .badge--improvement { background: rgba(168, 85, 247, 0.14); color: #c084fc; }
+    .fb-content { flex: 1; min-width: 0; }
 
-    .badge--reported    { background: rgba(113, 113, 122, 0.18); color: var(--color-text-muted); }
-    .badge--in-progress { background: rgba(245, 158, 11, 0.14);  color: var(--color-warning); }
-    .badge--rolling-out { background: rgba(59, 130, 246, 0.14);  color: #60a5fa; }
-    .badge--released    { background: rgba(34, 197, 94, 0.14);   color: var(--color-success); }
-
-    .fb-version {
-      margin-left: auto;
-      font-size: 0.75rem;
+    .fb-content h4 {
+      font-size: 0.9375rem;
       font-weight: 600;
-      color: var(--color-primary-hover);
-    }
-
-    .fb-version:hover { color: var(--color-text); }
-
-    .fb-title {
-      font-size: 1.0625rem;
-      font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     .fb-quote {
-      position: relative;
-      padding: 12px 16px 12px 40px;
-      margin-bottom: 14px;
-      background: var(--color-bg);
-      border-left: 3px solid var(--color-border);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    }
-
-    .fb-quote::before {
-      content: '\201C';
-      position: absolute;
-      left: 12px;
-      top: 2px;
-      font-size: 2rem;
-      line-height: 1.2;
-      color: var(--color-text-dim);
-    }
-
-    .fb-quote p {
-      font-size: 0.875rem;
-      color: var(--color-text);
-      line-height: 1.6;
+      font-size: 0.8125rem;
       font-style: italic;
-    }
-
-    .fb-meta {
-      margin-top: 6px;
-      font-size: 0.75rem;
-      color: var(--color-text-dim);
-    }
-
-    .fb-progress {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    .fb-step {
-      font-size: 0.6875rem;
-      font-weight: 600;
-      color: var(--color-text-dim);
-    }
-
-    .fb-step::before {
-      content: '';
-      display: block;
-      height: 4px;
-      margin-bottom: 6px;
-      border-radius: 2px;
-      background: var(--color-border);
-    }
-
-    .fb-step.done { color: var(--color-text-muted); }
-    .fb-step.done::before { background: linear-gradient(90deg, var(--color-primary), var(--color-success)); }
-
-    .fb-resolution {
-      display: flex;
-      gap: 10px;
-      padding: 12px 14px;
-      background: rgba(34, 197, 94, 0.05);
-      border: 1px solid rgba(34, 197, 94, 0.15);
-      border-radius: var(--radius-sm);
-      font-size: 0.875rem;
       color: var(--color-text-muted);
       line-height: 1.6;
     }
 
-    .fb-resolution i {
-      color: var(--color-success);
-      margin-top: 4px;
+    .fb-source {
+      display: block;
+      margin-top: 2px;
+      font-style: normal;
+      font-size: 0.75rem;
+      color: var(--color-text-dim);
     }
 
-    .fb-resolution strong { color: var(--color-text); }
+    .fb-fix {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--color-border);
+      font-size: 0.8125rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
 
-    .fb-empty {
-      padding: 40px 20px;
-      text-align: center;
-      color: var(--color-text-dim);
-      border: 1px dashed var(--color-border);
-      border-radius: var(--radius-md);
+    .fb-fix strong {
+      color: var(--color-text);
+      font-weight: 600;
     }
 
     /* ── Call to action ────────────────────── */
 
     .tracker-cta {
-      margin-top: 36px;
-      padding: 24px;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 0 80px;
       text-align: center;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-    }
-
-    .tracker-cta h2 {
-      font-size: 1.125rem;
-      font-weight: 700;
-      margin-bottom: 6px;
     }
 
     .tracker-cta p {
       font-size: 0.875rem;
       color: var(--color-text-muted);
-      margin-bottom: 16px;
-      line-height: 1.6;
+      margin-bottom: 14px;
     }
 
     .tracker-cta-actions {
@@ -336,10 +267,11 @@
     .back-link:hover { color: var(--color-text); border-color: var(--color-primary); }
 
     @media (max-width: 600px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
-      .back-link { position: static; margin: 20px 0 0 20px; }
-      .tracker-hero { padding-top: 48px; }
-      .fb-version { margin-left: 0; }
+      .timeline::before { left: 18px; }
+      .fb-block { padding-left: 52px; }
+      .fb-dot { left: 7px; }
+      .back-link { position: static; margin-bottom: 20px; }
+      .tracker-hero { padding-top: 80px; }
     }
   </style>
 </head>
@@ -354,44 +286,24 @@
     <section class="tracker-hero">
       <div class="container">
         <h1>You asked, <span class="gradient-text">we built it</span></h1>
-        <p>Every bug report and feature request from TouchLock users, and exactly what we did about it.</p>
+        <p>Every bug report and feature request from TouchLock users, and what we did about it. Each is fixed or built within 7 days.</p>
+        <div class="tracker-stats" id="summary"></div>
       </div>
     </section>
 
-    <section class="container tracker-wrap">
-      <div class="promise">
-        <div class="promise-icon"><i class="fa-solid fa-stopwatch"></i></div>
-        <div>
-          <h2>Every report gets fixed within 7 days</h2>
-          <p>We actively work through every piece of feedback. Each reported bug is fixed and each requested feature is built within 7 days at most — often sooner, depending on how many reports are in the queue. Leave your email when you send feedback and we'll tell you the moment it's done.</p>
-        </div>
-      </div>
+    <section class="timeline container" id="fb-list"></section>
 
-      <div class="stats" id="stats"></div>
-
-      <div class="filters" id="filters" role="tablist" aria-label="Filter feedback">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="bug">Bugs</button>
-        <button class="filter-btn" data-filter="feature">Features &amp; improvements</button>
-        <button class="filter-btn" data-filter="open">Open</button>
-        <button class="filter-btn" data-filter="done">Fixed</button>
-      </div>
-
-      <div class="fb-list" id="fb-list"></div>
-
-      <div class="tracker-cta">
-        <h2>Something not working, or missing?</h2>
-        <p>Tell us. It will show up here with its progress, and we'll email you when it's done if you leave your address.</p>
-        <div class="tracker-cta-actions">
-          <a href="https://github.com/mathinraj/TouchLock/issues/new" target="_blank" rel="noopener" class="btn btn-primary">
-            <i class="fa-solid fa-comment-dots"></i>
-            Send feedback
-          </a>
-          <a href="changelog.html" class="btn btn-secondary">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-            View changelog
-          </a>
-        </div>
+    <section class="container tracker-cta">
+      <p>Something not working, or missing? Tell us. Leave your email and we'll let you know when it's done.</p>
+      <div class="tracker-cta-actions">
+        <a href="https://github.com/mathinraj/TouchLock/issues/new" target="_blank" rel="noopener" class="btn btn-primary">
+          <i class="fa-solid fa-comment-dots"></i>
+          Send feedback
+        </a>
+        <a href="changelog.html" class="btn btn-secondary">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          View changelog
+        </a>
       </div>
     </section>
   </main>
@@ -415,23 +327,22 @@
   <script>
     (function () {
       const STATUS = {
-        'reported':    { label: 'Reported',             step: 0, icon: 'fa-inbox' },
-        'in-progress': { label: 'In progress',          step: 1, icon: 'fa-hammer' },
-        'rolling-out': { label: 'Fixed · rolling out',  step: 2, icon: 'fa-truck-fast' },
-        'released':    { label: 'Released',             step: 3, icon: 'fa-circle-check' }
+        'reported':    { label: 'Reported',    done: false },
+        'in-progress': { label: 'In progress', done: false },
+        'rolling-out': { label: 'Fixed',       done: true },
+        'released':    { label: 'Released',    done: true }
       };
       const TYPE = {
-        bug:         { label: 'Bug',         icon: 'fa-bug' },
-        feature:     { label: 'Feature',     icon: 'fa-lightbulb' },
-        improvement: { label: 'Improvement', icon: 'fa-wand-magic-sparkles' }
+        bug:         { label: 'Bug',             icon: 'fa-bug' },
+        feature:     { label: 'Feature request', icon: 'fa-lightbulb' },
+        improvement: { label: 'Improvement',     icon: 'fa-wand-magic-sparkles' }
       };
-      const STEPS = ['Reported', 'In progress', 'Fixed', 'Released'];
       const DAY = 24 * 60 * 60 * 1000;
 
       const items = (typeof FEEDBACK_ITEMS !== 'undefined' ? FEEDBACK_ITEMS : [])
         .filter(i => STATUS[i.status] && TYPE[i.type]);
 
-      const isDone = i => STATUS[i.status].step >= 2;
+      const isDone = i => STATUS[i.status].done;
 
       function el(tag, className, text) {
         const node = document.createElement(tag);
@@ -440,18 +351,17 @@
         return node;
       }
 
-      function icon(name) {
-        return el('i', `fa-solid ${name}`);
-      }
-
       function parseDate(s) {
         const d = s ? new Date(s + 'T00:00:00') : null;
         return d && !isNaN(d) ? d : null;
       }
 
-      function formatDate(s) {
+      function formatDate(s, monthOnly) {
         const d = parseDate(s);
-        return d ? d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        if (!d) return '';
+        return d.toLocaleDateString(undefined, monthOnly
+          ? { month: 'long', year: 'numeric' }
+          : { day: 'numeric', month: 'short', year: 'numeric' });
       }
 
       function daysToFix(item) {
@@ -460,109 +370,79 @@
         return a && b ? Math.max(0, Math.round((b - a) / DAY)) : null;
       }
 
-      function describeDays(days) {
-        if (days === 0) return 'same day';
-        return `${days} day${days === 1 ? '' : 's'}`;
+      function badgeText(item) {
+        if (!isDone(item)) return STATUS[item.status].label;
+        const days = daysToFix(item);
+        if (days === null) return STATUS[item.status].label;
+        return days === 0 ? 'Fixed same day' : `Fixed in ${days} day${days === 1 ? '' : 's'}`;
       }
 
-      function renderStats() {
+      function renderSummary() {
         const done = items.filter(isDone);
-        const open = items.filter(i => !isDone(i));
         const timed = done.map(daysToFix).filter(d => d !== null);
-        const avg = timed.length ? Math.round(timed.reduce((a, b) => a + b, 0) / timed.length) : null;
+        const stats = [[items.length, 'Reports'], [done.length, 'Fixed']];
+        if (timed.length) {
+          const avg = timed.reduce((a, b) => a + b, 0) / timed.length;
+          stats.push([avg < 1 ? '< 1 day' : `${Math.round(avg)} days`, 'Avg. fix time']);
+        }
 
-        const stats = [
-          [items.length, 'Reports'],
-          [done.length, 'Fixed'],
-          [open.length, 'Open'],
-          [avg === null ? '—' : (avg === 0 ? '< 1 day' : `${avg} day${avg === 1 ? '' : 's'}`), 'Avg. time to fix']
-        ];
-
-        const wrap = document.getElementById('stats');
+        const wrap = document.getElementById('summary');
+        if (!items.length) { wrap.remove(); return; }
         for (const [value, label] of stats) {
-          const s = el('div', 'stat');
-          s.append(el('span', 'stat-value', String(value)), el('span', 'stat-label', label));
-          wrap.appendChild(s);
+          const stat = el('div', 'tracker-stat');
+          stat.append(el('span', 'tracker-stat-value', String(value)), el('span', 'tracker-stat-label', label));
+          wrap.appendChild(stat);
         }
       }
 
-      function renderCard(item) {
-        const status = STATUS[item.status];
-        const type = TYPE[item.type];
-        const card = el('article', 'fb-card');
+      function renderItem(item) {
+        const block = el('div', `fb-block${isDone(item) ? ' done' : ''}`);
+        block.appendChild(el('div', 'fb-dot'));
 
-        const top = el('div', 'fb-top');
-        const typeBadge = el('span', `badge badge--${item.type}`);
-        typeBadge.append(icon(type.icon), document.createTextNode(type.label));
-        const statusBadge = el('span', `badge badge--${item.status}`);
-        statusBadge.append(icon(status.icon), document.createTextNode(status.label));
-        top.append(typeBadge, statusBadge);
-
+        const header = el('div', 'fb-header');
+        header.appendChild(el('span', 'fb-date',
+          item.reportedOn ? formatDate(item.reportedOn) : formatDate(item.resolvedOn, true) || 'Earlier'));
+        header.appendChild(el('span', 'fb-badge', badgeText(item)));
         if (item.version) {
-          const link = el('a', 'fb-version', `v${item.version} →`);
-          link.href = 'changelog.html';
-          top.appendChild(link);
+          const v = el('a', 'fb-version', `v${item.version}`);
+          v.href = 'changelog.html';
+          header.appendChild(v);
         }
+        block.appendChild(header);
 
-        card.append(top, el('h3', 'fb-title', item.title));
+        const card = el('div', 'fb-card');
+        const iconBox = el('div', `fb-icon ${item.type}`);
+        iconBox.appendChild(el('i', `fa-solid ${TYPE[item.type].icon}`));
+
+        const content = el('div', 'fb-content');
+        content.appendChild(el('h4', null, item.title));
 
         if (item.feedback) {
-          const quote = el('div', 'fb-quote');
-          quote.appendChild(el('p', null, item.feedback));
-          const meta = [item.source, item.browser, item.reportedOn && `Reported ${formatDate(item.reportedOn)}`]
-            .filter(Boolean).join(' · ');
-          if (meta) quote.appendChild(el('div', 'fb-meta', meta));
-          card.appendChild(quote);
+          const quote = el('p', 'fb-quote', `“${item.feedback}”`);
+          const source = [TYPE[item.type].label, item.source, item.browser].filter(Boolean).join(' · ');
+          quote.appendChild(el('span', 'fb-source', source));
+          content.appendChild(quote);
         }
-
-        const progress = el('div', 'fb-progress');
-        STEPS.forEach((label, i) => progress.appendChild(el('div', `fb-step${i <= status.step ? ' done' : ''}`, label)));
-        card.appendChild(progress);
 
         if (item.resolution) {
-          const res = el('div', 'fb-resolution');
-          res.appendChild(icon(isDone(item) ? 'fa-circle-check' : 'fa-hammer'));
-          const text = el('div');
-          const days = daysToFix(item);
-          const heading = isDone(item)
-            ? `What we did${days !== null ? ` — fixed in ${describeDays(days)}` : ''}: `
-            : 'What we\'re doing: ';
-          text.append(el('strong', null, heading), document.createTextNode(item.resolution));
-          res.appendChild(text);
-          card.appendChild(res);
+          const fix = el('p', 'fb-fix');
+          fix.append(el('strong', null, isDone(item) ? 'What we did: ' : 'What we\'re doing: '),
+                     document.createTextNode(item.resolution));
+          content.appendChild(fix);
         }
 
-        return card;
+        card.append(iconBox, content);
+        block.appendChild(card);
+        return block;
       }
 
-      function renderList(filter) {
-        const list = document.getElementById('fb-list');
-        list.textContent = '';
-        const shown = items.filter(i =>
-          filter === 'all' ||
-          (filter === 'bug' && i.type === 'bug') ||
-          (filter === 'feature' && i.type !== 'bug') ||
-          (filter === 'open' && !isDone(i)) ||
-          (filter === 'done' && isDone(i))
-        );
-        if (!shown.length) {
-          list.appendChild(el('div', 'fb-empty', filter === 'open'
-            ? 'Nothing open right now — every report so far has been fixed.'
-            : 'No feedback here yet.'));
-          return;
-        }
-        shown.forEach(i => list.appendChild(renderCard(i)));
+      const list = document.getElementById('fb-list');
+      if (!items.length) {
+        list.appendChild(el('p', 'tracker-empty', 'No feedback here yet.'));
+      } else {
+        items.forEach(i => list.appendChild(renderItem(i)));
       }
-
-      document.getElementById('filters').addEventListener('click', (e) => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
-        renderList(btn.dataset.filter);
-      });
-
-      renderStats();
-      renderList('all');
+      renderSummary();
     })();
   </script>
 
