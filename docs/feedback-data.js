@@ -13,6 +13,17 @@
 
 const FEEDBACK_ITEMS = [
   {
+    type: 'feature',
+    title: 'Require the PIN periodically, even with fingerprint unlock',
+    feedback: 'After a password unlock, fingerprint unlock should work for a configurable period — e.g. 1h, 4h, 6h, 12h or 24h. When that period expires, require a password unlock, then fingerprint works again for another full period.',
+    source: 'Email',
+    reportedOn: '2026-11-03',
+    status: 'rolling-out',
+    resolution: 'Added "Require PIN every…" in Settings → Biometric Authentication with 1, 4, 6, 12 and 24 hours. Once the time is up, Touch ID and Windows Hello stop working until you unlock once with your PIN, and then work for another full period.',
+    version: '1.5.0',
+    resolvedOn: '2026-11-03'
+  },
+  {
     type: 'bug',
     title: 'Chrome stuck in fullscreen after unlocking',
     feedback: 'The navigation buttons keep disappearing after unlocking the browser, and websites fail to load. It keeps forcing Chrome to be full screen.',

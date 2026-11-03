@@ -905,6 +905,17 @@ body {
 
 .field-inline { padding: 14px 0 6px; }
 
+/* ── Require PIN every… ─────────────────────── */
+
+.pin-interval { padding-bottom: 0; }
+
+.pin-interval-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
 /* ── Feature request ───────────────────────── */
 
 .fr-promise {

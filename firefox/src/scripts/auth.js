@@ -25,6 +25,12 @@ async function authenticate() {
       return;
     }
 
+    if (!(await biometricAllowedNow())) {
+      statusEl.textContent = 'For your security, enter your PIN this time. Your fingerprint works again after that.';
+      statusEl.className = 'error';
+      return;
+    }
+
     const challenge = new Uint8Array(32);
     crypto.getRandomValues(challenge);
 
@@ -46,8 +52,13 @@ async function authenticate() {
       statusEl.innerHTML = '&#10003; Authenticated successfully!';
       statusEl.className = 'success';
 
-      chrome.runtime.sendMessage({ action: 'biometricUnlock' }, () => {
-        setTimeout(() => window.close(), 600);
+      chrome.runtime.sendMessage({ action: 'biometricUnlock' }, (res) => {
+        if (!chrome.runtime.lastError && res && res.success) {
+          setTimeout(() => window.close(), 600);
+        } else {
+          statusEl.textContent = 'Your PIN is required this time. Enter it on the lock screen.';
+          statusEl.className = 'error';
+        }
       });
     }
   } catch (err) {

@@ -6,7 +6,7 @@
 
 **Lock your browser — or just your bank and email sites — with Touch ID, Windows Hello, or a PIN.**
 
-![Version](https://img.shields.io/badge/version-1.4.1-6366f1)
+![Version](https://img.shields.io/badge/version-1.5.0-6366f1)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-22c55e)
 ![Chrome](https://img.shields.io/badge/Chrome-110%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Edge](https://img.shields.io/badge/Edge-110%2B-0078D7?logo=microsoftedge&logoColor=white)
@@ -44,6 +44,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 **Unlock your way**
 - Touch ID on macOS or Windows Hello on Windows, triggered automatically
 - A 4–10 digit PIN, always available as a fallback
+- Optionally require your PIN every 1–24 hours, even when you use your fingerprint <sup>PRO</sup>
 
 **Stay in control**
 - Changing your PIN, biometrics, recovery questions, or locked sites requires your PIN or fingerprint
@@ -107,6 +108,9 @@ To run TouchLock from source:
 <summary><strong>Version history</strong></summary>
 
 Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.vercel.app/changelog.html) · [GitHub Releases](https://github.com/mathinraj/TouchLock/releases)
+
+**v1.5.0**
+- Require PIN every 1, 4, 6, 12, or 24 hours: after that, biometrics stop working until you unlock once with your PIN
 
 **v1.4.1**
 - Fixed the browser staying in fullscreen after unlocking; fullscreen lock is now off by default

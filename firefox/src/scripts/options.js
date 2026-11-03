@@ -49,6 +49,9 @@ async function init() {
   const btnRemoveBio  = document.getElementById('btn-remove-bio');
   const bioMsg        = document.getElementById('bio-msg');
   const bioStatus     = document.getElementById('bio-status');
+  const pinIntervalField  = document.getElementById('pin-interval-field');
+  const pinIntervalSelect = document.getElementById('pin-interval');
+  const pinIntervalHint   = document.getElementById('pin-interval-hint');
 
   const sqSelects     = [1, 2, 3].map(i => document.getElementById(`sq-select-${i}`));
   const sqAnswers     = [1, 2, 3].map(i => document.getElementById(`sq-answer-${i}`));
@@ -129,6 +132,7 @@ async function init() {
       pinHash: hash,
       pinSalt: salt,
       pinLength: p1.length,
+      lastPinUnlockAt: Date.now(),
       setupComplete: true
     });
 
@@ -280,6 +284,33 @@ async function init() {
     showMsg(bioMsg, 'Biometric credential removed.', 'success');
     await refreshStatus();
   });
+
+  // ── Require PIN every… ───────────────────────
+
+  pinIntervalSelect.addEventListener('change', async () => {
+    const hours = getPinInterval(pinIntervalSelect.value);
+    if (!(await requireAuth('Changing when your PIN is required'))) {
+      await refreshStatus();
+      return;
+    }
+    const { pinRequiredEvery } = await chrome.storage.local.get('pinRequiredEvery');
+    const update = { pinRequiredEvery: hours };
+    if (hours && !getPinInterval(pinRequiredEvery)) update.lastPinUnlockAt = Date.now();
+    await chrome.storage.local.set(update);
+    showMsg(bioMsg, hours
+      ? `Your PIN will be required every ${hours} hour${hours === 1 ? '' : 's'}.`
+      : 'Your fingerprint now works without a periodic PIN.', 'success');
+    await refreshStatus();
+  });
+
+  function describePinWindow(data) {
+    const hours = getPinInterval(data.pinRequiredEvery);
+    if (!hours) return 'After the chosen time, your fingerprint stops working until you unlock once with your PIN. Entering it regularly also helps you remember your PIN.';
+    const until = biometricsAllowedUntil(data);
+    if (!until) return `Your PIN is required at the next unlock. After that, your fingerprint works for another ${hours} hour${hours === 1 ? '' : 's'}.`;
+    const when = new Date(until).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+    return `Fingerprint works until ${when}. After that, unlock once with your PIN.`;
+  }
 
   // ── Lock Behavior Settings (auto-save) ──────
 
@@ -611,8 +642,12 @@ async function init() {
   async function refreshStatus() {
     const data = await chrome.storage.local.get([
       'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured', 'setupComplete',
-      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout'
+      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout', 'pinRequiredEvery', 'lastPinUnlockAt'
     ]);
+
+    pinIntervalField.classList.toggle('hidden', !(data.pinHash && data.webauthnRegistered));
+    pinIntervalSelect.value = String(getPinInterval(data.pinRequiredEvery));
+    pinIntervalHint.textContent = describePinWindow(data);
 
     if (data.pinHash) {
       setStatus(pinStatus, 'PIN configured', 'green');
@@ -910,7 +945,7 @@ setStatus = function(el, text, color) {
     {
       target: '#section-bio',
       title: '👆 Biometric Authentication',
-      desc: 'Register your fingerprint via Touch ID (Mac) or Windows Hello (PC) for instant, one-touch unlocking. No need to type your PIN every time — your biometric data stays securely on your device and is never transmitted.'
+      desc: 'Register your fingerprint via Touch ID (Mac) or Windows Hello (PC) for instant, one-touch unlocking. No need to type your PIN every time — your biometric data stays securely on your device and is never transmitted. Optionally, require your PIN every few hours for extra safety.'
     },
     {
       target: '#section-sq',

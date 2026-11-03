@@ -294,6 +294,9 @@ async function handleSiteLockMessage(msg, sender, checkPin) {
 
     case 'unlockSiteBiometric':
       if (!isFromSiteLockPage(sender)) return { success: false, error: 'Not allowed.' };
+      if (!(await biometricAllowedNow())) {
+        return { success: false, pinRequired: true, error: 'Enter your PIN to unlock.' };
+      }
       await unlockSite(msg.siteId, sender.tab && sender.tab.id);
       return { success: true };
 

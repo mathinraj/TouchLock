@@ -4,7 +4,7 @@
 
 // Firefox loads these through manifest background.scripts instead.
 if (typeof importScripts === 'function') {
-  importScripts('site-lock-shared.js', 'site-lock-bg.js');
+  importScripts('site-lock-shared.js', 'bio-policy.js', 'site-lock-bg.js');
 }
 
 const LOCK_URL     = chrome.runtime.getURL('src/pages/lock.html');
@@ -190,7 +190,10 @@ async function checkPin(pin) {
   if (typeof pin !== 'string' || pin.length !== expectedLen) return { success: false, error: 'Incorrect PIN.' };
 
   const hash = await hashPin(pin, pinSalt);
-  return hash === pinHash ? { success: true } : { success: false, error: 'Incorrect PIN.' };
+  if (hash !== pinHash) return { success: false, error: 'Incorrect PIN.' };
+
+  await chrome.storage.local.set({ lastPinUnlockAt: Date.now() });
+  return { success: true };
 }
 
 async function verifyPin(pin) {
@@ -469,6 +472,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       }
 
       case 'biometricUnlock': {
+        if (!(await biometricAllowedNow())) {
+          sendResponse({ success: false, pinRequired: true, error: 'Enter your PIN to unlock.' });
+          break;
+        }
         await unlockBrowser();
         sendResponse({ success: true });
         break;

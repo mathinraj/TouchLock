@@ -59,7 +59,9 @@ const SITE_MODE = document.body.dataset.mode === 'site';
     await chrome.storage.local.get(['webauthnRegistered', 'webauthnCredentialId', 'securityQuestionsConfigured', 'pinLength']);
 
   const currentPinLength = pinLength || 6;
-  const hasBiometrics = !!(webauthnRegistered && webauthnCredentialId);
+  const bioRegistered = !!(webauthnRegistered && webauthnCredentialId);
+  const pinRequiredNow = bioRegistered && !(await biometricAllowedNow());
+  const hasBiometrics = bioRegistered && !pinRequiredNow;
 
   pinInput.maxLength = currentPinLength;
   pinInput.placeholder = '•'.repeat(currentPinLength);
@@ -76,9 +78,11 @@ const SITE_MODE = document.body.dataset.mode === 'site';
   if (!hasBiometrics) {
     bioBtn.style.display = 'none';
     bioBtn.previousElementSibling.style.display = 'none';
-    subtitleEl.textContent = SITE_MODE
-      ? `Enter your ${currentPinLength}-digit PIN to open this site`
-      : `Enter your ${currentPinLength}-digit PIN to unlock`;
+    subtitleEl.textContent = pinRequiredNow
+      ? 'For your security, enter your PIN this time. Your fingerprint works again after that.'
+      : SITE_MODE
+        ? `Enter your ${currentPinLength}-digit PIN to open this site`
+        : `Enter your ${currentPinLength}-digit PIN to unlock`;
   }
 
   if (SITE_MODE) {
@@ -202,10 +206,13 @@ const SITE_MODE = document.body.dataset.mode === 'site';
       if (assertion && SITE_MODE) {
         chrome.runtime.sendMessage({ action: 'unlockSiteBiometric', siteId: site.id }, (res) => {
           if (!chrome.runtime.lastError && res && res.success) showSuccess();
-          else showError('Could not unlock this site. Try again.');
+          else showError(res && res.pinRequired ? 'Your PIN is required this time.' : 'Could not unlock this site. Try again.');
         });
       } else if (assertion) {
-        chrome.runtime.sendMessage({ action: 'biometricUnlock' }, () => showSuccess());
+        chrome.runtime.sendMessage({ action: 'biometricUnlock' }, (res) => {
+          if (!chrome.runtime.lastError && res && res.success) showSuccess();
+          else showError(res && res.pinRequired ? 'Your PIN is required this time.' : 'Could not unlock. Try again.');
+        });
       }
     } catch (err) {
       const userCancelled = err.name === 'NotAllowedError';

@@ -14,8 +14,9 @@ async function requireAuth(reason) {
   const { pinHash, pinLength, webauthnRegistered, webauthnCredentialId } =
     await chrome.storage.local.get(['pinHash', 'pinLength', 'webauthnRegistered', 'webauthnCredentialId']);
 
-  const hasBio = !!(webauthnRegistered && webauthnCredentialId);
-  if (!pinHash && !hasBio) return true;
+  const bioRegistered = !!(webauthnRegistered && webauthnCredentialId);
+  if (!pinHash && !bioRegistered) return true;
+  const hasBio = bioRegistered && await biometricAllowedNow();
   if (Date.now() < reauthUntil) return true;
 
   const ok = await showReauthDialog(reason, {
