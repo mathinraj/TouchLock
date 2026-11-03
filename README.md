@@ -6,7 +6,7 @@
 
 **Lock your browser — or just your bank and email sites — with Touch ID, Windows Hello, or a PIN.**
 
-![Version](https://img.shields.io/badge/version-1.5.0-6366f1)
+![Version](https://img.shields.io/badge/version-1.5.1-6366f1)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-22c55e)
 ![Chrome](https://img.shields.io/badge/Chrome-110%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Edge](https://img.shields.io/badge/Edge-110%2B-0078D7?logo=microsoftedge&logoColor=white)
@@ -33,7 +33,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 - Locks automatically on startup and, optionally, after 1 minute to 1 hour of inactivity
 - Lock instantly from the toolbar or with <kbd>Alt</kbd>+<kbd>L</kbd> (customizable; <kbd>Ctrl</kbd>+<kbd>L</kbd> on Mac)
 - Optional fullscreen mode hides the address bar and tabs while locked
-- Tab guards block new tabs, tab switching, and browser pages until you unlock
+- Nothing opens while locked: websites and browser pages are held at the lock screen until you unlock
 
 **Lock specific sites** <sup>PRO</sup>
 - Keep sites like your bank or email locked even after unlocking the browser
@@ -108,6 +108,10 @@ To run TouchLock from source:
 <summary><strong>Version history</strong></summary>
 
 Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.vercel.app/changelog.html) · [GitHub Releases](https://github.com/mathinraj/TouchLock/releases)
+
+**v1.5.1**
+- Stricter lock: while locked, websites and browser pages are sent to the lock screen before they open, and return after unlock
+- Esc no longer exits the fullscreen lock; closing the browser while locked keeps it locked on restart
 
 **v1.5.0**
 - Require PIN every 1, 4, 6, 12, or 24 hours: after that, biometrics stop working until you unlock once with your PIN

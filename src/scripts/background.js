@@ -11,6 +11,7 @@ const LOCK_URL     = chrome.runtime.getURL('src/pages/lock.html');
 const RECOVERY_URL = chrome.runtime.getURL('src/pages/recovery.html');
 const OPTIONS_URL  = chrome.runtime.getURL('src/pages/options.html');
 const WELCOME_URL  = chrome.runtime.getURL('src/pages/welcome.html');
+const AUTH_URL     = chrome.runtime.getURL('src/pages/auth.html');
 
 // ── Helpers ──────────────────────────────────────
 
@@ -23,6 +24,46 @@ function isAllowedWhileLocked(url) {
     url.startsWith(LOCK_URL) ||
     url.startsWith(RECOVERY_URL)
   );
+}
+
+// Pages that may load in a tab while locked; anything else is held behind the lock screen.
+function mayLoadWhileLocked(url) {
+  return isAllowedWhileLocked(url) || url.startsWith(AUTH_URL) || url.startsWith(SITE_LOCK_URL);
+}
+
+// The address a held lock tab returns to on unlock, or null for a plain lock tab.
+function heldReturnUrl(tabUrl) {
+  const i = tabUrl ? tabUrl.indexOf('#') : -1;
+  if (i === -1) return null;
+  try {
+    const url = new URL(decodeHashUrl(tabUrl.slice(i + 1)));
+    return ['javascript:', 'data:', 'blob:'].includes(url.protocol) ? null : url.href;
+  } catch (_) {
+    return null;
+  }
+}
+
+async function holdTab(tabId, url) {
+  try {
+    await chrome.tabs.update(tabId, { url: `${LOCK_URL}#${url}` });
+  } catch (_) {
+    try { await chrome.tabs.remove(tabId); } catch (_) {}
+  }
+}
+
+// Sends held tabs back to their pages; closes plain lock tabs unless keepPlain.
+async function releaseLockTabs({ keepPlain }) {
+  const tabs = await chrome.tabs.query({});
+  for (const tab of tabs) {
+    if (!isLockUrl(tab.url)) continue;
+    const target = heldReturnUrl(tab.url);
+    try {
+      if (target) await chrome.tabs.update(tab.id, { url: target });
+      else if (!keepPlain) await chrome.tabs.remove(tab.id);
+    } catch (_) {
+      if (!keepPlain) { try { await chrome.tabs.remove(tab.id); } catch (_) {} }
+    }
+  }
 }
 
 async function getIsLocked() {
@@ -48,6 +89,7 @@ async function hashPin(pin, salt) {
 
 async function lockBrowser() {
   await chrome.storage.local.set({ isLocked: true });
+  await setBrowserLockRule(true);
   await onBrowserLocking();
 
   const windows = await chrome.windows.getAll({ populate: true });
@@ -74,18 +116,14 @@ async function lockBrowser() {
 
 async function unlockBrowser() {
   await chrome.storage.local.set({ isLocked: false });
+  await setBrowserLockRule(false);
 
   const { unlockCount } = await chrome.storage.local.get('unlockCount');
   await chrome.storage.local.set({ unlockCount: (unlockCount || 0) + 1 });
 
   await restoreLockFullscreen();
 
-  // Close all lock tabs
-  const allTabs = await chrome.tabs.query({});
-  const lockTabIds = allTabs.filter(t => isLockUrl(t.url)).map(t => t.id);
-  if (lockTabIds.length > 0) {
-    try { await chrome.tabs.remove(lockTabIds); } catch (_) {}
-  }
+  await releaseLockTabs({ keepPlain: false });
 
   // Remove content overlays from remaining tabs
   const remaining = await chrome.tabs.query({});
@@ -144,6 +182,17 @@ function restoreLockFullscreen() {
     }
   }).catch(() => {});
   return fullscreenChain;
+}
+
+// Esc exits extension-initiated fullscreen; while locked, put the window back.
+if (chrome.windows.onBoundsChanged) {
+  chrome.windows.onBoundsChanged.addListener(async (win) => {
+    if (win.state === 'fullscreen' || !(await getIsLocked())) return;
+    const { fullscreenLock, lockFullscreenWindows } =
+      await chrome.storage.local.get(['fullscreenLock', 'lockFullscreenWindows']);
+    if (fullscreenLock !== true || !lockFullscreenWindows || !(win.id in lockFullscreenWindows)) return;
+    try { await chrome.windows.update(win.id, { state: 'fullscreen' }); } catch (_) {}
+  });
 }
 
 // Window IDs change across restarts. If the previous session ended while locked
@@ -324,7 +373,7 @@ chrome.runtime.onStartup.addListener(async () => {
   await adoptRestoredFullscreen();
 
   const { lockOnStartup } = await chrome.storage.local.get('lockOnStartup');
-  if (lockOnStartup === false) return;
+  if (lockOnStartup === false && !(await getIsLocked())) return;
 
   if (await isSetupComplete()) {
     await lockBrowser();
@@ -389,6 +438,14 @@ chrome.tabs.onCreated.addListener(async (tab) => {
 // Guard 3: When a tab finishes loading, ensure guard tab is active + overlay injected
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (!(await getIsLocked())) return;
+
+  // Any navigation away while locked (including the lock tab's own address bar
+  // and browser pages like chrome://extensions) is sent straight back.
+  if (changeInfo.url && !mayLoadWhileLocked(changeInfo.url)) {
+    await holdTab(tabId, changeInfo.url);
+    return;
+  }
+
   if (changeInfo.status !== 'complete') return;
 
   if (isAllowedWhileLocked(tab.url)) return;
@@ -564,7 +621,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
       case 'recoveryComplete': {
         await chrome.storage.local.set({ isLocked: false });
+        await setBrowserLockRule(false);
         await restoreLockFullscreen();
+        await releaseLockTabs({ keepPlain: true });
         // Remove content overlays from all tabs
         const allTabs = await chrome.tabs.query({});
         for (const tab of allTabs) {

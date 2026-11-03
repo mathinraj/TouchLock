@@ -16,6 +16,12 @@ let pendingUpdateRedirect = false;
 const SITE_MODE = document.body.dataset.mode === 'site';
 
 (async function init() {
+  // Lock pages are web-accessible (redirect target), so never run inside a frame.
+  if (window.top !== window.self) {
+    document.body.innerHTML = '';
+    return;
+  }
+
   let site = null;
   let returnUrl = null;
 
@@ -127,7 +133,7 @@ const SITE_MODE = document.body.dataset.mode === 'site';
     setTimeout(() => triggerBiometrics(true, 0), SITE_MODE ? 300 : 1000);
   }
 
-  if (hasBiometrics && SITE_MODE && document.visibilityState !== 'visible') {
+  if (hasBiometrics && document.visibilityState !== 'visible') {
     // Background tabs can't show the biometric prompt; wait until the user opens this tab.
     setTimeout(() => pinInput.focus(), 100);
     document.addEventListener('visibilitychange', function onVisible() {

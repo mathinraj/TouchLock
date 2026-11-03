@@ -12,6 +12,8 @@ const SITE_LOCK_URL     = chrome.runtime.getURL('src/pages/site-lock.html');
 const EXTENSION_ORIGIN  = chrome.runtime.getURL('');
 const SITE_RELOCK_ALARM = 'site-relock:';
 const ALLOW_RULE_OFFSET = 100000;
+const BROWSER_LOCK_RULE_ID = 1000000;
+const LOCK_PAGE_URL = chrome.runtime.getURL('src/pages/lock.html');
 const GRANT_GRACE_MS    = 5000;
 
 const dnr = chrome.declarativeNetRequest || null;
@@ -124,13 +126,32 @@ async function applySiteRules() {
   ]);
 
   await dnr.updateSessionRules({
-    removeRuleIds: oldSession.map(r => r.id),
+    removeRuleIds: oldSession.map(r => r.id).filter(id => id !== BROWSER_LOCK_RULE_ID),
     addRules: sessionRules
   });
   await dnr.updateDynamicRules({
     removeRuleIds: oldDynamic.map(r => r.id),
     addRules: dynamicRules
   });
+}
+
+// While the browser is locked, every web page load is sent to the lock screen,
+// which keeps the address in its fragment and returns there on unlock. This
+// outranks the site-lock allow rules.
+function setBrowserLockRule(locked) {
+  if (!dnr) return Promise.resolve();
+  ruleSync = ruleSync
+    .then(() => dnr.updateSessionRules({
+      removeRuleIds: [BROWSER_LOCK_RULE_ID],
+      addRules: locked ? [{
+        id: BROWSER_LOCK_RULE_ID,
+        priority: 10,
+        action: { type: 'redirect', redirect: { regexSubstitution: `${LOCK_PAGE_URL}#\\0` } },
+        condition: { regexFilter: '^https?://.*$', resourceTypes: ['main_frame'] }
+      }] : []
+    }))
+    .catch(err => console.warn('[TouchLock] browser lock rule failed:', err));
+  return ruleSync;
 }
 
 // ── Tabs ────────────────────────────────────────

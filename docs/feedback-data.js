@@ -13,6 +13,17 @@
 
 const FEEDBACK_ITEMS = [
   {
+    type: 'bug',
+    title: 'Pressing Esc gets past the lock screen',
+    feedback: 'It just lets people access it easily by pressing the Escape key.',
+    source: 'Store review',
+    reportedOn: '2026-11-03',
+    status: 'rolling-out',
+    resolution: 'Esc exited the fullscreen lock and showed the browser again. Now, while locked, every website and browser page (including Settings and Extensions) is sent to the lock screen before it opens, and the window goes straight back to fullscreen if Esc is pressed. Tabs return to their pages after you unlock.',
+    version: '1.5.1',
+    resolvedOn: '2026-11-03'
+  },
+  {
     type: 'feature',
     title: 'Require the PIN periodically, even with fingerprint unlock',
     feedback: 'After a password unlock, fingerprint unlock should work for a configurable period — e.g. 1h, 4h, 6h, 12h or 24h. When that period expires, require a password unlock, then fingerprint works again for another full period.',

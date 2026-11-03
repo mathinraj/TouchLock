@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TouchLock – Fingerprint Browser Lock",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Lock your browser profile with Touch ID, Windows Hello, or a 6-digit PIN.",
   "browser_specific_settings": {
     "gecko": {
@@ -23,7 +23,7 @@
   "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {
-      "resources": ["src/pages/site-lock.html"],
+      "resources": ["src/pages/lock.html", "src/pages/site-lock.html"],
       "matches": ["<all_urls>"]
     }
   ],

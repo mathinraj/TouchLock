@@ -236,12 +236,45 @@
 
     <section class="timeline container">
 
-      <!-- v1.5.0 -->
+      <!-- v1.5.1 -->
       <div class="version-block latest">
         <div class="version-dot"></div>
         <div class="version-header">
-          <span class="version-tag">v1.5.0</span>
+          <span class="version-tag">v1.5.1</span>
           <span class="version-badge latest">Latest</span>
+          <span class="version-date">November 2026</span>
+        </div>
+        <p class="version-desc">Security fix: nothing can be opened while the browser is locked, even after pressing Esc.</p>
+        <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="change-content">
+              <h4>Stricter Lock</h4>
+              <p>While locked, every page — websites, the lock tab's own address bar, and browser pages like Settings or Extensions — is sent to the lock screen before it opens. After you unlock, each tab returns to the page it was opening, so nothing is lost.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-expand"></i></div>
+            <div class="change-content">
+              <h4>Esc No Longer Exits the Lock</h4>
+              <p>With fullscreen lock on, pressing Esc used to leave fullscreen and show your tabs. TouchLock now returns the window to fullscreen right away while it's locked (Chrome, Edge and other Chromium browsers).</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-power-off"></i></div>
+            <div class="change-content">
+              <h4>Stays Locked After a Restart</h4>
+              <p>If the browser was closed while locked, it now opens locked again, even when "Lock on browser startup" is off.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.5.0 -->
+      <div class="version-block">
+        <div class="version-dot"></div>
+        <div class="version-header">
+          <span class="version-tag">v1.5.0</span>
           <span class="version-date">November 2026</span>
         </div>
         <p class="version-desc">Require your PIN every few hours, even when you use your fingerprint.</p>
