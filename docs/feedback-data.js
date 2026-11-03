@@ -19,9 +19,10 @@ const FEEDBACK_ITEMS = [
     source: 'Email',
     browser: 'Firefox 158 · Windows 11',
     reportedOn: '2026-11-03',
-    status: 'in-progress',
+    status: 'rolling-out',
     resolution: 'Firefox doesn\'t accept an extension\'s own address as the biometric site ID. TouchLock for Firefox now uses touchlock.vercel.app instead, which Firefox 150+ allows, so Touch ID and Windows Hello work for registering and unlocking.',
-    version: '1.4.0'
+    version: '1.4.1',
+    resolvedOn: '2026-11-03'
   },
   {
     type: 'feature',

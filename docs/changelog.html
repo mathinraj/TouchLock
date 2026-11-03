@@ -236,12 +236,38 @@
 
     <section class="timeline container">
 
-      <!-- v1.4.0 -->
+      <!-- v1.4.1 -->
       <div class="version-block latest">
         <div class="version-dot"></div>
         <div class="version-header">
-          <span class="version-tag">v1.4.0</span>
+          <span class="version-tag">v1.4.1</span>
           <span class="version-badge latest">Latest</span>
+          <span class="version-date">November 2026</span>
+        </div>
+        <p class="version-desc">Patch release fixing biometric registration in Firefox.</p>
+        <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-fingerprint"></i></div>
+            <div class="change-content">
+              <h4>Biometrics in Firefox</h4>
+              <p>Registering Touch ID or Windows Hello in Firefox failed with "The operation is insecure". It now works on Firefox 150 and later; your system prompt shows "touchlock.vercel.app", which is TouchLock. On older Firefox versions, Settings explains the requirement and the PIN keeps working.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon improve"><i class="fa-solid fa-circle-info"></i></div>
+            <div class="change-content">
+              <h4>Clearer Biometric Errors</h4>
+              <p>If Firefox blocks registration because TouchLock's website access is turned off, Settings now says how to allow it instead of showing a technical error.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.4.0 -->
+      <div class="version-block">
+        <div class="version-dot"></div>
+        <div class="version-header">
+          <span class="version-tag">v1.4.0</span>
           <span class="version-date">November 2026</span>
         </div>
         <p class="version-desc">Lock specific sites like banking or email, even while the browser is unlocked.</p>
@@ -286,13 +312,6 @@
             <div class="change-content">
               <h4>Follow Your Feedback</h4>
               <p>A new <a href="feedback.html" style="color:var(--color-primary-hover)">feedback tracker</a> shows every reported bug and feature request with its progress. When you send feedback from Settings or after uninstalling, you can leave your email and we'll tell you when it's done — every report is handled within 7 days at most.</p>
-            </div>
-          </div>
-          <div class="change-item">
-            <div class="change-icon fix"><i class="fa-solid fa-fingerprint"></i></div>
-            <div class="change-content">
-              <h4>Biometrics in Firefox</h4>
-              <p>Registering Touch ID or Windows Hello in Firefox failed with "The operation is insecure". It now works on Firefox 150 and later; your system prompt shows "touchlock.vercel.app", which is TouchLock. On older Firefox versions, the PIN keeps working.</p>
             </div>
           </div>
           <div class="change-item">

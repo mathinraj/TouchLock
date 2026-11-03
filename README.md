@@ -142,9 +142,13 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 | Microsoft Edge 110+ | Supported |
 | Brave | Supported |
 | Opera / Vivaldi | Should work (Chromium-based) |
-| Firefox 115+ | Supported |
+| Firefox 115+ | Supported (biometrics need Firefox 150+) |
 
 ## Changelog
+
+### v1.4.1
+- **Fix: biometrics in Firefox** – registration failed with "The operation is insecure" because Firefox rejects `moz-extension://` origins as a WebAuthn RP ID; the Firefox build now uses `touchlock.vercel.app` as the RP ID (allowed for domains covered by host permissions since Firefox 150); older Firefox versions show a notice and keep PIN unlock
+- **Clearer biometric errors** – if Firefox blocks registration because website access is turned off, Settings explains how to allow it
 
 ### v1.4.0
 - **Lock specific sites (PRO)** – add sites in Settings → Lock Specific Sites or via "Lock this site" in the popup; locked sites are redirected to a TouchLock unlock page before they load (declarativeNetRequest), even while the browser is unlocked
@@ -154,7 +158,6 @@ To change the shortcut, go to **Settings → Lock Behavior → Quick-lock shortc
 - **Cleaner popup** – status moved into the header; on websites, Settings becomes a gear icon next to Lock Now to make room for the current-site card; slightly larger layout overall
 - **Guided tour** – new step for Lock Specific Sites
 - **Feedback follow-up** – new [feedback tracker](https://touchlock.vercel.app/feedback.html) page listing user reports and their fixes; the uninstall page and Settings promise a fix within 7 days and accept an optional email to notify users when their feedback is done; the uninstall link now includes the extension version and browser
-- **Fix: biometrics in Firefox** – registration failed with "The operation is insecure" because Firefox rejects `moz-extension://` origins as a WebAuthn RP ID; the Firefox build now uses `touchlock.vercel.app` as the RP ID (allowed for domains covered by host permissions since Firefox 150); older Firefox versions show a notice and keep PIN unlock
 - **Firefox** – minimum version is now Firefox 115 (needed for `storage.session`)
 
 ### v1.3.6
