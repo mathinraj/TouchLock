@@ -13,6 +13,17 @@
 
 const FEEDBACK_ITEMS = [
   {
+    type: 'bug',
+    title: 'Windows Hello registration fails in Firefox',
+    feedback: 'Registering Windows Hello consistently fails with "Registration failed: The operation is insecure." Windows Hello is set up and available.',
+    source: 'Email',
+    browser: 'Firefox 158 · Windows 11',
+    reportedOn: '2026-11-03',
+    status: 'in-progress',
+    resolution: 'Firefox doesn\'t accept an extension\'s own address as the biometric site ID. TouchLock for Firefox now uses touchlock.vercel.app instead, which Firefox 150+ allows, so Touch ID and Windows Hello work for registering and unlocking.',
+    version: '1.4.0'
+  },
+  {
     type: 'feature',
     title: 'Keep specific sites locked after unlocking the browser',
     feedback: 'Missing lock on specific sites after unlocking. Hopefully it will get a fix in the future.',

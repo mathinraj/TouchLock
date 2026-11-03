@@ -205,7 +205,7 @@ const SITE_MODE = document.body.dataset.mode === 'site';
       const assertion = await navigator.credentials.get({
         publicKey: {
           challenge,
-          rpId: location.hostname || location.host,
+          rpId: WEBAUTHN_RP_ID,
           allowCredentials: [{
             id: base64ToBuffer(webauthnCredentialId),
             type: 'public-key',

@@ -31,7 +31,7 @@ async function authenticate() {
     const assertion = await navigator.credentials.get({
       publicKey: {
         challenge,
-        rpId: location.hostname || location.host,
+        rpId: WEBAUTHN_RP_ID,
         allowCredentials: [{
           id: base64ToBuffer(webauthnCredentialId),
           type: 'public-key',

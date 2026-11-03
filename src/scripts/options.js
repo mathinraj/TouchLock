@@ -191,7 +191,18 @@ async function init() {
 
   // ── Register Biometrics ──────────────────────
 
+  const bioUnavailable = webauthnUnavailableReason();
+  if (bioUnavailable) {
+    btnRegBio.disabled = true;
+    showMsg(bioMsg, bioUnavailable, 'error');
+  }
+
   btnRegBio.addEventListener('click', async () => {
+    if (bioUnavailable) {
+      showMsg(bioMsg, bioUnavailable, 'error');
+      return;
+    }
+
     if (!window.PublicKeyCredential) {
       showMsg(bioMsg, 'WebAuthn is not supported in this browser.', 'error');
       return;
@@ -206,7 +217,7 @@ async function init() {
     if (!(await requireAuth('Registering a biometric credential'))) return;
 
     try {
-      showMsg(bioMsg, 'Waiting for biometric verification…', 'success');
+      showMsg(bioMsg, 'Waiting for biometric verification…' + WEBAUTHN_PROMPT_HINT, 'success');
 
       const challenge = new Uint8Array(32);
       crypto.getRandomValues(challenge);
@@ -253,6 +264,8 @@ async function init() {
     } catch (err) {
       if (err.name === 'NotAllowedError') {
         showMsg(bioMsg, 'Registration cancelled or timed out.', 'error');
+      } else if (err.name === 'SecurityError' && WEBAUTHN_NEEDS_HOST_ACCESS) {
+        showMsg(bioMsg, `Registration was blocked. Allow TouchLock to access websites (Add-ons → TouchLock → Permissions), then try again.`, 'error');
       } else {
         showMsg(bioMsg, `Registration failed: ${err.message}`, 'error');
       }
@@ -617,7 +630,7 @@ async function init() {
 // ── Utility functions ─────────────────────────
 
 function getRpId() {
-  return location.hostname || location.host;
+  return WEBAUTHN_RP_ID;
 }
 
 async function hashValue(value, salt) {
