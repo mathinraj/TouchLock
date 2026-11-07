@@ -160,6 +160,9 @@
       font-size: 0.75rem;
       font-weight: 600;
       text-decoration: none;
+      border: none;
+      font-family: var(--font);
+      cursor: pointer;
       transition: all 0.15s;
     }
 
@@ -419,14 +422,12 @@
           <span class="nudge-icon">⚡</span>
           Sorry about that! If you can describe the issue below, we'll prioritize a fix — every reported bug is fixed within 7 days at most. Leave your email and we'll tell you when it's done.
           <br>
-          <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener" class="nudge-action"><i class="fa-solid fa-bug"></i> Report the Issue</a>
+          <button type="button" class="nudge-action" data-focus-detail><i class="fa-solid fa-pen"></i> Describe the issue</button>
         </div>
 
         <div class="nudge nudge--privacy" id="nudge-privacy">
           <span class="nudge-icon">🔒</span>
           TouchLock is <strong>fully open-source</strong> and stores everything locally. We never collect, transmit, or see your data — not even your hashed PIN leaves your device.
-          <br>
-          <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener" class="nudge-action"><i class="fa-brands fa-github"></i> View Source Code</a>
         </div>
 
         <div class="nudge nudge--other" id="nudge-other">
@@ -434,7 +435,8 @@
           We'd love to understand more. Please share your thoughts below — every piece of feedback shapes TouchLock's future.
         </div>
 
-        <textarea class="feedback-textarea" id="feedback-detail" placeholder="Tell us more (optional) — what could we do better?"></textarea>
+        <label class="feedback-label" for="feedback-detail" id="detail-label" style="margin-bottom:8px">Tell us more (optional)</label>
+        <textarea class="feedback-textarea" id="feedback-detail" rows="3" placeholder="What could we do better?"></textarea>
 
         <label class="feedback-label" for="feedback-email" style="margin-bottom:8px">Your email (optional)</label>
         <input type="email" class="feedback-email" id="feedback-email" placeholder="you@example.com" autocomplete="email">
@@ -473,6 +475,39 @@
       other:    document.getElementById('nudge-other')
     };
 
+    const DETAIL_PROMPTS = {
+      setup: {
+        question: 'What was hard about setting it up?',
+        placeholder: 'e.g. which step was confusing, what went wrong, or what would make setup easier for you'
+      },
+      features: {
+        question: 'Which features were you expecting?',
+        placeholder: 'e.g. what you wanted TouchLock to do, and how you would use it day to day'
+      },
+      issues: {
+        question: 'What went wrong?',
+        placeholder: 'e.g. what happened, what you were doing at the time, and which browser and operating system you use'
+      },
+      privacy: {
+        question: 'What concerned you about privacy?',
+        placeholder: 'e.g. a permission, something you noticed, or what would help you trust TouchLock'
+      },
+      other: {
+        question: 'What made you uninstall?',
+        placeholder: 'Anything that didn\'t work for you, or what would bring you back'
+      }
+    };
+
+    const detailLabel = document.getElementById('detail-label');
+    const detailInput = document.getElementById('feedback-detail');
+
+    document.querySelectorAll('[data-focus-detail]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        detailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        detailInput.focus({ preventScroll: true });
+      });
+    });
+
     reasonList.addEventListener('click', (e) => {
       const item = e.target.closest('.reason-item');
       if (!item) return;
@@ -485,6 +520,12 @@
       Object.values(nudges).forEach(n => n.classList.remove('visible'));
       const key = item.dataset.reason;
       if (nudges[key]) nudges[key].classList.add('visible');
+
+      const prompt = DETAIL_PROMPTS[key];
+      if (prompt) {
+        detailLabel.textContent = `${prompt.question} (optional)`;
+        detailInput.placeholder = prompt.placeholder;
+      }
     });
 
     // The extension sets these when it registers the uninstall URL.
@@ -526,7 +567,8 @@
               from_email: email || 'Not provided',
               category:   'Uninstall Feedback',
               message:    'Reason: ' + reason.value +
-                          '\n\nDetails: ' + (detail || 'None provided') +
+                          '\n\n' + (DETAIL_PROMPTS[reason.closest('.reason-item').dataset.reason] || { question: 'Details' }).question +
+                          '\n' + (detail || 'None provided') +
                           '\n\nBrowser: ' + browser +
                           '\nNotify when fixed: ' + (email ? 'Yes — ' + email : 'No email given'),
               timestamp:  new Date().toISOString(),
