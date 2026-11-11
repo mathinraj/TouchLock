@@ -67,6 +67,7 @@ async function init() {
   const idleMedia        = document.getElementById('idle-media');
   const toggleIdleMedia  = document.getElementById('toggle-idle-media');
   const idleMediaFields  = document.getElementById('idle-media-fields');
+  const idleMediaSummary = document.getElementById('idle-media-summary');
   const idleMediaScope   = document.getElementById('idle-media-scope');
   const idleMediaSites   = document.getElementById('idle-media-sites');
   const idleSiteInput    = document.getElementById('idle-site-input');
@@ -351,6 +352,14 @@ async function init() {
     idleMedia.style.display = toggleIdle.checked ? 'block' : 'none';
     idleMediaFields.style.display = toggleIdleMedia.checked ? 'block' : 'none';
     idleMediaSites.style.display = idleMediaScope.value === 'sites' ? 'block' : 'none';
+
+    const count = idleMediaSiteHosts.length;
+    const maxMinutes = parseInt(idleMediaMax.value, 10);
+    idleMediaSummary.textContent = [
+      idleMediaScope.value === 'all' ? 'Any website' : `${count} site${count === 1 ? '' : 's'}`,
+      toggleIdleAudio.checked ? 'video and audio' : 'video only',
+      maxMinutes ? `locks anyway after ${maxMinutes / 60}h` : 'no time limit'
+    ].join(' · ');
   }
 
   function renderIdleSites() {
@@ -382,6 +391,7 @@ async function init() {
       idleSiteList.appendChild(li);
     }
     idleSiteEmpty.classList.toggle('hidden', idleMediaSiteHosts.length > 0);
+    updateIdleFields();
   }
 
   async function addIdleSite() {
@@ -420,8 +430,14 @@ async function init() {
     updateIdleFields();
     saveLockSettings();
   });
-  toggleIdleAudio.addEventListener('change', saveLockSettings);
-  idleMediaMax.addEventListener('change', saveLockSettings);
+  toggleIdleAudio.addEventListener('change', () => {
+    updateIdleFields();
+    saveLockSettings();
+  });
+  idleMediaMax.addEventListener('change', () => {
+    updateIdleFields();
+    saveLockSettings();
+  });
   btnAddIdleSite.addEventListener('click', addIdleSite);
   idleSiteInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addIdleSite(); });
 
