@@ -9,8 +9,18 @@
     return;
   }
 
-  document.getElementById('btn-setup').addEventListener('click', () => {
-    chrome.tabs.update({ url: chrome.runtime.getURL('src/pages/options.html') });
+  ['btn-setup', 'btn-setup-bottom'].forEach((id) => {
+    document.getElementById(id).addEventListener('click', () => {
+      chrome.tabs.update({ url: chrome.runtime.getURL('src/pages/options.html') });
+    });
+  });
+
+  const shortcutKey = document.getElementById('shortcut-key');
+  if (/Mac/i.test(navigator.platform)) shortcutKey.textContent = 'Control + L';
+  chrome.commands.getAll((cmds) => {
+    if (chrome.runtime.lastError) return;
+    const lockCmd = cmds.find(c => c.name === 'lock-browser');
+    if (lockCmd && lockCmd.shortcut) shortcutKey.textContent = lockCmd.shortcut.replace('MacCtrl', 'Control').split('+').join(' + ');
   });
 
   // ── Pin-to-toolbar prompt ──────────────────────

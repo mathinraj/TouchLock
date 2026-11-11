@@ -442,6 +442,8 @@
         <input type="email" class="feedback-email" id="feedback-email" placeholder="you@example.com" autocomplete="email">
         <p class="email-hint">We'll email you once your bug is fixed or your feature is built. We won't use it for anything else.</p>
 
+        <p class="email-hint">To help us find the problem, your feedback also includes your TouchLock version, browser, operating system and which TouchLock features you had set up. No browsing data, PIN or answers are ever sent.</p>
+
         <div class="feedback-msg" id="feedback-msg"></div>
 
         <button class="btn btn-primary btn-submit" id="btn-submit">
@@ -530,8 +532,72 @@
 
     // The extension sets these when it registers the uninstall URL.
     const params  = new URLSearchParams(location.search);
-    const version = (params.get('v') || '').replace(/[^0-9.]/g, '').slice(0, 20) || 'unknown';
-    const browser = (params.get('b') || '').replace(/[^a-z]/g, '').slice(0, 20) || 'unknown';
+    const param   = (key, pattern) => (params.get(key) || '').replace(pattern, '').slice(0, 60);
+    const version = param('v', /[^0-9.]/g) || 'unknown';
+    const browser = param('b', /[^a-z]/g) || 'unknown';
+    const extInfo = {
+      browserVersion: param('bv', /[^0-9.]/g),
+      os:       param('os', /[^a-z]/g),
+      features: param('f', /[^a-z0-9,]/g).split(',').filter(Boolean),
+      sites:    param('sites', /\D/g),
+      unlocks:  param('unlocks', /\D/g),
+      days:     param('days', /\D/g)
+    };
+
+    const FEATURE_LABELS = {
+      pin: 'PIN', bio: 'Biometrics', sq: 'Security questions', startup: 'Lock on startup',
+      idle: 'Idle lock', video: 'Idle lock waits for videos', fs: 'Fullscreen lock'
+    };
+    const OS_LABELS = { mac: 'macOS', win: 'Windows', linux: 'Linux', cros: 'ChromeOS', android: 'Android' };
+
+    async function browserDetails() {
+      const info = {
+        browser:  `${browser} ${extInfo.browserVersion}`.trim(),
+        os:       OS_LABELS[extInfo.os] || extInfo.os || 'unknown',
+        language: navigator.language,
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        screen:   `${screen.width}×${screen.height} @${window.devicePixelRatio}x`
+      };
+      const uaData = navigator.userAgentData;
+      if (uaData && uaData.getHighEntropyValues) {
+        try {
+          const hints = await uaData.getHighEntropyValues(['platformVersion', 'fullVersionList']);
+          const brands = (hints.fullVersionList || [])
+            .filter(b => !/not.?a.?brand|chromium/i.test(b.brand))
+            .map(b => `${b.brand} ${b.version}`);
+          if (brands.length) info.browser = brands.join(', ');
+          if (hints.platformVersion) {
+            const major = parseInt(hints.platformVersion, 10);
+            // Windows 11 reports platform version 13 or higher.
+            info.os = uaData.platform === 'Windows'
+              ? `Windows ${major >= 13 ? '11' : '10'} (${hints.platformVersion})`
+              : `${uaData.platform} ${hints.platformVersion}`;
+          }
+        } catch (_) {}
+      }
+      return info;
+    }
+
+    async function reportDetails() {
+      const info = await browserDetails();
+      const features = extInfo.features.map(f => {
+        const hours = f.match(/^pin(\d+)h$/);
+        return hours ? `PIN required every ${hours[1]}h` : FEATURE_LABELS[f] || f;
+      });
+      return [
+        '── Details ──',
+        'TouchLock: ' + version,
+        'Browser: ' + info.browser,
+        'OS: ' + info.os,
+        'Used for: ' + (extInfo.days ? extInfo.days + ' day(s)' : 'unknown'),
+        'Unlocks: ' + (extInfo.unlocks || 'unknown'),
+        'Set up: ' + (features.length ? features.join(', ') : 'nothing'),
+        'Locked sites: ' + (extInfo.sites || '0'),
+        'Language / time zone: ' + info.language + ' · ' + info.timeZone,
+        'Screen: ' + info.screen,
+        'User agent: ' + navigator.userAgent
+      ].join('\n');
+    }
 
     document.getElementById('btn-submit').addEventListener('click', async () => {
       const reason = document.querySelector('input[name="reason"]:checked');
@@ -569,8 +635,8 @@
               message:    'Reason: ' + reason.value +
                           '\n\n' + (DETAIL_PROMPTS[reason.closest('.reason-item').dataset.reason] || { question: 'Details' }).question +
                           '\n' + (detail || 'None provided') +
-                          '\n\nBrowser: ' + browser +
-                          '\nNotify when fixed: ' + (email ? 'Yes — ' + email : 'No email given'),
+                          '\n\nNotify when fixed: ' + (email ? 'Yes — ' + email : 'No email given') +
+                          '\n\n' + await reportDetails(),
               timestamp:  new Date().toISOString(),
               version:    version + ' (uninstalled)'
             }

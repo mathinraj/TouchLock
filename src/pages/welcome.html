@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../styles/welcome.css">
 </head>
 <body>
+  <div class="bg-glow" aria-hidden="true"></div>
   <div class="page">
 
     <!-- Pin to Toolbar notification -->
@@ -56,108 +57,166 @@
 
     <!-- Hero -->
     <section class="hero">
-      <div class="hero-glow"></div>
       <div class="hero-icon">
         <img src="../../icons/icon.svg" width="72" height="72" alt="TouchLock">
       </div>
+      <span class="hero-badge">v1.5.2 · Free &amp; open source</span>
       <h1>Welcome to <span class="gradient-text">TouchLock</span></h1>
-      <p class="hero-sub">Your browser profile is about to get a whole lot more secure.</p>
+      <p class="hero-sub">Lock your whole browser, or just your bank and email, behind your fingerprint or a PIN.</p>
+      <button class="btn btn-primary" id="btn-setup">
+        Set up in under a minute
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+      <ul class="trust-row">
+        <li>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Everything stays on your device
+        </li>
+        <li>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          No account needed
+        </li>
+        <li>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          No tracking or ads
+        </li>
+      </ul>
     </section>
 
     <!-- Features -->
-    <section class="features">
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
-            <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
-            <path d="M10 12c0 4-1 8-3 10"/>
-            <path d="M14 12c0 2.5-.5 5-1.5 7"/>
-            <path d="M18 12c0 1-.5 3-1 4.5"/>
-            <path d="M22 12a10 10 0 0 1-2 6"/>
-            <path d="M10 12a2 2 0 1 1 4 0"/>
-          </svg>
+    <section class="section">
+      <h2 class="section-title">What TouchLock does</h2>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon accent-indigo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/>
+              <path d="M5 19.5C5.5 18 6 15 6 12c0-3.5 2.5-6 6-6 2 0 3.7 1 4.8 2.5"/>
+              <path d="M10 12c0 4-1 8-3 10"/>
+              <path d="M14 12c0 2.5-.5 5-1.5 7"/>
+              <path d="M18 12c0 1-.5 3-1 4.5"/>
+              <path d="M22 12a10 10 0 0 1-2 6"/>
+              <path d="M10 12a2 2 0 1 1 4 0"/>
+            </svg>
+          </div>
+          <h3>Fingerprint unlock</h3>
+          <p>Unlock in a touch with Touch ID or Windows Hello. A PIN is always there as a backup.</p>
         </div>
-        <h3>Biometric Unlock</h3>
-        <p>Use Touch ID or Windows Hello to unlock your browser instantly with a single touch.</p>
-      </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
+        <div class="feature-card">
+          <div class="feature-icon accent-blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <h3>Lock specific sites <span class="tag tag-pro">PRO</span></h3>
+          <p>Keep your bank or email locked, even while the rest of the browser is open.</p>
         </div>
-        <h3>PIN Lock</h3>
-        <p>Set a secure fallback PIN for when biometrics aren't available or supported.</p>
-      </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
-          </svg>
+        <div class="feature-card">
+          <div class="feature-icon accent-green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3>Smart auto-lock <span class="tag tag-new">NEW</span></h3>
+          <p>Locks on startup or when you step away, but waits while you're watching a video.</p>
         </div>
-        <h3>Auto-Lock</h3>
-        <p>Automatically lock your browser on startup or after a period of inactivity.</p>
-      </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
+        <div class="feature-card">
+          <div class="feature-icon accent-purple">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>Nothing gets past it</h3>
+          <p>Every tab, window and browser page stays behind the lock screen until you unlock.</p>
         </div>
-        <h3>Profile-Level Security</h3>
-        <p>Every tab and window is locked down — no way to peek at your data while locked.</p>
+
+        <div class="feature-card">
+          <div class="feature-icon accent-amber">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <h3>PIN check-ins <span class="tag tag-pro">PRO</span></h3>
+          <p>Optionally ask for your PIN every few hours, so you never forget it.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon accent-teal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <h3>Easy recovery</h3>
+          <p>Forgot your PIN? Answer 2 of your 3 security questions to set a new one.</p>
+        </div>
       </div>
     </section>
 
     <!-- How it works -->
-    <section class="steps-section">
-      <h2>Get started in 3 simple steps</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h4>Set your PIN</h4>
-            <p>Create a 4–10 digit PIN as your secure fallback unlock method.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h4>Register biometrics</h4>
-            <p>Enable Touch ID or Windows Hello for instant, passwordless unlocking.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h4>Add security questions</h4>
-            <p>Choose recovery questions so you can reset your PIN if you ever forget it.</p>
-          </div>
-        </div>
-      </div>
+    <section class="section">
+      <h2 class="section-title">Ready in 3 steps</h2>
+      <ol class="steps">
+        <li class="step">
+          <span class="step-number">1</span>
+          <h4>Create a PIN</h4>
+          <p>4–10 digits. It's your backup way to unlock.</p>
+        </li>
+        <li class="step">
+          <span class="step-number">2</span>
+          <h4>Add your fingerprint</h4>
+          <p>Register Touch ID or Windows Hello for one-touch unlocking.</p>
+        </li>
+        <li class="step">
+          <span class="step-number">3</span>
+          <h4>Choose when it locks</h4>
+          <p>On startup, after you've been away, or only the sites you pick.</p>
+        </li>
+      </ol>
     </section>
+
+    <!-- Shortcut tip -->
+    <div class="tip">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
+      </svg>
+      <span>Tip: press <kbd id="shortcut-key">Alt + L</kbd> on any page to lock your browser instantly.</span>
+    </div>
 
     <!-- CTA -->
     <section class="cta-section">
-      <button id="btn-setup" class="btn btn-primary">
+      <button class="btn btn-primary" id="btn-setup-bottom">
+        Start setup
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
         </svg>
-        Open Setup
       </button>
-      <p class="cta-hint">You can always access settings from the extension toolbar icon.</p>
+      <p class="cta-hint">You can open Settings anytime from the TouchLock icon in your toolbar.</p>
     </section>
 
     <footer class="footer">

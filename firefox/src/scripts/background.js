@@ -425,9 +425,58 @@ function browserName() {
   return 'chrome';
 }
 
-chrome.runtime.setUninstallURL(
-  `https://touchlock.vercel.app/uninstall.html?v=${chrome.runtime.getManifest().version}&b=${browserName()}`
-);
+// ── Uninstall feedback URL ───────────────────────
+// The browser opens a fixed URL on uninstall, so it is rebuilt whenever the
+// details it carries change. Chrome rejects URLs over 1023 characters.
+
+const UNINSTALL_URL = 'https://touchlock.vercel.app/uninstall.html';
+const UNINSTALL_URL_KEYS = [
+  'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured', 'lockOnStartup',
+  'idleLockEnabled', 'idleMediaSettings', 'fullscreenLock', 'pinRequiredEvery',
+  'lockedSites', 'unlockCount', 'installedAt'
+];
+
+function browserVersion() {
+  const token = { edge: 'Edg', firefox: 'Firefox', chrome: 'Chrome' }[browserName()];
+  const match = navigator.userAgent.match(new RegExp(`${token}/([\\d.]+)`));
+  return match ? match[1] : '';
+}
+
+async function updateUninstallUrl() {
+  const data = await chrome.storage.local.get(UNINSTALL_URL_KEYS);
+  let os = '';
+  try { os = (await chrome.runtime.getPlatformInfo()).os; } catch (_) {}
+
+  const features = [
+    data.pinHash && 'pin',
+    data.webauthnRegistered && 'bio',
+    data.securityQuestionsConfigured && 'sq',
+    data.lockOnStartup !== false && 'startup',
+    data.idleLockEnabled && 'idle',
+    data.idleLockEnabled && getIdleMediaSettings(data.idleMediaSettings).enabled && 'video',
+    data.fullscreenLock && 'fs',
+    data.pinRequiredEvery && `pin${data.pinRequiredEvery}h`
+  ].filter(Boolean);
+
+  const params = new URLSearchParams({
+    v: chrome.runtime.getManifest().version,
+    b: browserName(),
+    bv: browserVersion(),
+    os,
+    f: features.join(','),
+    sites: String(Array.isArray(data.lockedSites) ? data.lockedSites.length : 0),
+    unlocks: String(data.unlockCount || 0)
+  });
+  if (data.installedAt) params.set('days', String(Math.floor((Date.now() - data.installedAt) / 86400000)));
+
+  try { await chrome.runtime.setUninstallURL(`${UNINSTALL_URL}?${params}`); } catch (_) {}
+}
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && UNINSTALL_URL_KEYS.some(key => key in changes)) updateUninstallUrl();
+});
+
+updateUninstallUrl();
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install') {
@@ -439,7 +488,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       fullscreenOffMigrated: true,
       idleLockEnabled: false,
       idleLockTimeout: 300,
-      showPinToToolbar: true
+      showPinToToolbar: true,
+      installedAt: Date.now()
     });
 
     // Set a badge to draw attention to the extension icon in the toolbar
