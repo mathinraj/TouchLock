@@ -1486,6 +1486,19 @@ body {
   border-top: 1px solid var(--border);
 }
 
+.collapsible-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.collapsible-meta .chevron { margin-top: 0; }
+
+.sq-body.expanded { max-height: 1200px; }
+
+.sq-intro { margin: 0 0 14px; }
+
 /* ── Feature request ───────────────────────── */
 
 .field-text { margin-bottom: 12px; }

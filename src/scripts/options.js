@@ -619,6 +619,15 @@ async function init() {
     frChevron.classList.toggle('open', isOpen);
   });
 
+  const sqToggle  = document.getElementById('sq-toggle');
+  const sqBody    = document.getElementById('sq-body');
+  const sqChevron = document.getElementById('sq-chevron');
+
+  sqToggle.addEventListener('click', () => {
+    const isOpen = sqBody.classList.toggle('expanded');
+    sqChevron.classList.toggle('open', isOpen);
+  });
+
   const roadmapToggle  = document.getElementById('roadmap-toggle');
   const roadmapBody    = document.getElementById('roadmap-body');
   const roadmapChevron = document.getElementById('roadmap-chevron');
@@ -945,7 +954,14 @@ function getStoreUrl() {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const target = document.getElementById(link.dataset.section);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (target) {
+        const body = target.querySelector('.collapsible-body');
+        if (body) {
+          body.classList.add('expanded');
+          target.querySelector('.collapsible-header .chevron').classList.add('open');
+        }
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       closeSidebar();
     });
   });
@@ -1047,7 +1063,7 @@ setStatus = function(el, text, color) {
     {
       target: '#section-sq',
       title: '🛟 Recovery Questions',
-      desc: 'Your safety net! Select 3 security questions and provide answers. If you ever forget your PIN, answering any 2 questions correctly will let you reset it and regain access to your browser.'
+      desc: 'Your safety net! Expand this section to select 3 security questions and provide answers. If you ever forget your PIN, answering any 2 questions correctly will let you reset it and regain access to your browser.'
     },
     {
       target: '#section-lock',

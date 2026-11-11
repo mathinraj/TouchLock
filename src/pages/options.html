@@ -318,7 +318,7 @@
 
       <!-- ═══════ Security Questions ═══════ -->
       <section class="section section--wide" id="section-sq">
-        <div class="section-top">
+        <div class="collapsible-header" id="sq-toggle">
           <div class="section-title-row">
             <div class="section-icon accent-teal">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -330,15 +330,22 @@
             </div>
             <div class="section-title-text">
               <h2>Security Questions</h2>
-              <p>Select and answer 3 questions. Any 2 correct answers will let you reset a forgotten PIN.</p>
+              <p>Used only to reset a forgotten PIN. Expand to set up or change your 3 questions.</p>
             </div>
           </div>
-          <div class="status-row" id="sq-status">
-            <span class="dot gray"></span>
-            <span>Not configured</span>
+          <div class="collapsible-meta">
+            <div class="status-row" id="sq-status">
+              <span class="dot gray"></span>
+              <span>Not configured</span>
+            </div>
+            <svg class="chevron" id="sq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
           </div>
         </div>
-        <div class="section-body">
+        <div class="collapsible-body sq-body" id="sq-body">
+          <p class="site-hint sq-intro">Select and answer 3 questions. Any 2 correct answers will let you reset a forgotten PIN.</p>
           <div class="sq-group" id="sq-group">
             <div class="sq-item">
               <label>Question 1</label>
