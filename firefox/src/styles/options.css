@@ -868,6 +868,13 @@ body {
   color: var(--text-faint);
 }
 
+.toggle-warn {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #fbbf24;
+}
+
 .toggle {
   position: relative;
   width: 42px;

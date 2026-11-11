@@ -222,7 +222,7 @@
         </div>
       </div>
 
-      <div class="sections-wrap" id="sections-wrap">
+      <div class="sections-wrap view-grid" id="sections-wrap">
 
       <!-- ═══════ PIN Lock ═══════ -->
       <section class="section" id="section-pin">
@@ -407,6 +407,7 @@
                 <span class="recommended-badge">Recommended</span>
               </span>
               <span class="toggle-desc">Hides the address bar, tabs, and browser UI when locked — prevents bypassing the lock screen</span>
+              <span class="toggle-warn">On some computers, fullscreen can make the browser freeze or stop responding. If that happens, turn this off.</span>
             </div>
             <label class="toggle">
               <input type="checkbox" id="toggle-fullscreen">
@@ -756,7 +757,7 @@
 
       <!-- Floating view toggle -->
       <div class="view-fab" id="view-fab">
-        <button class="fab-btn active" id="btn-view-list" title="List view" aria-label="List view">
+        <button class="fab-btn" id="btn-view-list" title="List view" aria-label="List view">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="8" y1="6" x2="21" y2="6"/>
@@ -767,7 +768,7 @@
             <line x1="3" y1="18" x2="3.01" y2="18"/>
           </svg>
         </button>
-        <button class="fab-btn" id="btn-view-grid" title="Grid view" aria-label="Grid view">
+        <button class="fab-btn active" id="btn-view-grid" title="Grid view" aria-label="Grid view">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7" rx="1"/>

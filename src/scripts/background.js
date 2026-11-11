@@ -471,12 +471,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   applyIdleSettings();
   checkForUpdate();
   reconcileSiteLocks();
+  if (details.reason !== 'install') syncPinBadge();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
   applyIdleSettings();
   checkForUpdate();
   reconcileSiteLocks();
+  syncPinBadge();
   await adoptRestoredFullscreen();
 
   const { lockOnStartup } = await chrome.storage.local.get('lockOnStartup');
@@ -486,6 +488,35 @@ chrome.runtime.onStartup.addListener(async () => {
     await lockBrowser();
   }
 });
+
+// ── "PIN" toolbar badge ──────────────────────
+// The badge asks new users to pin TouchLock. It must go away once they do,
+// even if the welcome page that watches for pinning is already closed.
+
+async function dismissPinPrompt() {
+  await chrome.storage.local.set({ showPinToToolbar: false });
+  try { await chrome.action.setBadgeText({ text: '' }); } catch (_) {}
+}
+
+async function isPinnedToToolbar() {
+  try {
+    const settings = await chrome.action.getUserSettings();
+    return settings.isOnToolbar === true;
+  } catch (_) {
+    return false;
+  }
+}
+
+async function syncPinBadge() {
+  const { showPinToToolbar } = await chrome.storage.local.get('showPinToToolbar');
+  if (showPinToToolbar !== true || await isPinnedToToolbar()) await dismissPinPrompt();
+}
+
+if (chrome.action.onUserSettingsChanged) {
+  chrome.action.onUserSettingsChanged.addListener((settings) => {
+    if (settings.isOnToolbar) dismissPinPrompt();
+  });
+}
 
 // ── Keyboard shortcut (quick lock) ───────────
 
@@ -698,24 +729,20 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
       case 'checkPinToToolbar': {
         const { showPinToToolbar } = await chrome.storage.local.get('showPinToToolbar');
-        let isPinned = false;
-        try {
-          const settings = await chrome.action.getUserSettings();
-          isPinned = settings.isOnToolbar === true;
-        } catch (_) {}
-
-        if (isPinned) {
-          await chrome.storage.local.set({ showPinToToolbar: false });
-          try { chrome.action.setBadgeText({ text: '' }); } catch (_) {}
-        }
-
+        const isPinned = await isPinnedToToolbar();
+        if (isPinned) await dismissPinPrompt();
         sendResponse({ show: showPinToToolbar === true && !isPinned, isPinned });
         break;
       }
 
       case 'dismissPinToToolbar': {
-        await chrome.storage.local.set({ showPinToToolbar: false });
-        try { chrome.action.setBadgeText({ text: '' }); } catch (_) {}
+        await dismissPinPrompt();
+        sendResponse({ success: true });
+        break;
+      }
+
+      case 'popupOpened': {
+        await syncPinBadge();
         sendResponse({ success: true });
         break;
       }

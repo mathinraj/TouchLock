@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnSettings = document.getElementById('btn-settings');
   const btnWhatsNew = document.getElementById('btn-whats-new');
 
+  chrome.runtime.sendMessage({ action: 'popupOpened' }, () => void chrome.runtime.lastError);
+
   chrome.runtime.sendMessage({ action: 'getState' }, (res) => {
     if (chrome.runtime.lastError || !res) {
       badge.querySelector('.label').textContent = 'Error';

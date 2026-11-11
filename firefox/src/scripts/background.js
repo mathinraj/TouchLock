@@ -702,7 +702,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         break;
       }
 
-      case 'dismissPinToToolbar': {
+      // Firefox can't report whether the button is pinned, so opening the
+      // popup counts as having found it.
+      case 'dismissPinToToolbar':
+      case 'popupOpened': {
         await chrome.storage.local.set({ showPinToToolbar: false });
         try { chrome.action.setBadgeText({ text: '' }); } catch (_) {}
         sendResponse({ success: true });

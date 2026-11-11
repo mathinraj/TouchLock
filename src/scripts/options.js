@@ -907,7 +907,7 @@ function getStoreUrl() {
   if (!wrap || !btnList || !btnGrid) return;
 
   chrome.storage.local.get('settingsView', ({ settingsView }) => {
-    if (settingsView === 'grid') applyView('grid');
+    if (settingsView === 'list') applyView('list');
   });
 
   btnList.addEventListener('click', () => applyView('list'));
