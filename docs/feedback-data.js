@@ -14,6 +14,17 @@
 const FEEDBACK_ITEMS = [
   {
     type: 'bug',
+    title: 'Idle lock kicks in while watching YouTube',
+    feedback: 'A feature would be nice to have the automatic lock ignore specific sites such as youtube if it\'s playing video so it doesn\'t lock when watching something.',
+    source: 'Store review',
+    reportedOn: '2026-11-11',
+    status: 'rolling-out',
+    resolution: 'The idle lock only counted keyboard and mouse input, so a long video looked like you had walked away. It now waits while a video is playing, on any site or only the sites you choose (like youtube.com), and locks after your usual idle time once the video stops. A safety limit still locks the browser if something plays for hours, and the popup can pause auto-lock for an hour.',
+    version: '1.5.2',
+    resolvedOn: '2026-11-11'
+  },
+  {
+    type: 'bug',
     title: 'Pressing Esc gets past the lock screen',
     feedback: 'It just lets people access it easily by pressing the Escape key.',
     source: 'Store review',

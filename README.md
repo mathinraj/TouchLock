@@ -6,7 +6,7 @@
 
 **Lock your browser — or just your bank and email sites — with Touch ID, Windows Hello, or a PIN.**
 
-![Version](https://img.shields.io/badge/version-1.5.1-6366f1)
+![Version](https://img.shields.io/badge/version-1.5.2-6366f1)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-22c55e)
 ![Chrome](https://img.shields.io/badge/Chrome-110%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Edge](https://img.shields.io/badge/Edge-110%2B-0078D7?logo=microsoftedge&logoColor=white)
@@ -109,6 +109,11 @@ To run TouchLock from source:
 <summary><strong>Version history</strong></summary>
 
 Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.vercel.app/changelog.html) · [GitHub Releases](https://github.com/mathinraj/TouchLock/releases)
+
+**v1.5.2**
+- Idle lock waits while a video is playing (any site, or only the sites you choose), then locks after your usual idle time
+- Optional: count music and podcasts too, and a 1–4 hour safety limit
+- Pause auto-lock for 1 hour from the toolbar popup
 
 **v1.5.1**
 - Stricter lock: while locked, websites and browser pages are sent to the lock screen before they open, and return after unlock

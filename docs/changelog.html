@@ -236,12 +236,45 @@
 
     <section class="timeline container">
 
-      <!-- v1.5.1 -->
+      <!-- v1.5.2 -->
       <div class="version-block latest">
         <div class="version-dot"></div>
         <div class="version-header">
-          <span class="version-tag">v1.5.1</span>
+          <span class="version-tag">v1.5.2</span>
           <span class="version-badge latest">Latest</span>
+          <span class="version-date">November 2026</span>
+        </div>
+        <p class="version-desc">Fix: the idle lock no longer interrupts you while you're watching a video.</p>
+        <div class="change-list">
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-circle-play"></i></div>
+            <div class="change-content">
+              <h4>Idle Lock Waits While Videos Play</h4>
+              <p>Watching YouTube, Netflix or any other video no longer triggers the idle lock, even though you aren't touching the keyboard or mouse. It's on by default and also covers videos embedded on other pages and picture-in-picture. Once the video stops, the browser locks after your usual idle time. Locking your computer still locks the browser right away.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-sliders"></i></div>
+            <div class="change-content">
+              <h4>Video Options</h4>
+              <p>In Settings → Lock Behavior → Video options, choose any website or only the sites you pick (like youtube.com), count music and podcasts too, and set a safety limit (1, 2 or 4 hours) so the browser still locks if you walk away while something plays.</p>
+            </div>
+          </div>
+          <div class="change-item">
+            <div class="change-icon fix"><i class="fa-solid fa-pause"></i></div>
+            <div class="change-content">
+              <h4>Pause Auto-Lock for an Hour</h4>
+              <p>When idle lock is on, the toolbar popup has a Pause 1 hour button, with Resume to turn it back on early.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- v1.5.1 -->
+      <div class="version-block">
+        <div class="version-dot"></div>
+        <div class="version-header">
+          <span class="version-tag">v1.5.1</span>
           <span class="version-date">November 2026</span>
         </div>
         <p class="version-desc">Security fix: nothing can be opened while the browser is locked, even after pressing Esc.</p>
