@@ -426,6 +426,58 @@
               <option value="3600">1 hour</option>
             </select>
           </div>
+          <div class="idle-media" id="idle-media" style="display:none">
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <span class="toggle-label">Don't lock while a video is playing</span>
+                <span class="toggle-desc">Watching YouTube, Netflix or other videos won't trigger the idle lock. Locking your computer still locks the browser.</span>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="toggle-idle-media" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div id="idle-media-fields">
+              <div class="field-inline">
+                <label for="idle-media-scope">Applies to</label>
+                <select id="idle-media-scope" class="sq-select">
+                  <option value="all">Any website</option>
+                  <option value="sites">Only the websites I choose</option>
+                </select>
+              </div>
+              <div class="idle-media-sites" id="idle-media-sites" style="display:none">
+                <div class="site-add">
+                  <input type="text" id="idle-site-input" class="sq-answer" placeholder="e.g. youtube.com"
+                         autocomplete="off" spellcheck="false" aria-label="Website where playing media keeps the browser unlocked">
+                  <button id="btn-add-idle-site" class="btn btn-primary site-add-btn">Add site</button>
+                </div>
+                <p class="site-hint">Subdomains are included, and so are videos embedded from these sites on other pages.</p>
+                <div class="msg" id="idle-sites-msg"></div>
+                <ul class="site-list" id="idle-site-list"></ul>
+                <p class="site-empty" id="idle-site-empty">No sites yet. Until you add one, videos won't pause the idle lock.</p>
+              </div>
+              <div class="toggle-row">
+                <div class="toggle-info">
+                  <span class="toggle-label">Also while audio is playing</span>
+                  <span class="toggle-desc">Music or podcasts playing in any tab also keep the browser unlocked</span>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="toggle-idle-audio">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="field-inline">
+                <label for="idle-media-max">Lock anyway after</label>
+                <select id="idle-media-max" class="sq-select">
+                  <option value="60">1 hour without input</option>
+                  <option value="120">2 hours without input</option>
+                  <option value="240" selected>4 hours without input</option>
+                  <option value="0">Never, keep waiting while media plays</option>
+                </select>
+                <p class="site-hint">A safety limit in case you walk away while something is still playing.</p>
+              </div>
+            </div>
+          </div>
 
           <div class="shortcut-section">
             <div class="shortcut-header">

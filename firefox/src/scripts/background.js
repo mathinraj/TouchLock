@@ -252,6 +252,10 @@ async function verifyPin(pin) {
 }
 
 // ── Idle detection (auto-lock on inactivity) ────
+// chrome.idle only fires when the state changes, so once a playing video or a
+// snooze defers the lock, an alarm keeps rechecking until it can lock.
+
+const IDLE_RECHECK_ALARM = 'idle-recheck';
 
 async function applyIdleSettings() {
   const { idleLockEnabled, idleLockTimeout } = await chrome.storage.local.get([
@@ -261,20 +265,123 @@ async function applyIdleSettings() {
   if (idleLockEnabled) {
     const seconds = idleLockTimeout || 300;
     chrome.idle.setDetectionInterval(seconds);
+  } else {
+    await clearIdleDeferral();
   }
 }
 
-chrome.idle.onStateChanged.addListener(async (newState) => {
-  if (newState !== 'idle' && newState !== 'locked') return;
+async function clearIdleDeferral() {
+  await chrome.alarms.clear(IDLE_RECHECK_ALARM);
+  await chrome.storage.local.remove(['idleStartedAt', 'idleMediaSeenAt']);
+}
 
-  const { idleLockEnabled, setupComplete } = await chrome.storage.local.get([
-    'idleLockEnabled', 'setupComplete'
+// Runs in each frame. Returns the frame's hostname if it shows a playing video.
+function playingVideoHost() {
+  const pip = document.pictureInPictureElement;
+  if (document.visibilityState !== 'visible' && !pip) return null;
+  const playing = Array.from(document.querySelectorAll('video')).some(v =>
+    !v.paused && !v.ended && v.readyState > 2 &&
+    // Muted looping videos are page decoration, like hero banners.
+    !(v.muted && v.loop) &&
+    (v === pip || (v.clientWidth >= 200 && v.clientHeight >= 112)));
+  return playing ? location.hostname : null;
+}
+
+async function isMediaPlaying(settings) {
+  const tabs = (await chrome.tabs.query({})).filter(t =>
+    (t.active || t.audible) && !t.discarded && toHttpUrl(t.url));
+
+  for (const tab of tabs) {
+    const tabHost = new URL(tab.url).hostname;
+    const heard = tab.audible && !(tab.mutedInfo && tab.mutedInfo.muted);
+    if (settings.includeAudio && heard && idleMediaCoversHost(settings, tabHost)) return true;
+
+    let results;
+    try {
+      results = await chrome.scripting.executeScript({
+        target: { tabId: tab.id, allFrames: true },
+        func: playingVideoHost
+      });
+    } catch (_) {
+      continue;
+    }
+    const covered = results.some(r => r.result &&
+      (idleMediaCoversHost(settings, tabHost) || idleMediaCoversHost(settings, r.result)));
+    if (covered) return true;
+  }
+  return false;
+}
+
+async function idleLockOrDefer() {
+  const data = await chrome.storage.local.get([
+    'idleLockEnabled', 'idleLockTimeout', 'setupComplete',
+    'idleStartedAt', 'idleMediaSeenAt', 'idleSnoozeUntil', 'idleMediaSettings'
+  ]);
+  if (!data.idleLockEnabled || !data.setupComplete || await getIsLocked()) {
+    await clearIdleDeferral();
+    return;
+  }
+
+  const now = Date.now();
+  const timeoutMs = (data.idleLockTimeout || 300) * 1000;
+  const settings = getIdleMediaSettings(data.idleMediaSettings);
+  const idleStartedAt = data.idleStartedAt || now - timeoutMs;
+  const pastLimit = settings.maxMinutes > 0 && now - idleStartedAt >= settings.maxMinutes * 60000;
+
+  let defer = data.idleSnoozeUntil > now;
+  if (!defer && settings.enabled && !pastLimit) {
+    if (await isMediaPlaying(settings)) {
+      await chrome.storage.local.set({ idleMediaSeenAt: now });
+      defer = true;
+    } else {
+      // After playback stops, wait a full idle timeout before locking.
+      defer = now - (data.idleMediaSeenAt || 0) < timeoutMs;
+    }
+  }
+
+  if (defer) {
+    chrome.alarms.create(IDLE_RECHECK_ALARM, { delayInMinutes: 1 });
+    return;
+  }
+  await clearIdleDeferral();
+  await lockBrowser();
+}
+
+chrome.idle.onStateChanged.addListener(async (newState) => {
+  if (newState === 'active') {
+    await clearIdleDeferral();
+    return;
+  }
+
+  const { idleLockEnabled, idleLockTimeout, setupComplete } = await chrome.storage.local.get([
+    'idleLockEnabled', 'idleLockTimeout', 'setupComplete'
   ]);
 
   if (!idleLockEnabled || !setupComplete) return;
   if (await getIsLocked()) return;
 
-  await lockBrowser();
+  if (newState === 'locked') {
+    await clearIdleDeferral();
+    await lockBrowser();
+    return;
+  }
+
+  await chrome.storage.local.set({
+    idleStartedAt: Date.now() - (idleLockTimeout || 300) * 1000,
+    idleMediaSeenAt: 0
+  });
+  await idleLockOrDefer();
+});
+
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name !== IDLE_RECHECK_ALARM) return;
+  const { idleLockTimeout } = await chrome.storage.local.get('idleLockTimeout');
+  const state = await chrome.idle.queryState(Math.max(15, idleLockTimeout || 300));
+  if (state === 'active') {
+    await clearIdleDeferral();
+    return;
+  }
+  await idleLockOrDefer();
 });
 
 // ── Remote version check ─────────────────────────

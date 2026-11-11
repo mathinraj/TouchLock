@@ -6,6 +6,7 @@ const PROMO_URL    = 'https://raw.githubusercontent.com/mathinraj/mathinraj/main
 const SELF_ID      = 'touchlock';
 const RATE_ITEM_ID = '__rate__';
 const REMIND_DAYS  = 2;
+const IDLE_SNOOZE_MS = 60 * 60 * 1000;
 
 const REVIEW_URLS = {
   chrome:  'https://chromewebstore.google.com/detail/jajgeiifpgdfnphjklcogipefkfdacdl/reviews',
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       badge.querySelector('.label').textContent = 'Unlocked';
       actions.classList.remove('hidden');
       initSiteCard();
+      initIdleCard();
     }
   });
 
@@ -156,6 +158,44 @@ async function initSiteCard() {
     stateEl.textContent = 'Locked';
     btn.classList.add('hidden');
   }
+}
+
+async function initIdleCard() {
+  const { idleLockEnabled } = await chrome.storage.local.get('idleLockEnabled');
+  if (!idleLockEnabled) return;
+
+  const card    = document.getElementById('idle-card');
+  const stateEl = document.getElementById('idle-card-state');
+  const btn     = document.getElementById('btn-idle-snooze');
+
+  btn.addEventListener('click', async () => {
+    const { idleSnoozeUntil } = await chrome.storage.local.get('idleSnoozeUntil');
+    if (idleSnoozeUntil > Date.now()) {
+      await chrome.storage.local.remove('idleSnoozeUntil');
+    } else {
+      await chrome.storage.local.set({ idleSnoozeUntil: Date.now() + IDLE_SNOOZE_MS });
+    }
+    render();
+  });
+
+  async function render() {
+    const { idleLockTimeout, idleSnoozeUntil } =
+      await chrome.storage.local.get(['idleLockTimeout', 'idleSnoozeUntil']);
+    if (idleSnoozeUntil > Date.now()) {
+      const until = new Date(idleSnoozeUntil).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      stateEl.textContent = `Paused until ${until}`;
+      stateEl.classList.add('unlocked');
+      btn.textContent = 'Resume';
+    } else {
+      const mins = Math.floor((idleLockTimeout || 300) / 60);
+      stateEl.textContent = `Locks after ${mins >= 60 ? '1 hour' : `${mins} min`} idle`;
+      stateEl.classList.remove('unlocked');
+      btn.textContent = 'Pause 1 hour';
+    }
+    card.classList.remove('hidden');
+  }
+
+  render();
 }
 
 async function showUpdateBanner() {

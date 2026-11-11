@@ -64,6 +64,19 @@ async function init() {
   const toggleFullscreen = document.getElementById('toggle-fullscreen');
   const idleField        = document.getElementById('idle-timeout-field');
   const idleTimeout      = document.getElementById('idle-timeout');
+  const idleMedia        = document.getElementById('idle-media');
+  const toggleIdleMedia  = document.getElementById('toggle-idle-media');
+  const idleMediaFields  = document.getElementById('idle-media-fields');
+  const idleMediaScope   = document.getElementById('idle-media-scope');
+  const idleMediaSites   = document.getElementById('idle-media-sites');
+  const idleSiteInput    = document.getElementById('idle-site-input');
+  const btnAddIdleSite   = document.getElementById('btn-add-idle-site');
+  const idleSitesMsg     = document.getElementById('idle-sites-msg');
+  const idleSiteList     = document.getElementById('idle-site-list');
+  const idleSiteEmpty    = document.getElementById('idle-site-empty');
+  const toggleIdleAudio  = document.getElementById('toggle-idle-audio');
+  const idleMediaMax     = document.getElementById('idle-media-max');
+  let idleMediaSiteHosts = [];
   const lockMsg          = document.getElementById('lock-msg');
   const lockStatus       = document.getElementById('lock-status');
 
@@ -319,34 +332,120 @@ async function init() {
       lockOnStartup: toggleStartup.checked,
       idleLockEnabled: toggleIdle.checked,
       idleLockTimeout: parseInt(idleTimeout.value, 10),
-      fullscreenLock: toggleFullscreen.checked
+      fullscreenLock: toggleFullscreen.checked,
+      idleMediaSettings: getIdleMediaSettings({
+        enabled: toggleIdleMedia.checked,
+        scope: idleMediaScope.value,
+        sites: idleMediaSiteHosts,
+        includeAudio: toggleIdleAudio.checked,
+        maxMinutes: parseInt(idleMediaMax.value, 10)
+      })
     });
     chrome.runtime.sendMessage({ action: 'updateIdleSettings' });
     showMsg(lockMsg, 'Lock settings saved.', 'success');
     await refreshStatus();
   }
 
+  function updateIdleFields() {
+    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
+    idleMedia.style.display = toggleIdle.checked ? 'block' : 'none';
+    idleMediaFields.style.display = toggleIdleMedia.checked ? 'block' : 'none';
+    idleMediaSites.style.display = idleMediaScope.value === 'sites' ? 'block' : 'none';
+  }
+
+  function renderIdleSites() {
+    idleSiteList.textContent = '';
+    for (const host of idleMediaSiteHosts) {
+      const li = document.createElement('li');
+      li.className = 'site-item';
+
+      const avatar = document.createElement('span');
+      avatar.className = 'site-avatar';
+      avatar.textContent = host.charAt(0).toUpperCase();
+
+      const name = document.createElement('span');
+      name.className = 'site-item-host';
+      name.textContent = host;
+
+      const remove = document.createElement('button');
+      remove.className = 'site-btn site-btn--remove';
+      remove.setAttribute('aria-label', `Remove ${host}`);
+      remove.title = 'Remove';
+      remove.textContent = '✕';
+      remove.addEventListener('click', async () => {
+        idleMediaSiteHosts = idleMediaSiteHosts.filter(h => h !== host);
+        renderIdleSites();
+        await saveLockSettings();
+      });
+
+      li.append(avatar, name, remove);
+      idleSiteList.appendChild(li);
+    }
+    idleSiteEmpty.classList.toggle('hidden', idleMediaSiteHosts.length > 0);
+  }
+
+  async function addIdleSite() {
+    const host = normalizeSiteHost(idleSiteInput.value);
+    if (!host) {
+      showMsg(idleSitesMsg, 'That doesn\'t look like a website address.', 'error');
+      return;
+    }
+    if (idleMediaSiteHosts.includes(host)) {
+      showMsg(idleSitesMsg, `${host} is already on the list.`, 'error');
+      return;
+    }
+    if (idleMediaSiteHosts.length >= MAX_LOCKED_SITES) {
+      showMsg(idleSitesMsg, `You can add up to ${MAX_LOCKED_SITES} sites.`, 'error');
+      return;
+    }
+    idleMediaSiteHosts = [...idleMediaSiteHosts, host];
+    idleSiteInput.value = '';
+    renderIdleSites();
+    await saveLockSettings();
+    showMsg(idleSitesMsg, `Videos on ${host} now keep the browser unlocked.`, 'success');
+  }
+
   toggleStartup.addEventListener('change', saveLockSettings);
   toggleFullscreen.addEventListener('change', saveLockSettings);
   toggleIdle.addEventListener('change', () => {
-    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
+    updateIdleFields();
     saveLockSettings();
   });
   idleTimeout.addEventListener('change', saveLockSettings);
+  toggleIdleMedia.addEventListener('change', () => {
+    updateIdleFields();
+    saveLockSettings();
+  });
+  idleMediaScope.addEventListener('change', () => {
+    updateIdleFields();
+    saveLockSettings();
+  });
+  toggleIdleAudio.addEventListener('change', saveLockSettings);
+  idleMediaMax.addEventListener('change', saveLockSettings);
+  btnAddIdleSite.addEventListener('click', addIdleSite);
+  idleSiteInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addIdleSite(); });
 
   async function loadLockSettings() {
     const data = await chrome.storage.local.get([
-      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout', 'fullscreenLock'
+      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout', 'fullscreenLock', 'idleMediaSettings'
     ]);
 
     toggleStartup.checked = data.lockOnStartup !== false;
     toggleIdle.checked = data.idleLockEnabled === true;
     toggleFullscreen.checked = data.fullscreenLock === true;
-    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
 
     if (data.idleLockTimeout) {
       idleTimeout.value = String(data.idleLockTimeout);
     }
+
+    const media = getIdleMediaSettings(data.idleMediaSettings);
+    toggleIdleMedia.checked = media.enabled;
+    idleMediaScope.value = media.scope;
+    toggleIdleAudio.checked = media.includeAudio;
+    idleMediaMax.value = String(media.maxMinutes);
+    idleMediaSiteHosts = media.sites;
+    renderIdleSites();
+    updateIdleFields();
   }
 
   // ── Keyboard Shortcut ─────────────────────────

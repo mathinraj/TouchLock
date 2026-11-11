@@ -96,6 +96,33 @@ function createSiteEntry(sites, host) {
   return { id: crypto.randomUUID(), host, ruleId, addedAt: Date.now() };
 }
 
+// ── Idle lock while media plays ──────────────────
+
+const IDLE_MEDIA_DEFAULTS = {
+  enabled: true,
+  scope: 'all',          // 'all' | 'sites'
+  sites: [],             // hosts that count when scope is 'sites'
+  includeAudio: false,
+  maxMinutes: 240        // 0 = keep waiting while media plays
+};
+
+const IDLE_MEDIA_MAX_MINUTES = [0, 60, 120, 240];
+
+function getIdleMediaSettings(raw) {
+  const s = Object.assign({}, IDLE_MEDIA_DEFAULTS, raw || {});
+  s.enabled = s.enabled !== false;
+  if (!['all', 'sites'].includes(s.scope)) s.scope = IDLE_MEDIA_DEFAULTS.scope;
+  s.sites = Array.isArray(s.sites) ? s.sites.filter(h => typeof h === 'string') : [];
+  s.includeAudio = s.includeAudio === true;
+  if (!IDLE_MEDIA_MAX_MINUTES.includes(s.maxMinutes)) s.maxMinutes = IDLE_MEDIA_DEFAULTS.maxMinutes;
+  return s;
+}
+
+function idleMediaCoversHost(settings, hostname) {
+  return settings.scope === 'all' ||
+    settings.sites.some(host => siteMatchesHost(host, hostname, true));
+}
+
 function describeSiteMatch(host, includeSubdomains) {
   return includeSubdomains
     ? `Locks ${host} and all its subdomains, like www.${host} and login.${host}`

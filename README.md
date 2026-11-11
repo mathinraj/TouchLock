@@ -31,6 +31,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 **Lock your browser**
 - Locks every tab and window behind a full-screen lock screen
 - Locks automatically on startup and, optionally, after 1 minute to 1 hour of inactivity
+- Idle lock waits while you watch a video (on any site or only the sites you choose), with an optional safety limit; pause it for an hour from the toolbar popup
 - Lock instantly from the toolbar or with <kbd>Alt</kbd>+<kbd>L</kbd> (customizable; <kbd>Ctrl</kbd>+<kbd>L</kbd> on Mac)
 - Optional fullscreen mode hides the address bar and tabs while locked
 - Nothing opens while locked: websites and browser pages are held at the lock screen until you unlock

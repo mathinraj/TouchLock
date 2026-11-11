@@ -1082,6 +1082,12 @@ body {
 
 .sites-settings .toggle-row:first-of-type { padding-top: 14px; }
 
+/* ── Idle lock while media plays ───────────── */
+
+.idle-media .toggle-row:first-of-type { padding-top: 14px; }
+
+.idle-media-sites { padding-top: 8px; }
+
 /* ── Re-auth dialog ────────────────────────── */
 
 .reauth-overlay {
