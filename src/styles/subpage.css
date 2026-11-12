@@ -1,0 +1,139 @@
+/* ───────────────────────────────────────────────
+   TouchLock – Settings sub-pages (lock behavior,
+   locked sites, duress PIN). Builds on options.css.
+   ─────────────────────────────────────────────── */
+
+.subpage {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 22px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.back-link:hover { color: var(--text); }
+
+.subpage-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.subpage-head-text { flex: 1; min-width: 0; }
+
+.subpage-head h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.subpage-head p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.sub-card {
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.sub-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 650;
+  margin-bottom: 12px;
+}
+
+.sub-card > .toggle-row:last-child,
+.sub-card > div:last-child > .toggle-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.sub-card.is-off > :not(h2):not(.sub-off-note) {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.sub-off-note {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #fcd34d;
+}
+
+.sub-hint {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-faint);
+}
+
+.sub-note {
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: var(--radius-sm);
+  background: rgba(251, 191, 36, 0.06);
+  font-size: 13px;
+  color: #fcd34d;
+}
+
+.step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.18);
+  color: #a5b4fc;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+}
+
+.option-row > label:first-child {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.option-row .sq-select { width: auto; min-width: 200px; }
+
+.sticky-msg {
+  position: sticky;
+  bottom: 16px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .subpage-head { flex-wrap: wrap; }
+  .option-row { flex-direction: column; align-items: stretch; }
+  .option-row .sq-select { width: 100%; }
+}

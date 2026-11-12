@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TouchLock – Duress PIN</title>
   <link rel="stylesheet" href="../styles/options.css">
+  <link rel="stylesheet" href="../styles/subpage.css">
   <link rel="stylesheet" href="../styles/duress.css">
 </head>
 <body>
-  <main class="duress-page">
+  <main class="subpage">
     <a class="back-link" href="options.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -18,7 +19,7 @@
       Back to Settings
     </a>
 
-    <header class="duress-head">
+    <header class="subpage-head">
       <div class="section-icon accent-red">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -27,7 +28,7 @@
           <line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
       </div>
-      <div class="duress-head-text">
+      <div class="subpage-head-text">
         <h1>Duress PIN <span class="pro-badge">PRO</span></h1>
         <p>A secret second PIN for when someone forces you to unlock your browser. It unlocks like your real PIN, but first erases the data you choose below.</p>
       </div>
@@ -37,23 +38,23 @@
       </div>
     </header>
 
-    <div class="d-note hidden" id="no-pin-note">
+    <div class="sub-note hidden" id="no-pin-note">
       Set up your PIN in Settings first. The duress PIN works alongside it.
     </div>
 
     <!-- How it works -->
-    <section class="d-card">
+    <section class="sub-card">
       <h2>How it works</h2>
       <ol class="how">
         <li>You choose a second PIN that's different from your real one.</li>
         <li>If you're ever pressured to unlock, type the duress PIN instead.</li>
         <li>TouchLock erases what you picked, then unlocks as normal. Nothing on screen shows that anything happened.</li>
       </ol>
-      <p class="d-hint">Works on the browser lock screen and on locked sites. Fingerprint unlock and settings changes always need your real PIN.</p>
+      <p class="sub-hint">Works on the browser lock screen and on locked sites. Fingerprint unlock and settings changes always need your real PIN.</p>
     </section>
 
     <!-- Step: what to erase -->
-    <section class="d-card">
+    <section class="sub-card">
       <h2><span class="step">1</span> What should be erased?</h2>
       <div class="choices" role="radiogroup">
         <label class="choice">
@@ -81,7 +82,7 @@
     </section>
 
     <!-- Step: which sites -->
-    <section class="d-card" id="sites-card">
+    <section class="sub-card" id="sites-card">
       <h2><span class="step">2</span> Which sites?</h2>
       <div class="site-add">
         <input type="text" id="duress-site-input" class="sq-answer" placeholder="e.g. bank.com or reddit.com"
@@ -96,20 +97,20 @@
     </section>
 
     <!-- Step: PIN -->
-    <section class="d-card">
+    <section class="sub-card">
       <h2><span class="step" id="pin-step">3</span> Choose your duress PIN</h2>
-      <p class="d-hint" id="pin-hint">Use the same number of digits as your real PIN, so nobody can tell them apart. It must be different from your real PIN.</p>
+      <p class="sub-hint" id="pin-hint">Use the same number of digits as your real PIN, so nobody can tell them apart. It must be different from your real PIN.</p>
       <div class="pin-pair">
         <input type="password" id="duress-pin1" class="sq-answer" inputmode="numeric" pattern="[0-9]*"
                autocomplete="off" placeholder="Duress PIN" aria-label="Duress PIN">
         <input type="password" id="duress-pin2" class="sq-answer" inputmode="numeric" pattern="[0-9]*"
                autocomplete="off" placeholder="Confirm duress PIN" aria-label="Confirm duress PIN">
       </div>
-      <p class="d-hint hidden" id="pin-keep-hint">Leave both empty to keep your current duress PIN.</p>
+      <p class="sub-hint hidden" id="pin-keep-hint">Leave both empty to keep your current duress PIN.</p>
     </section>
 
     <!-- Warning -->
-    <section class="d-card d-warn">
+    <section class="sub-card d-warn">
       <h2>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -135,13 +136,14 @@
       <button class="btn btn-danger" id="btn-save-duress">Turn on duress PIN</button>
       <button class="btn btn-secondary hidden" id="btn-off-duress">Turn off</button>
     </div>
-    <p class="d-hint d-last" id="last-used"></p>
+    <p class="sub-hint d-last" id="last-used"></p>
   </main>
 
   <script src="../scripts/site-lock-shared.js"></script>
   <script src="../scripts/webauthn-config.js"></script>
   <script src="../scripts/bio-policy.js"></script>
   <script src="../scripts/reauth.js"></script>
+  <script src="../scripts/settings-common.js"></script>
   <script src="../scripts/duress.js"></script>
 </body>
 </html>

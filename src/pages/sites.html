@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – Lock Specific Sites</title>
+  <link rel="stylesheet" href="../styles/options.css">
+  <link rel="stylesheet" href="../styles/subpage.css">
+</head>
+<body>
+  <main class="subpage">
+    <a class="back-link" href="options.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Back to Settings
+    </a>
+
+    <header class="subpage-head">
+      <div class="section-icon accent-blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <div class="subpage-head-text">
+        <h1>Lock Specific Sites <span class="pro-badge">PRO</span></h1>
+        <p>Keep sensitive sites like banking or email locked, even after you unlock the browser. Each one asks for your PIN or fingerprint when it opens.</p>
+      </div>
+      <div class="status-row" id="sites-status">
+        <span class="dot gray"></span>
+        <span>No sites</span>
+      </div>
+    </header>
+
+    <div class="sub-note hidden" id="sites-setup-note">
+      Set up a PIN or biometrics in Settings first. Locked sites need a way to unlock them.
+    </div>
+
+    <!-- Sites -->
+    <section class="sub-card">
+      <h2>Your locked sites</h2>
+      <div class="site-add">
+        <input type="text" id="site-input" class="sq-answer" placeholder="e.g. bank.com or https://mail.google.com/"
+               autocomplete="off" spellcheck="false" aria-label="Website to lock">
+        <button id="btn-add-site" class="btn btn-primary site-add-btn">Lock site</button>
+      </div>
+      <p class="site-hint" id="site-hint">Enter a website address. Open tabs on it lock right away.</p>
+      <div class="msg" id="sites-msg"></div>
+      <ul class="site-list" id="site-list"></ul>
+      <p class="site-empty" id="site-empty">No locked sites yet. Tip: open a site and choose "Lock this site" in the TouchLock popup.</p>
+    </section>
+
+    <!-- Settings -->
+    <section class="sub-card">
+      <h2>How locked sites behave</h2>
+      <div class="option-row">
+        <label for="site-relock">Lock an unlocked site again</label>
+        <select id="site-relock" class="sq-select">
+          <option value="tabs-closed">When I leave it or close all its tabs</option>
+          <option value="timer-5">5 minutes after unlocking</option>
+          <option value="timer-15">15 minutes after unlocking</option>
+          <option value="timer-30">30 minutes after unlocking</option>
+          <option value="timer-60">1 hour after unlocking</option>
+          <option value="browser-lock">Only when the browser locks</option>
+        </select>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Include subdomains</span>
+          <span class="toggle-desc">Example: locking google.com also locks mail.google.com and drive.google.com</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-site-subdomains" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Keep sites locked after unlocking the browser</span>
+          <span class="toggle-desc">On: these sites still need your PIN or fingerprint after you unlock the browser. Off: unlocking the browser opens them too.</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-site-separate" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <p class="sub-hint">Sites always lock again when the browser locks or restarts. Changing these settings asks for your PIN.</p>
+    </section>
+  </main>
+
+  <script src="../scripts/site-lock-shared.js"></script>
+  <script src="../scripts/webauthn-config.js"></script>
+  <script src="../scripts/bio-policy.js"></script>
+  <script src="../scripts/reauth.js"></script>
+  <script src="../scripts/settings-common.js"></script>
+  <script src="../scripts/options-sites.js"></script>
+</body>
+</html>

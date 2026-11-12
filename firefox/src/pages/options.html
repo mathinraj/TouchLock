@@ -380,7 +380,7 @@
       </section>
 
       <!-- ═══════ Lock & Shortcut ═══════ -->
-      <section class="section section--wide" id="section-lock">
+      <section class="section" id="section-lock">
         <div class="section-top">
           <div class="section-title-row">
             <div class="section-icon accent-amber">
@@ -392,7 +392,7 @@
             </div>
             <div class="section-title-text">
               <h2>Lock Behavior</h2>
-              <p>Control when your browser locks automatically and set up a quick-lock shortcut.</p>
+              <p>Choose when your browser locks automatically. Fullscreen, video options and your shortcut are in All lock settings.</p>
             </div>
           </div>
           <div class="status-row" id="lock-status">
@@ -408,17 +408,6 @@
             </div>
             <label class="toggle">
               <input type="checkbox" id="toggle-startup" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="toggle-row" id="fullscreen-row">
-            <div class="toggle-info">
-              <span class="toggle-label">Fullscreen lock screen</span>
-              <span class="toggle-desc">Hides the address bar, tabs, and browser UI on the lock screen. Only applies when you switch to the browser, so it won't interrupt other apps.</span>
-              <span class="toggle-warn">On some computers, fullscreen can make the browser freeze or stop responding. If that happens, turn this off.</span>
-            </div>
-            <label class="toggle">
-              <input type="checkbox" id="toggle-fullscreen">
               <span class="toggle-slider"></span>
             </label>
           </div>
@@ -442,98 +431,22 @@
               <option value="3600">1 hour</option>
             </select>
           </div>
-          <div class="idle-media" id="idle-media" style="display:none">
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <span class="toggle-label">Stay unlocked while watching videos</span>
-                <span class="toggle-desc">YouTube, Netflix and other videos won't trigger the idle lock</span>
-              </div>
-              <label class="toggle">
-                <input type="checkbox" id="toggle-idle-media" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <details class="idle-more" id="idle-media-fields">
-              <summary>
-                <span class="idle-more-title">Video options</span>
-                <span class="idle-more-summary" id="idle-media-summary"></span>
-              </summary>
-              <div class="idle-more-body">
-                <div class="idle-option">
-                  <label for="idle-media-scope">Websites</label>
-                  <select id="idle-media-scope" class="sq-select">
-                    <option value="all">Any website</option>
-                    <option value="sites">Only websites I choose</option>
-                  </select>
-                </div>
-                <div class="idle-media-sites" id="idle-media-sites" style="display:none">
-                  <div class="site-add">
-                    <input type="text" id="idle-site-input" class="sq-answer" placeholder="e.g. youtube.com"
-                           autocomplete="off" spellcheck="false" aria-label="Website where playing videos keep the browser unlocked">
-                    <button id="btn-add-idle-site" class="btn btn-primary site-add-btn">Add site</button>
-                  </div>
-                  <div class="msg" id="idle-sites-msg"></div>
-                  <ul class="site-list" id="idle-site-list"></ul>
-                  <p class="site-empty" id="idle-site-empty">Add a site like youtube.com. Its videos also count when embedded on other pages.</p>
-                </div>
-                <div class="idle-option">
-                  <label for="toggle-idle-audio">Count music and podcasts too</label>
-                  <label class="toggle">
-                    <input type="checkbox" id="toggle-idle-audio">
-                    <span class="toggle-slider"></span>
-                  </label>
-                </div>
-                <div class="idle-option">
-                  <label for="idle-media-max">Lock anyway after</label>
-                  <select id="idle-media-max" class="sq-select">
-                    <option value="60">1 hour</option>
-                    <option value="120">2 hours</option>
-                    <option value="240" selected>4 hours</option>
-                    <option value="0">Never</option>
-                  </select>
-                </div>
-                <p class="site-hint">Locking your computer always locks the browser, even during a video.</p>
-              </div>
-            </details>
-          </div>
 
-          <div class="shortcut-section">
-            <div class="shortcut-header">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="4" width="20" height="16" rx="2"/>
-                <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"/>
-              </svg>
-              <span>Quick-lock shortcut</span>
-            </div>
-            <p class="shortcut-desc">Press this key combo on any web page to instantly lock the browser.</p>
-            <div class="shortcut-row">
-              <kbd class="shortcut-display" id="shortcut-display">Alt + L</kbd>
-              <button class="btn-shortcut-record" id="btn-record-shortcut">Change <span class="pro-badge">PRO</span></button>
-            </div>
-            <div class="shortcut-recording hidden" id="shortcut-recording">
-              <span class="recording-pulse"></span>
-              <span>Press your new shortcut…</span>
-              <button class="btn-shortcut-cancel" id="btn-cancel-shortcut">Cancel</button>
-            </div>
-            <div class="shortcut-note">
+          <div class="card-more">
+            <span class="card-more-summary" id="lock-summary"></span>
+            <a class="btn btn-secondary card-more-btn" href="lock-behavior.html">All lock settings
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="16" x2="12" y2="12"/>
-                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
               </svg>
-              <span>Your shortcut is automatically applied everywhere, including browser pages.
-                You can also manage it in <a href="#" id="open-browser-shortcuts">browser shortcut settings</a>.</span>
-            </div>
+            </a>
           </div>
-
           <div class="msg" id="lock-msg"></div>
         </div>
       </section>
 
       <!-- ═══════ Lock Specific Sites ═══════ -->
-      <section class="section section--wide" id="section-sites">
+      <section class="section" id="section-sites">
         <div class="section-top">
           <div class="section-title-row">
             <div class="section-icon accent-blue">
@@ -555,54 +468,16 @@
           </div>
         </div>
         <div class="section-body">
-          <div class="sites-setup-note hidden" id="sites-setup-note">
-            Set up a PIN or biometrics above first. Locked sites need a way to unlock them.
-          </div>
-
-          <div class="site-add">
-            <input type="text" id="site-input" class="sq-answer" placeholder="e.g. bank.com or https://mail.google.com/"
-                   autocomplete="off" spellcheck="false" aria-label="Website to lock">
-            <button id="btn-add-site" class="btn btn-primary site-add-btn">Lock site</button>
-          </div>
-          <p class="site-hint" id="site-hint">Enter a website address. Open tabs on it lock right away.</p>
-          <div class="msg" id="sites-msg"></div>
-
-          <ul class="site-list" id="site-list"></ul>
-          <p class="site-empty" id="site-empty">No locked sites yet. Tip: open a site and choose "Lock this site" in the TouchLock popup.</p>
-
-          <div class="sites-settings">
-            <div class="field-inline">
-              <label for="site-relock">Lock an unlocked site again</label>
-              <select id="site-relock" class="sq-select">
-                <option value="tabs-closed">When I leave it or close all its tabs</option>
-                <option value="timer-5">5 minutes after unlocking</option>
-                <option value="timer-15">15 minutes after unlocking</option>
-                <option value="timer-30">30 minutes after unlocking</option>
-                <option value="timer-60">1 hour after unlocking</option>
-                <option value="browser-lock">Only when the browser locks</option>
-              </select>
-            </div>
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <span class="toggle-label">Include subdomains</span>
-                <span class="toggle-desc">Example: locking google.com also locks mail.google.com and drive.google.com</span>
-              </div>
-              <label class="toggle">
-                <input type="checkbox" id="toggle-site-subdomains" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <span class="toggle-label">Keep sites locked after unlocking the browser</span>
-                <span class="toggle-desc">On: these sites still need your PIN or fingerprint after you unlock the browser. Off: unlocking the browser opens them too.</span>
-              </div>
-              <label class="toggle">
-                <input type="checkbox" id="toggle-site-separate" checked>
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <p class="site-hint">Sites always lock again when the browser locks or restarts. Changing these settings asks for your PIN.</p>
+          <div class="site-chips" id="sites-chips"></div>
+          <p class="site-hint" id="sites-empty-hint">No locked sites yet. Tip: open a site and choose "Lock this site" in the TouchLock popup.</p>
+          <div class="card-more">
+            <span class="card-more-summary">Add sites, and choose when they lock again.</span>
+            <a class="btn btn-secondary card-more-btn" href="sites.html"><span id="sites-btn-label">Manage locked sites</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
           </div>
         </div>
       </section>
@@ -630,7 +505,15 @@
           </div>
         </div>
         <div class="section-body">
-          <a class="btn btn-secondary" id="btn-open-duress" href="duress.html">Set up duress PIN</a>
+          <div class="card-more">
+            <span class="card-more-summary">Choose what gets erased and set your second PIN.</span>
+            <a class="btn btn-secondary card-more-btn" href="duress.html"><span id="duress-btn-label">Set up duress PIN</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -836,7 +719,7 @@
   <script src="../scripts/webauthn-config.js"></script>
   <script src="../scripts/bio-policy.js"></script>
   <script src="../scripts/reauth.js"></script>
+  <script src="../scripts/settings-common.js"></script>
   <script src="../scripts/options.js"></script>
-  <script src="../scripts/options-sites.js"></script>
 </body>
 </html>

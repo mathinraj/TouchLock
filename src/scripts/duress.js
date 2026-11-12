@@ -12,11 +12,7 @@ const PERMISSION_TEXT = {
 document.addEventListener('DOMContentLoaded', initDuress);
 
 async function initDuress() {
-  const { isLocked } = await chrome.storage.local.get('isLocked');
-  if (isLocked === true) {
-    location.replace(chrome.runtime.getURL('src/pages/lock.html'));
-    return;
-  }
+  if (await redirectIfLocked()) return;
 
   const statusEl    = document.getElementById('duress-status');
   const noPinNote   = document.getElementById('no-pin-note');
@@ -240,19 +236,8 @@ async function initDuress() {
   }
 }
 
-function showMsg(el, text, type) {
-  el.textContent = text;
-  el.className = `msg ${type}`;
-}
-
 async function sha256(pin, salt) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(salt + pin));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-function base64ToBuffer(base64) {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return bytes.buffer;
-}

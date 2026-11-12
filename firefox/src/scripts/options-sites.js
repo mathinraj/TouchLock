@@ -1,5 +1,5 @@
 /* ───────────────────────────────────────────────
-   TouchLock – Settings: Lock Specific Sites section
+   TouchLock – Lock Specific Sites page
    Writes lockedSites / siteLockSettings to storage;
    the background applies the lock rules.
    ─────────────────────────────────────────────── */
@@ -7,6 +7,8 @@
 document.addEventListener('DOMContentLoaded', initLockedSites);
 
 async function initLockedSites() {
+  if (await redirectIfLocked()) return;
+
   const input         = document.getElementById('site-input');
   const btnAdd        = document.getElementById('btn-add-site');
   const hint          = document.getElementById('site-hint');

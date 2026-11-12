@@ -24,7 +24,6 @@ const SECURITY_QUESTIONS = [
   { id: 14, text: 'In what city did you have your first job?' }
 ];
 
-const DEFAULT_SHORTCUT = { ctrlKey: false, altKey: true, shiftKey: false, metaKey: false, key: 'L', code: 'KeyL' };
 const MIN_PIN = 4;
 const MAX_PIN = 10;
 
@@ -61,30 +60,11 @@ async function init() {
 
   const toggleStartup    = document.getElementById('toggle-startup');
   const toggleIdle       = document.getElementById('toggle-idle');
-  const toggleFullscreen = document.getElementById('toggle-fullscreen');
   const idleField        = document.getElementById('idle-timeout-field');
   const idleTimeout      = document.getElementById('idle-timeout');
-  const idleMedia        = document.getElementById('idle-media');
-  const toggleIdleMedia  = document.getElementById('toggle-idle-media');
-  const idleMediaFields  = document.getElementById('idle-media-fields');
-  const idleMediaSummary = document.getElementById('idle-media-summary');
-  const idleMediaScope   = document.getElementById('idle-media-scope');
-  const idleMediaSites   = document.getElementById('idle-media-sites');
-  const idleSiteInput    = document.getElementById('idle-site-input');
-  const btnAddIdleSite   = document.getElementById('btn-add-idle-site');
-  const idleSitesMsg     = document.getElementById('idle-sites-msg');
-  const idleSiteList     = document.getElementById('idle-site-list');
-  const idleSiteEmpty    = document.getElementById('idle-site-empty');
-  const toggleIdleAudio  = document.getElementById('toggle-idle-audio');
-  const idleMediaMax     = document.getElementById('idle-media-max');
-  let idleMediaSiteHosts = [];
+  const lockSummary      = document.getElementById('lock-summary');
   const lockMsg          = document.getElementById('lock-msg');
   const lockStatus       = document.getElementById('lock-status');
-
-  const shortcutDisplay   = document.getElementById('shortcut-display');
-  const btnRecordShortcut = document.getElementById('btn-record-shortcut');
-  const shortcutRecording = document.getElementById('shortcut-recording');
-  const btnCancelShortcut = document.getElementById('btn-cancel-shortcut');
 
   const frEmail       = document.getElementById('fr-email');
   const frCategory    = document.getElementById('fr-category');
@@ -99,7 +79,7 @@ async function init() {
 
   populateQuestionDropdowns();
   await loadLockSettings();
-  await loadShortcut();
+  await loadSitesSummary();
   await loadWhatsNew();
   const hasUpdate = await loadUpdateBanner();
   if (!hasUpdate) await loadRateBanner();
@@ -341,206 +321,78 @@ async function init() {
     return `Fingerprint works until ${when}. After that, unlock once with your PIN.`;
   }
 
-  // ── Lock Behavior Settings (auto-save) ──────
+  // ── Lock Behavior (basics; the rest is on lock-behavior.html) ──
 
   async function saveLockSettings() {
     await chrome.storage.local.set({
       lockOnStartup: toggleStartup.checked,
       idleLockEnabled: toggleIdle.checked,
-      idleLockTimeout: parseInt(idleTimeout.value, 10),
-      fullscreenLock: toggleFullscreen.checked,
-      idleMediaSettings: getIdleMediaSettings({
-        enabled: toggleIdleMedia.checked,
-        scope: idleMediaScope.value,
-        sites: idleMediaSiteHosts,
-        includeAudio: toggleIdleAudio.checked,
-        maxMinutes: parseInt(idleMediaMax.value, 10)
-      })
+      idleLockTimeout: parseInt(idleTimeout.value, 10)
     });
     chrome.runtime.sendMessage({ action: 'updateIdleSettings' });
     showMsg(lockMsg, 'Lock settings saved.', 'success');
+    await loadLockSummary();
     await refreshStatus();
   }
 
-  function updateIdleFields() {
-    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
-    idleMedia.style.display = toggleIdle.checked ? 'block' : 'none';
-    idleMediaFields.style.display = toggleIdleMedia.checked ? 'block' : 'none';
-    idleMediaSites.style.display = idleMediaScope.value === 'sites' ? 'block' : 'none';
-
-    const count = idleMediaSiteHosts.length;
-    const maxMinutes = parseInt(idleMediaMax.value, 10);
-    idleMediaSummary.textContent = [
-      idleMediaScope.value === 'all' ? 'Any website' : `${count} site${count === 1 ? '' : 's'}`,
-      toggleIdleAudio.checked ? 'video and audio' : 'video only',
-      maxMinutes ? `locks anyway after ${maxMinutes / 60}h` : 'no time limit'
-    ].join(' · ');
-  }
-
-  function renderIdleSites() {
-    idleSiteList.textContent = '';
-    for (const host of idleMediaSiteHosts) {
-      const li = document.createElement('li');
-      li.className = 'site-item';
-
-      const avatar = document.createElement('span');
-      avatar.className = 'site-avatar';
-      avatar.textContent = host.charAt(0).toUpperCase();
-
-      const name = document.createElement('span');
-      name.className = 'site-item-host';
-      name.textContent = host;
-
-      const remove = document.createElement('button');
-      remove.className = 'site-btn site-btn--remove';
-      remove.setAttribute('aria-label', `Remove ${host}`);
-      remove.title = 'Remove';
-      remove.textContent = '✕';
-      remove.addEventListener('click', async () => {
-        idleMediaSiteHosts = idleMediaSiteHosts.filter(h => h !== host);
-        renderIdleSites();
-        await saveLockSettings();
-      });
-
-      li.append(avatar, name, remove);
-      idleSiteList.appendChild(li);
-    }
-    idleSiteEmpty.classList.toggle('hidden', idleMediaSiteHosts.length > 0);
-    updateIdleFields();
-  }
-
-  async function addIdleSite() {
-    const host = normalizeSiteHost(idleSiteInput.value);
-    if (!host) {
-      showMsg(idleSitesMsg, 'That doesn\'t look like a website address.', 'error');
-      return;
-    }
-    if (idleMediaSiteHosts.includes(host)) {
-      showMsg(idleSitesMsg, `${host} is already on the list.`, 'error');
-      return;
-    }
-    if (idleMediaSiteHosts.length >= MAX_LOCKED_SITES) {
-      showMsg(idleSitesMsg, `You can add up to ${MAX_LOCKED_SITES} sites.`, 'error');
-      return;
-    }
-    idleMediaSiteHosts = [...idleMediaSiteHosts, host];
-    idleSiteInput.value = '';
-    renderIdleSites();
-    await saveLockSettings();
-    showMsg(idleSitesMsg, `Videos on ${host} now keep the browser unlocked.`, 'success');
-  }
-
   toggleStartup.addEventListener('change', saveLockSettings);
-  toggleFullscreen.addEventListener('change', saveLockSettings);
   toggleIdle.addEventListener('change', () => {
-    updateIdleFields();
+    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
     saveLockSettings();
   });
   idleTimeout.addEventListener('change', saveLockSettings);
-  toggleIdleMedia.addEventListener('change', () => {
-    updateIdleFields();
-    saveLockSettings();
-  });
-  idleMediaScope.addEventListener('change', () => {
-    updateIdleFields();
-    saveLockSettings();
-  });
-  toggleIdleAudio.addEventListener('change', () => {
-    updateIdleFields();
-    saveLockSettings();
-  });
-  idleMediaMax.addEventListener('change', () => {
-    updateIdleFields();
-    saveLockSettings();
-  });
-  btnAddIdleSite.addEventListener('click', addIdleSite);
-  idleSiteInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') addIdleSite(); });
 
   async function loadLockSettings() {
-    const data = await chrome.storage.local.get([
-      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout', 'fullscreenLock', 'idleMediaSettings'
-    ]);
-
+    const data = await chrome.storage.local.get(['lockOnStartup', 'idleLockEnabled', 'idleLockTimeout']);
     toggleStartup.checked = data.lockOnStartup !== false;
     toggleIdle.checked = data.idleLockEnabled === true;
-    toggleFullscreen.checked = data.fullscreenLock === true;
+    idleField.style.display = toggleIdle.checked ? 'block' : 'none';
+    if (data.idleLockTimeout) idleTimeout.value = String(data.idleLockTimeout);
+    await loadLockSummary();
+  }
 
-    if (data.idleLockTimeout) {
-      idleTimeout.value = String(data.idleLockTimeout);
+  async function loadLockSummary() {
+    const data = await chrome.storage.local.get(['idleLockEnabled', 'idleMediaSettings', 'fullscreenLock', 'lockShortcut']);
+    const parts = [`Shortcut ${formatShortcut(data.lockShortcut || DEFAULT_SHORTCUT)}`];
+    parts.push(data.fullscreenLock === true ? 'Fullscreen on' : 'Fullscreen off');
+    if (data.idleLockEnabled && getIdleMediaSettings(data.idleMediaSettings).enabled) parts.push('Waits for videos');
+    lockSummary.textContent = parts.join(' · ');
+  }
+
+  // ── Lock Specific Sites (summary; managed on sites.html) ──
+
+  async function loadSitesSummary() {
+    const { lockedSites, setupComplete } = await chrome.storage.local.get(['lockedSites', 'setupComplete']);
+    const sites = Array.isArray(lockedSites) ? lockedSites : [];
+    const statusEl = document.getElementById('sites-status');
+    const chips = document.getElementById('sites-chips');
+
+    if (!sites.length) setStatus(statusEl, 'No sites', 'gray');
+    else if (setupComplete !== true) setStatus(statusEl, 'Paused until setup', 'gray');
+    else setStatus(statusEl, `${sites.length} site${sites.length === 1 ? '' : 's'} locked`, 'green');
+
+    chips.textContent = '';
+    for (const site of sites.slice(0, 4)) {
+      const chip = document.createElement('span');
+      chip.className = 'site-chip';
+      chip.textContent = site.host;
+      chips.appendChild(chip);
     }
-
-    const media = getIdleMediaSettings(data.idleMediaSettings);
-    toggleIdleMedia.checked = media.enabled;
-    idleMediaScope.value = media.scope;
-    toggleIdleAudio.checked = media.includeAudio;
-    idleMediaMax.value = String(media.maxMinutes);
-    idleMediaSiteHosts = media.sites;
-    renderIdleSites();
-    updateIdleFields();
+    if (sites.length > 4) {
+      const more = document.createElement('span');
+      more.className = 'site-chip site-chip--more';
+      more.textContent = `+${sites.length - 4} more`;
+      chips.appendChild(more);
+    }
+    document.getElementById('sites-empty-hint').classList.toggle('hidden', sites.length > 0);
+    document.getElementById('sites-btn-label').textContent = sites.length ? 'Manage locked sites' : 'Lock a site';
   }
 
-  // ── Keyboard Shortcut ─────────────────────────
-
-  const openBrowserShortcuts = document.getElementById('open-browser-shortcuts');
-
-  async function loadShortcut() {
-    const { lockShortcut } = await chrome.storage.local.get('lockShortcut');
-    const sc = lockShortcut || DEFAULT_SHORTCUT;
-    shortcutDisplay.textContent = formatShortcut(sc);
-  }
-
-  openBrowserShortcuts.addEventListener('click', (e) => {
-    e.preventDefault();
-    chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area !== 'local') return;
+    if (changes.lockedSites || changes.setupComplete) loadSitesSummary();
+    if (changes.lockShortcut || changes.fullscreenLock || changes.idleMediaSettings) loadLockSummary();
   });
-
-  btnRecordShortcut.addEventListener('click', () => {
-    shortcutRecording.classList.remove('hidden');
-    btnRecordShortcut.classList.add('hidden');
-    document.addEventListener('keydown', captureShortcut);
-  });
-
-  btnCancelShortcut.addEventListener('click', stopRecording);
-
-  function captureShortcut(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (['Control', 'Alt', 'Shift', 'Meta'].includes(e.key)) return;
-
-    if (!e.ctrlKey && !e.altKey && !e.metaKey) {
-      showMsg(lockMsg, 'Shortcut must include Ctrl, Alt, or Cmd.', 'error');
-      return;
-    }
-
-    const letterKey = e.code.startsWith('Key') ? e.code.slice(3) : (e.key.length === 1 ? e.key.toUpperCase() : e.key);
-    const combo = { ctrlKey: e.ctrlKey, altKey: e.altKey, shiftKey: e.shiftKey, metaKey: e.metaKey, code: e.code };
-
-    const reserved = isReservedShortcut(combo, letterKey);
-    if (reserved) {
-      showMsg(lockMsg, reserved, 'error');
-      return;
-    }
-
-    const newShortcut = {
-      ctrlKey: e.ctrlKey,
-      altKey: e.altKey,
-      shiftKey: e.shiftKey,
-      metaKey: e.metaKey,
-      key: letterKey,
-      code: e.code
-    };
-
-    shortcutDisplay.textContent = formatShortcut(newShortcut);
-    chrome.storage.local.set({ lockShortcut: newShortcut });
-    stopRecording();
-    showMsg(lockMsg, 'Shortcut saved!', 'success');
-  }
-
-  function stopRecording() {
-    document.removeEventListener('keydown', captureShortcut);
-    shortcutRecording.classList.add('hidden');
-    btnRecordShortcut.classList.remove('hidden');
-  }
 
   // ── What's New ─────────────────────────────────
 
@@ -778,7 +630,7 @@ async function init() {
     const DURESS_LABELS = { 'history': 'erases site history', 'history-data': 'erases site history & data', 'everything': 'erases all data' };
     setStatus(document.getElementById('duress-status'),
       duress.enabled ? `On · ${DURESS_LABELS[duress.mode]}` : 'Off', duress.enabled ? 'green' : 'gray');
-    document.getElementById('btn-open-duress').textContent = duress.enabled ? 'Manage duress PIN' : 'Set up duress PIN';
+    document.getElementById('duress-btn-label').textContent = duress.enabled ? 'Manage duress PIN' : 'Set up duress PIN';
 
     pinIntervalField.classList.toggle('hidden', !(data.pinHash && data.webauthnRegistered));
     pinIntervalSelect.value = String(getPinInterval(data.pinRequiredEvery));
@@ -837,74 +689,11 @@ function bufferToBase64(buffer) {
   return btoa(binary);
 }
 
-function base64ToBuffer(base64) {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return bytes.buffer;
-}
-
-function setStatus(el, text, color) {
-  el.querySelector('.dot').className = `dot ${color}`;
-  el.querySelector('span:last-child').textContent = text;
-}
-
-function showMsg(el, text, type) {
-  el.textContent = text;
-  el.className = `msg ${type}`;
-}
-
 function getPinStrength(length) {
   if (length <= 4)  return { level: 'weak',   label: 'Weak' };
   if (length <= 5)  return { level: 'fair',   label: 'Fair' };
   if (length <= 7)  return { level: 'good',   label: 'Good' };
   return                    { level: 'strong', label: 'Strong' };
-}
-
-function formatShortcut(sc) {
-  const parts = [];
-  const isMac = navigator.platform.toUpperCase().includes('MAC');
-  if (sc.ctrlKey)  parts.push(isMac ? 'Ctrl' : 'Ctrl');
-  if (sc.altKey)   parts.push(isMac ? 'Option' : 'Alt');
-  if (sc.shiftKey) parts.push('Shift');
-  if (sc.metaKey)  parts.push(isMac ? 'Cmd' : 'Win');
-  parts.push(sc.key);
-  return parts.join(' + ');
-}
-
-function isReservedShortcut(combo, key) {
-  const isMac = navigator.platform.toUpperCase().includes('MAC');
-  const c = isMac ? combo.metaKey : combo.ctrlKey;
-  const s = combo.shiftKey;
-  const a = combo.altKey;
-  const k = key.toUpperCase();
-  const mod = isMac ? 'Cmd' : 'Ctrl';
-
-  if (c && !s && !a) {
-    const reserved = ['S','P','Z','X','C','V','A','F','H','J','N','T','W','R','L','D','G','E','K','O','U','B','Q'];
-    if (reserved.includes(k)) return `${mod}+${k} is reserved by the browser.`;
-    if (/^[1-9]$/.test(k)) return `${mod}+${k} is used for tab switching.`;
-  }
-
-  if (c && s && !a) {
-    const reserved = ['T','N','I','J','B','R','P','D','M','O'];
-    if (reserved.includes(k)) return `${mod}+Shift+${k} is reserved by the browser.`;
-  }
-
-  if (!isMac && a && !c && !s && !combo.metaKey) {
-    if (k === 'F4') return 'Alt+F4 closes the window.';
-  }
-
-  if (/^F\d{1,2}$/.test(k)) {
-    const fNum = parseInt(k.slice(1), 10);
-    if (fNum >= 1 && fNum <= 12 && !a && !s) return `${k} is reserved by the browser.`;
-  }
-
-  if (isMac && a && !combo.ctrlKey && !combo.metaKey) {
-    return 'Option key produces special characters on Mac, which may interfere with text fields. Use Ctrl + key instead.';
-  }
-
-  return null;
 }
 
 const REVIEW_URLS = {
@@ -1098,12 +887,12 @@ setStatus = function(el, text, color) {
     {
       target: '#section-lock',
       title: '⏱️ Lock Behavior & Shortcut',
-      desc: 'Fine-tune when your browser locks: on startup, after idle time, or via the Alt+L shortcut. Optionally turn on "Fullscreen lock screen" to also hide the address bar and tabs while locked.'
+      desc: 'Choose whether your browser locks on startup and after you\'ve been away. Open "All lock settings" for fullscreen lock, video options, and your quick-lock shortcut (Alt+L by default).'
     },
     {
       target: '#section-sites',
       title: '🌐 Lock Specific Sites',
-      desc: 'Keep sensitive sites like banking or email locked even after you unlock the browser. Add a site here (or use "Lock this site" in the toolbar popup) and it will ask for your PIN or fingerprint every time it opens. Choose when an unlocked site locks again.'
+      desc: 'Keep sensitive sites like banking or email locked even after you unlock the browser. Open "Manage locked sites" to add one (or use "Lock this site" in the toolbar popup), and choose when an unlocked site locks again.'
     },
     {
       target: '#section-feedback',

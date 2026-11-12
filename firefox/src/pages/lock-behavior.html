@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – Lock Behavior</title>
+  <link rel="stylesheet" href="../styles/options.css">
+  <link rel="stylesheet" href="../styles/subpage.css">
+</head>
+<body>
+  <main class="subpage">
+    <a class="back-link" href="options.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Back to Settings
+    </a>
+
+    <header class="subpage-head">
+      <div class="section-icon accent-amber">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div class="subpage-head-text">
+        <h1>Lock Behavior</h1>
+        <p>Choose when your browser locks, how the lock screen looks, and your quick-lock shortcut. Changes save automatically.</p>
+      </div>
+    </header>
+
+    <!-- When to lock -->
+    <section class="sub-card">
+      <h2>Lock automatically</h2>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Lock on browser startup</span>
+          <span class="toggle-desc">Require your PIN or fingerprint every time the browser opens</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-startup" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Auto-lock on idle</span>
+          <span class="toggle-desc">Lock after a period with no keyboard or mouse activity</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-idle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="option-row" id="idle-timeout-field">
+        <label for="idle-timeout">Lock after</label>
+        <select id="idle-timeout" class="sq-select">
+          <option value="60">1 minute</option>
+          <option value="300" selected>5 minutes</option>
+          <option value="900">15 minutes</option>
+          <option value="1800">30 minutes</option>
+          <option value="3600">1 hour</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Videos -->
+    <section class="sub-card" id="video-card">
+      <h2>While you're watching videos</h2>
+      <p class="sub-off-note hidden" id="video-off-note">Turn on "Auto-lock on idle" above to use these.</p>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Stay unlocked while watching videos</span>
+          <span class="toggle-desc">YouTube, Netflix and other videos won't trigger the idle lock</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-idle-media" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div id="idle-media-fields">
+        <div class="option-row">
+          <label for="idle-media-scope">Websites</label>
+          <select id="idle-media-scope" class="sq-select">
+            <option value="all">Any website</option>
+            <option value="sites">Only websites I choose</option>
+          </select>
+        </div>
+        <div id="idle-media-sites" class="hidden">
+          <div class="site-add">
+            <input type="text" id="idle-site-input" class="sq-answer" placeholder="e.g. youtube.com"
+                   autocomplete="off" spellcheck="false" aria-label="Website where playing videos keep the browser unlocked">
+            <button id="btn-add-idle-site" class="btn btn-primary site-add-btn">Add site</button>
+          </div>
+          <div class="msg" id="idle-sites-msg"></div>
+          <ul class="site-list" id="idle-site-list"></ul>
+          <p class="site-empty" id="idle-site-empty">Add a site like youtube.com. Its videos also count when embedded on other pages.</p>
+        </div>
+        <div class="option-row">
+          <label for="toggle-idle-audio">Count music and podcasts too</label>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-idle-audio">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="option-row">
+          <label for="idle-media-max">Lock anyway after</label>
+          <select id="idle-media-max" class="sq-select">
+            <option value="60">1 hour</option>
+            <option value="120">2 hours</option>
+            <option value="240" selected>4 hours</option>
+            <option value="0">Never</option>
+          </select>
+        </div>
+        <p class="sub-hint">The safety limit locks the browser if you walk away while something keeps playing. Locking your computer always locks the browser, even during a video.</p>
+      </div>
+    </section>
+
+    <!-- Lock screen -->
+    <section class="sub-card">
+      <h2>Lock screen</h2>
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <span class="toggle-label">Fullscreen lock screen</span>
+          <span class="toggle-desc">Hides the address bar, tabs, and browser UI on the lock screen. Only applies when you switch to the browser, so it won't interrupt other apps.</span>
+          <span class="toggle-warn">On some computers, fullscreen can make the browser freeze or stop responding. If that happens, turn this off.</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle-fullscreen">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Shortcut -->
+    <section class="sub-card">
+      <h2>Quick-lock shortcut</h2>
+      <p class="shortcut-desc">Press this key combo on any web page to instantly lock the browser.</p>
+      <div class="shortcut-row">
+        <kbd class="shortcut-display" id="shortcut-display">Alt + L</kbd>
+        <button class="btn-shortcut-record" id="btn-record-shortcut">Change <span class="pro-badge">PRO</span></button>
+      </div>
+      <div class="shortcut-recording hidden" id="shortcut-recording">
+        <span class="recording-pulse"></span>
+        <span>Press your new shortcut…</span>
+        <button class="btn-shortcut-cancel" id="btn-cancel-shortcut">Cancel</button>
+      </div>
+      <div class="shortcut-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <span>Your shortcut is automatically applied everywhere, including browser pages.
+          You can also manage it in <a href="#" id="open-browser-shortcuts">browser shortcut settings</a>.</span>
+      </div>
+    </section>
+
+    <div class="msg sticky-msg" id="lock-msg"></div>
+  </main>
+
+  <script src="../scripts/site-lock-shared.js"></script>
+  <script src="../scripts/settings-common.js"></script>
+  <script src="../scripts/lock-behavior.js"></script>
+</body>
+</html>

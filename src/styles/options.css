@@ -1945,3 +1945,55 @@ body {
 }
 
 a.btn { text-decoration: none; }
+
+/* ── Card summary + link to a full settings page ── */
+
+.card-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.card-more-summary {
+  flex: 1 1 200px;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+.card-more-btn {
+  width: auto;
+  flex-shrink: 0;
+  padding: 9px 14px;
+  white-space: nowrap;
+}
+
+.site-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.site-chips:empty { display: none; }
+
+.site-chip {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.site-chip--more { color: var(--text-faint); }
+
+@media (max-width: 520px) {
+  .card-more { flex-direction: column; align-items: stretch; }
+}
