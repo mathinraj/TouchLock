@@ -9,148 +9,164 @@
 <body>
   <div class="popup">
     <header class="header">
-      <div class="logo">
-        <img src="../../icons/icon.svg" width="28" height="28" alt="TouchLock">
-      </div>
+      <img class="logo" src="../../icons/icon.svg" width="30" height="30" alt="">
       <h1>TouchLock</h1>
       <div class="status-badge" id="status-badge">
         <span class="dot"></span>
         <span class="label">Checking…</span>
       </div>
-    </header>
-
-    <!-- Not configured -->
-    <div id="setup-needed" class="section hidden">
-      <p class="muted">Extension is not configured yet.</p>
-      <button id="btn-setup" class="btn btn-primary">Open Setup</button>
-    </div>
-
-    <!-- Actions (when configured) -->
-    <div id="actions" class="section hidden">
-      <div class="lock-row">
-        <button id="btn-lock" class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-          Lock Now
-        </button>
-        <button id="btn-settings-icon" class="btn-icon hidden" title="Settings" aria-label="Settings">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-          </svg>
-        </button>
-      </div>
-
-      <!-- Current site (shown on http/https tabs) -->
-      <div class="site-card hidden" id="site-card">
-        <div class="site-card-info">
-          <span class="site-card-host" id="site-card-host"></span>
-          <span class="site-card-state" id="site-card-state"></span>
-        </div>
-        <button class="site-card-btn" id="btn-site-action"></button>
-      </div>
-
-      <!-- Idle auto-lock (shown when enabled) -->
-      <div class="site-card hidden" id="idle-card">
-        <div class="site-card-info">
-          <span class="site-card-host">Auto-lock on idle</span>
-          <span class="site-card-state" id="idle-card-state"></span>
-        </div>
-        <button class="site-card-btn" id="btn-idle-snooze"></button>
-      </div>
-
-      <button id="btn-settings" class="btn btn-ghost">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      <button id="btn-settings-icon" class="icon-btn" title="Settings" aria-label="Settings">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3"/>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
-        Settings
       </button>
+    </header>
+
+    <!-- Not configured -->
+    <div id="setup-needed" class="setup-card hidden">
+      <div class="setup-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h2>Finish setting up</h2>
+      <p>Create a PIN to start locking your browser. It takes under a minute.</p>
+      <button id="btn-setup" class="btn btn-primary">Open Setup</button>
+    </div>
+
+    <!-- Actions (when configured) -->
+    <div id="actions" class="hidden">
+      <button id="btn-lock" class="btn btn-primary btn-lock">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span>Lock Now</span>
+        <kbd class="shortcut hidden" id="lock-shortcut"></kbd>
+      </button>
+
+      <div class="panel hidden" id="panel">
+        <!-- Current site (shown on http/https tabs) -->
+        <div class="row hidden" id="site-card">
+          <span class="row-icon row-icon--site" id="site-card-icon"></span>
+          <div class="row-info">
+            <span class="row-title" id="site-card-host"></span>
+            <span class="row-sub" id="site-card-state"></span>
+          </div>
+          <button class="row-btn" id="btn-site-action"></button>
+        </div>
+
+        <!-- Idle auto-lock (shown when enabled) -->
+        <div class="row hidden" id="idle-card">
+          <span class="row-icon row-icon--idle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </span>
+          <div class="row-info">
+            <span class="row-title">Auto-lock</span>
+            <span class="row-sub" id="idle-card-state"></span>
+          </div>
+          <button class="row-btn" id="btn-idle-snooze"></button>
+        </div>
+      </div>
     </div>
 
     <!-- Update banner -->
-    <div class="update-banner hidden" id="update-banner">
-      <div class="update-left">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="17 1 21 5 17 9"/>
-          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-          <polyline points="7 23 3 19 7 15"/>
-          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-        </svg>
-        <span>v<span id="update-version"></span> available</span>
-      </div>
-      <button class="update-btn" id="btn-update">Update</button>
+    <div class="notice notice--update hidden" id="update-banner">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="17 1 21 5 17 9"/>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+        <polyline points="7 23 3 19 7 15"/>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+      </svg>
+      <span class="notice-text">v<span id="update-version"></span> is available</span>
+      <button class="notice-btn" id="btn-update">Update</button>
     </div>
 
     <!-- Rate prompt (shows in place of promo when triggered) -->
-    <div class="rate-prompt hidden" id="rate-prompt">
-      <div class="rate-left">
-        <span class="rate-star">⭐</span>
-        <span class="rate-text">Enjoying TouchLock?</span>
-      </div>
-      <div class="rate-actions">
-        <button class="rate-btn rate-btn--primary" id="btn-rate-now">Rate now</button>
-        <button class="rate-btn rate-btn--later" id="btn-rate-later">Later</button>
-      </div>
+    <div class="notice notice--rate hidden" id="rate-prompt">
+      <span class="rate-star">⭐</span>
+      <span class="notice-text">Enjoying TouchLock?</span>
+      <button class="notice-btn notice-btn--rate" id="btn-rate-now">Rate</button>
+      <button class="notice-btn notice-btn--ghost" id="btn-rate-later">Later</button>
     </div>
 
-    <!-- Promo banner (rotating) -->
-    <a class="promo-banner" id="promo-banner" href="#" target="_blank" rel="noopener">
-      <span class="promo-icon" id="promo-icon"><img class="promo-logo hidden" id="promo-logo" width="20" height="20" alt=""></span>
-      <span class="promo-body">
-        <span class="promo-name" id="promo-name"></span>
-        <span class="promo-desc" id="promo-desc"></span>
-      </span>
-      <span class="promo-cta">Try it &rarr;</span>
-    </a>
-
-    <!-- Bottom bar -->
-    <div class="bottom-bar">
-      <a href="https://coindrop.to/mathinraj" target="_blank" rel="noopener" class="bar-item" title="Buy me a coffee">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-          <line x1="6" y1="1" x2="6" y2="4"/>
-          <line x1="10" y1="1" x2="10" y2="4"/>
-          <line x1="14" y1="1" x2="14" y2="4"/>
+    <!-- Footer: promo, or quick links when expanded -->
+    <div class="footer-row" id="footer-row">
+      <a class="promo hidden" id="promo-banner" href="#" target="_blank" rel="noopener">
+        <span class="promo-icon" id="promo-icon">
+          <img class="promo-logo hidden" id="promo-logo" width="18" height="18" alt="">
+          <span id="promo-emoji"></span>
+        </span>
+        <span class="promo-body">
+          <span class="promo-name" id="promo-name"></span>
+          <span class="promo-desc" id="promo-desc"></span>
+        </span>
+        <svg class="promo-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
         </svg>
-        <span>Support</span>
       </a>
-      <a href="https://touchlock.vercel.app/feedback.html" target="_blank" rel="noopener" class="bar-item" title="Report a bug">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
+      <nav class="quick-links" id="quick-links">
+        <a href="https://coindrop.to/mathinraj" target="_blank" rel="noopener" class="link-item" title="Buy me a coffee">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+            <line x1="6" y1="1" x2="6" y2="4"/>
+            <line x1="10" y1="1" x2="10" y2="4"/>
+            <line x1="14" y1="1" x2="14" y2="4"/>
+          </svg>
+          <span>Support</span>
+        </a>
+        <a href="https://touchlock.vercel.app/feedback.html" target="_blank" rel="noopener" class="link-item" title="Report a bug">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>Bug</span>
+        </a>
+        <button class="link-item" id="btn-whats-new" title="What's New">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 12v10H4V12"/>
+            <path d="M2 7h20v5H2z"/>
+            <path d="M12 22V7"/>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+          </svg>
+          <span>What's New</span>
+        </button>
+        <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener" class="link-item" title="Developer">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+          <span>Developer</span>
+        </a>
+      </nav>
+      <button class="icon-btn footer-toggle hidden" id="btn-more" title="More options" aria-label="More options" aria-expanded="false">
+        <svg class="icon-more" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/>
         </svg>
-        <span>Bug</span>
-      </a>
-      <button class="bar-item" id="btn-whats-new" title="What's New">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 12v10H4V12"/>
-          <path d="M2 7h20v5H2z"/>
-          <path d="M12 22V7"/>
-          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
-          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+        <svg class="icon-close" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
         </svg>
-        <span>New</span>
       </button>
-      <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener" class="bar-item" title="Developer">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6"/>
-          <polyline points="8 6 2 12 8 18"/>
-        </svg>
-        <span>Developer</span>
-      </a>
     </div>
   </div>
 

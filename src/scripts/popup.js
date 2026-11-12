@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const actions     = document.getElementById('actions');
   const btnLock     = document.getElementById('btn-lock');
   const btnSetup    = document.getElementById('btn-setup');
-  const btnSettings = document.getElementById('btn-settings');
   const btnWhatsNew = document.getElementById('btn-whats-new');
 
   chrome.runtime.sendMessage({ action: 'popupOpened' }, () => void chrome.runtime.lastError);
@@ -56,14 +55,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       badge.querySelector('.label').textContent = 'Locked';
       actions.classList.remove('hidden');
       btnLock.disabled = true;
-      btnLock.style.opacity = '0.5';
     } else {
       badge.classList.add('unlocked');
       badge.querySelector('.label').textContent = 'Unlocked';
       actions.classList.remove('hidden');
-      initSiteCard();
-      initIdleCard();
+      initSiteCard().then(updatePanel);
+      initIdleCard().then(updatePanel);
     }
+  });
+
+  chrome.commands.getAll((cmds) => {
+    if (chrome.runtime.lastError) return;
+    const lockCmd = cmds.find(c => c.name === 'lock-browser');
+    if (!lockCmd || !lockCmd.shortcut) return;
+    const kbd = document.getElementById('lock-shortcut');
+    kbd.textContent = lockCmd.shortcut.replace('MacCtrl', 'Ctrl');
+    kbd.classList.remove('hidden');
   });
 
   btnLock.addEventListener('click', () => {
@@ -75,12 +82,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.close();
   });
 
-  const openSettings = () => {
+  document.getElementById('btn-settings-icon').addEventListener('click', () => {
     chrome.runtime.openOptionsPage();
     window.close();
-  };
-  btnSettings.addEventListener('click', openSettings);
-  document.getElementById('btn-settings-icon').addEventListener('click', openSettings);
+  });
 
   btnWhatsNew.addEventListener('click', () => {
     chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/whats-new.html') });
@@ -104,9 +109,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.close();
   });
 
+  document.getElementById('btn-more').addEventListener('click', () => {
+    setFooterExpanded(!document.getElementById('footer-row').classList.contains('expanded'));
+  });
+
   await showUpdateBanner();
   loadBanner();
 });
+
+function setFooterExpanded(expanded) {
+  const btnMore = document.getElementById('btn-more');
+  document.getElementById('footer-row').classList.toggle('expanded', expanded);
+  document.getElementById('promo-banner').classList.toggle('hidden', expanded);
+  document.getElementById('quick-links').classList.toggle('hidden', !expanded);
+  btnMore.setAttribute('aria-expanded', String(expanded));
+  btnMore.title = expanded ? 'Show offer' : 'More options';
+}
 
 async function initSiteCard() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -123,14 +141,14 @@ async function initSiteCard() {
   const settings = getSiteLockSettings(siteLockSettings);
   const site = findLockedSite(sites, tab.url, settings.includeSubdomains);
 
+  setSiteIcon(tab, host);
+  hostEl.title = site ? site.host : host;
   card.classList.remove('hidden');
-  document.getElementById('btn-settings').classList.add('hidden');
-  document.getElementById('btn-settings-icon').classList.remove('hidden');
 
   if (!site) {
     hostEl.textContent = host;
     stateEl.textContent = 'Not locked';
-    btn.innerHTML = 'Lock this site <span class="pro-badge">PRO</span>';
+    btn.innerHTML = 'Lock site <span class="pro-badge">PRO</span>';
     btn.addEventListener('click', async () => {
       if (sites.length >= MAX_LOCKED_SITES) {
         stateEl.textContent = `Limit of ${MAX_LOCKED_SITES} sites reached`;
@@ -186,18 +204,34 @@ async function initIdleCard() {
     if (idleSnoozeUntil > Date.now()) {
       const until = new Date(idleSnoozeUntil).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
       stateEl.textContent = `Paused until ${until}`;
-      stateEl.classList.add('unlocked');
+      stateEl.classList.add('paused');
       btn.textContent = 'Resume';
     } else {
       const mins = Math.floor((idleLockTimeout || 300) / 60);
       stateEl.textContent = `Locks after ${mins >= 60 ? '1 hour' : `${mins} min`} idle`;
-      stateEl.classList.remove('unlocked');
+      stateEl.classList.remove('paused');
       btn.textContent = 'Pause 1 hour';
     }
     card.classList.remove('hidden');
   }
 
-  render();
+  await render();
+}
+
+function updatePanel() {
+  const rows = document.querySelectorAll('#panel .row');
+  const anyVisible = Array.from(rows).some(r => !r.classList.contains('hidden'));
+  document.getElementById('panel').classList.toggle('hidden', !anyVisible);
+}
+
+function setSiteIcon(tab, host) {
+  const iconEl = document.getElementById('site-card-icon');
+  iconEl.textContent = host.charAt(0).toUpperCase();
+  if (!tab.favIconUrl || !/^https?:|^data:image\//.test(tab.favIconUrl)) return;
+  const img = new Image();
+  img.alt = '';
+  img.onload = () => iconEl.replaceChildren(img);
+  img.src = tab.favIconUrl;
 }
 
 async function showUpdateBanner() {
@@ -237,7 +271,6 @@ async function loadBanner() {
   }
 
   if (!promos.length) {
-    promoBanner.style.display = 'none';
     return;
   }
 
@@ -248,26 +281,30 @@ async function loadBanner() {
   await chrome.storage.local.set({ promoIndex: (idx + 1) % promos.length });
 
   if (item.id === RATE_ITEM_ID) {
-    promoBanner.style.display = 'none';
     ratePrompt.classList.remove('hidden');
     return;
   }
 
   ratePrompt.classList.add('hidden');
 
-  const iconEl = document.getElementById('promo-icon');
-  const logoEl = document.getElementById('promo-logo');
+  const logoEl  = document.getElementById('promo-logo');
+  const emojiEl = document.getElementById('promo-emoji');
+  const fallback = item.icon || (item.name || '?').charAt(0).toUpperCase();
 
   if (item.logo) {
+    logoEl.onerror = () => {
+      logoEl.classList.add('hidden');
+      emojiEl.textContent = fallback;
+    };
     logoEl.src = item.logo;
     logoEl.classList.remove('hidden');
-    iconEl.childNodes.forEach(n => { if (n.nodeType === 3) n.textContent = ''; });
   } else {
-    logoEl.classList.add('hidden');
-    iconEl.childNodes[0].textContent = item.icon;
+    emojiEl.textContent = fallback;
   }
 
   document.getElementById('promo-name').textContent = item.name;
   document.getElementById('promo-desc').textContent = item.desc;
   promoBanner.href = item.url;
+  document.getElementById('btn-more').classList.remove('hidden');
+  setFooterExpanded(false);
 }
