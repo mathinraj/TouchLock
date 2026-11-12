@@ -402,7 +402,7 @@ function asNote(value) {
   return note.length > MAX_UPDATE_NOTE ? note.slice(0, MAX_UPDATE_NOTE - 1).trimEnd() + '…' : note;
 }
 
-// versions.json keeps "touchlock" as a plain string for versions before 1.5.3,
+// versions.json keeps "touchlock" as a plain string for versions before 1.5.4,
 // which only read that key. "touchlock_release" adds a master version, a
 // one-line note, and per-browser overrides for stores that update later.
 function resolveRelease(versions) {

@@ -6,7 +6,7 @@
 
 **Lock your browser — or just your bank and email sites — with Touch ID, Windows Hello, or a PIN.**
 
-![Version](https://img.shields.io/badge/version-1.5.3-6366f1)
+![Version](https://img.shields.io/badge/version-1.5.4-6366f1)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-22c55e)
 ![Chrome](https://img.shields.io/badge/Chrome-110%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Edge](https://img.shields.io/badge/Edge-110%2B-0078D7?logo=microsoftedge&logoColor=white)
@@ -109,6 +109,10 @@ To run TouchLock from source:
 <summary><strong>Version history</strong></summary>
 
 Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.vercel.app/changelog.html) · [GitHub Releases](https://github.com/mathinraj/TouchLock/releases)
+
+**v1.5.4**
+- Redesigned toolbar popup; extra links behind a ⋯ button next to the featured app
+- Update notices show a one-line summary, match each browser's store version, and are checked daily
 
 **v1.5.3**
 - Fixed the "PIN" toolbar badge staying after you pin TouchLock
