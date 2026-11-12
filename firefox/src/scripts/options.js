@@ -563,13 +563,19 @@ async function init() {
   // ── Update Banner ──────────────────────────────
 
   async function loadUpdateBanner() {
-    const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
+    const { updateAvailable, latestVersion, latestNote } =
+      await chrome.storage.local.get(['updateAvailable', 'latestVersion', 'latestNote']);
     if (!updateAvailable || !latestVersion) return false;
 
     const banner = document.getElementById('update-banner');
     const btnUpdate = document.getElementById('opt-update-btn');
 
     document.getElementById('update-version').textContent = latestVersion;
+    if (latestNote) {
+      const noteEl = document.getElementById('update-note');
+      noteEl.textContent = latestNote;
+      noteEl.classList.remove('hidden');
+    }
     btnUpdate.href = getStoreUrl();
     banner.classList.remove('hidden');
     return true;

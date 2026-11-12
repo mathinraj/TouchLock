@@ -31,10 +31,14 @@ const SITE_MODE = document.body.dataset.mode === 'site';
     ({ site, returnUrl } = ctx);
   }
 
-  const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
+  const { updateAvailable, latestVersion, latestNote } =
+    await chrome.storage.local.get(['updateAvailable', 'latestVersion', 'latestNote']);
   if (!SITE_MODE && updateAvailable && latestVersion) {
     const corner = document.getElementById('update-corner');
-    document.getElementById('update-corner-text').textContent = `v${latestVersion} available — Update now`;
+    document.getElementById('update-corner-text').textContent = latestNote
+      ? `v${latestVersion}: ${latestNote} — Update now`
+      : `v${latestVersion} available — Update now`;
+    if (latestNote) corner.title = latestNote;
     corner.classList.remove('hidden');
 
     corner.addEventListener('click', async () => {

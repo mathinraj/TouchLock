@@ -281,6 +281,13 @@ body {
 
 .update-corner svg { flex-shrink: 0; }
 
+.update-corner span {
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ── Shake animation ──────────────────────── */
 
 @keyframes shake {

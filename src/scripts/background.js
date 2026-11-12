@@ -388,21 +388,65 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 
 const VERSIONS_URL = 'https://raw.githubusercontent.com/mathinraj/mathinraj/main/promotions/versions.json';
 
+const UPDATE_CHECK_ALARM = 'update-check';
+const MAX_UPDATE_NOTE = 90;
+
+function asVersion(value) {
+  return typeof value === 'string' && /^\d+(\.\d+){0,3}$/.test(value.trim()) ? value.trim() : null;
+}
+
+function asNote(value) {
+  if (typeof value !== 'string') return null;
+  const note = value.replace(/\s+/g, ' ').trim();
+  if (!note) return null;
+  return note.length > MAX_UPDATE_NOTE ? note.slice(0, MAX_UPDATE_NOTE - 1).trimEnd() + '…' : note;
+}
+
+// versions.json keeps "touchlock" as a plain string for versions before 1.5.3,
+// which only read that key. "touchlock_release" adds a master version, a
+// one-line note, and per-browser overrides for stores that update later.
+function resolveRelease(versions) {
+  const release = versions.touchlock_release && typeof versions.touchlock_release === 'object'
+    ? versions.touchlock_release : {};
+  const browsers = release.browsers && typeof release.browsers === 'object' ? release.browsers : {};
+  const own = browsers[browserName()] && typeof browsers[browserName()] === 'object'
+    ? browsers[browserName()] : {};
+
+  const ownVersion = asVersion(own.version);
+  if (ownVersion) return { version: ownVersion, note: asNote(own.note) };
+
+  const masterVersion = asVersion(release.version);
+  if (masterVersion) return { version: masterVersion, note: asNote(own.note) || asNote(release.note) };
+
+  return { version: asVersion(versions.touchlock), note: null };
+}
+
 async function checkForUpdate() {
   try {
     const res = await fetch(VERSIONS_URL, { cache: 'no-cache' });
-    const versions = await res.json();
-    const latest = versions.touchlock;
+    const { version: latest, note } = resolveRelease(await res.json());
     if (!latest) return;
 
     const current = chrome.runtime.getManifest().version;
     if (isNewerVersion(latest, current)) {
       await chrome.storage.local.set({ updateAvailable: true, latestVersion: latest });
+      if (note) await chrome.storage.local.set({ latestNote: note });
+      else await chrome.storage.local.remove('latestNote');
     } else {
-      await chrome.storage.local.remove(['updateAvailable', 'latestVersion']);
+      await chrome.storage.local.remove(['updateAvailable', 'latestVersion', 'latestNote']);
     }
   } catch (_) {}
 }
+
+// Re-creating an existing alarm restarts its countdown, and the service worker
+// restarts often, so only create it when missing.
+chrome.alarms.get(UPDATE_CHECK_ALARM, (alarm) => {
+  if (!alarm) chrome.alarms.create(UPDATE_CHECK_ALARM, { periodInMinutes: 24 * 60 });
+});
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === UPDATE_CHECK_ALARM) checkForUpdate();
+});
 
 function isNewerVersion(remote, local) {
   const r = remote.split('.').map(Number);

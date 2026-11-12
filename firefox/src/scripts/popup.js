@@ -235,10 +235,17 @@ function setSiteIcon(tab, host) {
 }
 
 async function showUpdateBanner() {
-  const { updateAvailable, latestVersion } = await chrome.storage.local.get(['updateAvailable', 'latestVersion']);
+  const { updateAvailable, latestVersion, latestNote } =
+    await chrome.storage.local.get(['updateAvailable', 'latestVersion', 'latestNote']);
   if (!updateAvailable || !latestVersion) return;
 
   document.getElementById('update-version').textContent = latestVersion;
+  if (latestNote) {
+    const noteEl = document.getElementById('update-note');
+    noteEl.textContent = latestNote;
+    noteEl.title = latestNote;
+    noteEl.classList.remove('hidden');
+  }
   document.getElementById('update-banner').classList.remove('hidden');
 }
 
