@@ -13,6 +13,17 @@
 
 const FEEDBACK_ITEMS = [
   {
+    type: 'improvement',
+    title: 'Fullscreen lock gets in the way of other apps',
+    feedback: 'Exclude the full screen option when prompting the finger print when using multiple applications its hard to operate it. Anyways the extension is good',
+    source: 'Store review',
+    reportedOn: '2026-11-12',
+    status: 'rolling-out',
+    resolution: 'Fullscreen lock used to bring the browser to the front and go fullscreen as soon as it locked, even while you were working in another app, and forced it back to fullscreen if you switched away. Now it only goes fullscreen when you switch to the browser to unlock, and leaves it alone while you use other apps. Fullscreen also stays optional and off by default.',
+    version: '1.5.4',
+    resolvedOn: '2026-11-12'
+  },
+  {
     type: 'bug',
     title: 'Idle lock kicks in while watching YouTube',
     feedback: 'A feature would be nice to have the automatic lock ignore specific sites such as youtube if it\'s playing video so it doesn\'t lock when watching something.',

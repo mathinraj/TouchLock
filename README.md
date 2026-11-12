@@ -113,6 +113,7 @@ Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.verc
 **v1.5.4**
 - Redesigned toolbar popup; extra links behind a ⋯ button next to the featured app
 - Update notices show a one-line summary, match each browser's store version, and are checked daily
+- Fullscreen lock no longer pulls the browser in front of other apps; it applies only when you switch to the browser
 
 **v1.5.3**
 - Fixed the "PIN" toolbar badge staying after you pin TouchLock

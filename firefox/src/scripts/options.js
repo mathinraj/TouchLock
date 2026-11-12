@@ -1092,7 +1092,7 @@ setStatus = function(el, text, color) {
     {
       target: '#section-lock',
       title: '⏱️ Lock Behavior & Shortcut',
-      desc: 'Fine-tune when your browser locks: on startup, after idle time, or via the Alt+L shortcut. We highly recommend enabling "Fullscreen lock screen" — it hides the address bar and tabs so nobody can bypass the lock!'
+      desc: 'Fine-tune when your browser locks: on startup, after idle time, or via the Alt+L shortcut. Optionally turn on "Fullscreen lock screen" to also hide the address bar and tabs while locked.'
     },
     {
       target: '#section-sites',

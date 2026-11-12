@@ -147,6 +147,8 @@ async function unlockBrowser() {
 // lockFullscreenWindows maps windowId → state to restore on unlock. Only windows
 // TouchLock itself put into fullscreen are listed, so a user's own fullscreen
 // (F11) is left alone.
+// Fullscreen is only applied to the window the user is looking at, so a lock
+// that fires while they work in another app never pulls the browser in front.
 
 let fullscreenChain = Promise.resolve();
 
@@ -157,16 +159,27 @@ function enterLockFullscreen(windowId) {
     if (fullscreenLock !== true || !(await getIsLocked())) return;
 
     const win = await chrome.windows.get(windowId);
-    if (win.state === 'fullscreen') return;
+    if (win.state === 'fullscreen' || !win.focused || win.type !== 'normal') return;
 
     const map = lockFullscreenWindows || {};
-    map[windowId] = win.state === 'minimized' ? 'normal' : win.state;
-    await chrome.storage.local.set({ lockFullscreenWindows: map });
-    await chrome.windows.update(windowId, { focused: true });
+    if (!(windowId in map)) {
+      map[windowId] = win.state === 'minimized' ? 'normal' : win.state;
+      await chrome.storage.local.set({ lockFullscreenWindows: map });
+    }
     await chrome.windows.update(windowId, { state: 'fullscreen' });
   }).catch(() => {});
   return fullscreenChain;
 }
+
+chrome.windows.onFocusChanged.addListener(async (windowId) => {
+  if (windowId === chrome.windows.WINDOW_ID_NONE || !(await getIsLocked())) return;
+  const { fullscreenLock } = await chrome.storage.local.get('fullscreenLock');
+  if (fullscreenLock !== true) return;
+  try {
+    const tabs = await chrome.tabs.query({ windowId });
+    if (tabs.some(t => isLockUrl(t.url))) enterLockFullscreen(windowId);
+  } catch (_) {}
+});
 
 function restoreLockFullscreen() {
   fullscreenChain = fullscreenChain.then(async () => {
@@ -185,9 +198,10 @@ function restoreLockFullscreen() {
 }
 
 // Esc exits extension-initiated fullscreen; while locked, put the window back.
+// A window that isn't focused is left alone so other apps stay usable.
 if (chrome.windows.onBoundsChanged) {
   chrome.windows.onBoundsChanged.addListener(async (win) => {
-    if (win.state === 'fullscreen' || !(await getIsLocked())) return;
+    if (win.state === 'fullscreen' || !win.focused || !(await getIsLocked())) return;
     const { fullscreenLock, lockFullscreenWindows } =
       await chrome.storage.local.get(['fullscreenLock', 'lockFullscreenWindows']);
     if (fullscreenLock !== true || !lockFullscreenWindows || !(win.id in lockFullscreenWindows)) return;
