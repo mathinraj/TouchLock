@@ -6,7 +6,7 @@
 
 **Lock your browser — or just your bank and email sites — with Touch ID, Windows Hello, or a PIN.**
 
-![Version](https://img.shields.io/badge/version-1.5.4-6366f1)
+![Version](https://img.shields.io/badge/version-1.6.0-6366f1)
 ![Manifest V3](https://img.shields.io/badge/Manifest-V3-22c55e)
 ![Chrome](https://img.shields.io/badge/Chrome-110%2B-4285F4?logo=googlechrome&logoColor=white)
 ![Edge](https://img.shields.io/badge/Edge-110%2B-0078D7?logo=microsoftedge&logoColor=white)
@@ -38,7 +38,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 
 **Lock specific sites** <sup>PRO</sup>
 - Keep sites like your bank or email locked even after unlocking the browser
-- Add sites in Settings, or click **Lock this site** in the toolbar popup
+- Add sites in **Settings → Manage locked sites**, or click **Lock this site** in the toolbar popup
 - Choose when a site locks again: when you leave it (default), after 5–60 minutes, or when the browser locks
 - Optionally include subdomains — locking `google.com` also covers `mail.google.com`
 
@@ -49,7 +49,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 - **Duress PIN** <sup>PRO</sup>: a secret second PIN that unlocks as normal but first erases the history, cookies and site data of sites you choose, or all browsing data
 
 **Stay in control**
-- Changing your PIN, biometrics, recovery questions, or locked sites requires your PIN or fingerprint
+- Changing your PIN, biometrics, recovery questions, locked sites, or duress PIN requires your PIN or fingerprint
 - Forgot your PIN? Answer 2 of your 3 security questions to reset it
 - A guided tour walks you through every setting on first install
 
@@ -60,6 +60,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 3. **Add 3 security questions** so you can reset a forgotten PIN.
 4. **Register biometrics** *(recommended)* — Touch ID or Windows Hello.
 5. *(Optional)* **Lock specific sites** in **Settings → Lock Specific Sites**.
+6. *(Optional)* **Set a duress PIN** in **Settings → Duress PIN**, for when someone forces you to unlock.
 
 That's it — your browser locks the next time it starts.
 
@@ -113,11 +114,14 @@ To run TouchLock from source:
 
 Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.vercel.app/changelog.html) · [GitHub Releases](https://github.com/mathinraj/TouchLock/releases)
 
-**v1.5.4**
+**v1.6.0**
 - Duress PIN (PRO): a second PIN that erases chosen browsing data, then unlocks as normal
+- Simpler Settings: Lock Behavior shows the basics, with full lock settings, locked sites and Duress PIN on their own pages
+- Fullscreen lock no longer pulls the browser in front of other apps; it applies only when you switch to the browser
+
+**v1.5.4**
 - Redesigned toolbar popup; extra links behind a ⋯ button next to the featured app
 - Update notices show a one-line summary, match each browser's store version, and are checked daily
-- Fullscreen lock no longer pulls the browser in front of other apps; it applies only when you switch to the browser
 
 **v1.5.3**
 - Fixed the "PIN" toolbar badge staying after you pin TouchLock

@@ -20,7 +20,7 @@ const FEEDBACK_ITEMS = [
     reportedOn: '2026-11-12',
     status: 'rolling-out',
     resolution: 'Added a Duress PIN (Settings → Duress PIN). It unlocks like your real PIN but first erases what you choose: the history of specific sites, their history plus cookies and site data, or all browsing data. Extra permissions are only requested when you turn it on.',
-    version: '1.5.4',
+    version: '1.6.0',
     resolvedOn: '2026-11-12'
   },
   {
@@ -31,7 +31,7 @@ const FEEDBACK_ITEMS = [
     reportedOn: '2026-11-12',
     status: 'rolling-out',
     resolution: 'Fullscreen lock used to bring the browser to the front and go fullscreen as soon as it locked, even while you were working in another app, and forced it back to fullscreen if you switched away. Now it only goes fullscreen when you switch to the browser to unlock, and leaves it alone while you use other apps. Fullscreen also stays optional and off by default.',
-    version: '1.5.4',
+    version: '1.6.0',
     resolvedOn: '2026-11-12'
   },
   {

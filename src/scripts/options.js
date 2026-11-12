@@ -895,6 +895,11 @@ setStatus = function(el, text, color) {
       desc: 'Keep sensitive sites like banking or email locked even after you unlock the browser. Open "Manage locked sites" to add one (or use "Lock this site" in the toolbar popup), and choose when an unlocked site locks again.'
     },
     {
+      target: '#section-duress',
+      title: '🛡️ Duress PIN',
+      desc: 'Optional: a secret second PIN for when someone forces you to unlock. It opens the browser as normal, but first erases the browsing data you choose. Nothing is erased until you set it up.'
+    },
+    {
       target: '#section-feedback',
       title: '💡 Feature Request & Bug Report',
       desc: 'Got an idea or found a bug? Expand this section to send a feature request, improvement suggestion, or bug report directly to the developer. Your feedback shapes what gets built next!'

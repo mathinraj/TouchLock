@@ -317,6 +317,7 @@ body {
 .accent-purple { background: rgba(168, 85, 247, 0.15);  color: #d8b4fe; }
 .accent-amber  { background: rgba(245, 158, 11, 0.15);  color: #fcd34d; }
 .accent-teal   { background: rgba(20, 184, 166, 0.15);  color: #5eead4; }
+.accent-red    { background: rgba(248, 113, 113, 0.15); color: #fca5a5; }
 
 .feature-card h3 {
   display: flex;

@@ -62,7 +62,7 @@
       "price": "0",
       "priceCurrency": "USD"
     },
-    "softwareVersion": "1.5.4",
+    "softwareVersion": "1.6.0",
     "author": {
       "@type": "Person",
       "name": "Mathinraj",
@@ -81,7 +81,8 @@
       "Keyboard shortcut to lock instantly (customizable)",
       "Profile-level browser lock",
       "Lock specific sites like banking or email, even while the browser is unlocked",
-      "Auto-lock on startup and idle",
+      "Auto-lock on startup and idle, pausing while you watch videos",
+      "Duress PIN that erases chosen browsing data before unlocking",
       "Fullscreen lock screen",
       "Tab guard protection",
       "PIN-protected settings changes",
@@ -189,7 +190,7 @@
         </a>
         <a href="changelog.html" class="btn btn-secondary">
           <i class="fa-solid fa-sparkles"></i>
-          What's New in v1.5.4
+          What's New in v1.6.0
         </a>
       </div>
       <div class="hero-visual">
@@ -254,8 +255,8 @@
           <div class="feature-icon">
             <i class="fa-solid fa-clock fa-lg"></i>
           </div>
-          <h3>Auto-Lock on Startup</h3>
-          <p>Every browser launch requires authentication. No manual action needed — it just works.</p>
+          <h3>Smart Auto-Lock</h3>
+          <p>Locks on every launch and when you step away, but waits while you're watching a video.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
@@ -280,17 +281,17 @@
         </div>
         <div class="feature-card">
           <div class="feature-icon">
-            <i class="fa-solid fa-expand fa-lg"></i>
+            <i class="fa-solid fa-user-secret fa-lg"></i>
           </div>
-          <h3>Fullscreen Lock Screen</h3>
-          <p>Hides the address bar, tabs, and browser UI while locked so nothing can be reached around the lock.</p>
+          <h3>Duress PIN</h3>
+          <p>Forced to unlock? A secret second PIN opens the browser as normal, but first erases the history and sign-ins of sites you choose.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
             <i class="fa-solid fa-user-shield fa-lg"></i>
           </div>
           <h3>PIN-Protected Settings</h3>
-          <p>Changing your PIN, biometrics, recovery questions, or locked sites requires your PIN or fingerprint.</p>
+          <p>Changing your PIN, biometrics, recovery questions, locked sites, or duress PIN requires your PIN or fingerprint.</p>
         </div>
       </div>
     </div>
@@ -394,44 +395,44 @@
   <section class="whats-new-section" id="whats-new" aria-label="What's new">
     <div class="container">
       <div class="section-header">
-        <h2>What's new in <span class="gradient-text">v1.5.0</span></h2>
-        <p>Lock the sites that matter most, and require your PIN every few hours.</p>
+        <h2>What's new in <span class="gradient-text">v1.6.0</span></h2>
+        <p>A duress PIN, an idle lock that waits for your videos, and a simpler Settings page.</p>
       </div>
       <div class="wn-list">
         <div class="wn-item">
-          <div class="wn-icon wn-icon--shortcut">
-            <i class="fa-solid fa-user-clock"></i>
-          </div>
-          <div class="wn-content">
-            <h3>Require PIN Every… <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
-            <p>Choose 1–24 hours. After that, your fingerprint stops working until you unlock once with your PIN.</p>
-          </div>
-        </div>
-        <div class="wn-item">
           <div class="wn-icon wn-icon--pin">
-            <i class="fa-solid fa-globe"></i>
+            <i class="fa-solid fa-user-secret"></i>
           </div>
           <div class="wn-content">
-            <h3>Lock Specific Sites <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
-            <p>Keep banking, email, or any site locked even while the browser is unlocked. Add sites in Settings or with "Lock this site" in the popup.</p>
+            <h3>Duress PIN <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
+            <p>A secret second PIN for when you're forced to unlock. It opens the browser as normal, but first erases what you choose: one site's history, its sign-ins, or all browsing data.</p>
           </div>
         </div>
         <div class="wn-item">
           <div class="wn-icon wn-icon--shortcut">
-            <i class="fa-solid fa-rotate-left"></i>
+            <i class="fa-solid fa-circle-play"></i>
           </div>
           <div class="wn-content">
-            <h3>Flexible Re-Lock</h3>
-            <p>Unlocked sites lock again when you leave them, after 5–60 minutes, or when the browser locks. Subdomains included by default.</p>
+            <h3>Idle Lock Waits for Videos <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
+            <p>Watching YouTube, Netflix or any other video no longer triggers the idle lock. Limit it to sites you choose and set a safety limit.</p>
           </div>
         </div>
         <div class="wn-item">
           <div class="wn-icon wn-icon--firefox">
-            <i class="fa-solid fa-shield-halved"></i>
+            <i class="fa-solid fa-expand"></i>
           </div>
           <div class="wn-content">
-            <h3>PIN-Protected Settings</h3>
-            <p>Changing your PIN, biometrics, recovery questions, or locked sites now requires your PIN or fingerprint.</p>
+            <h3>Fullscreen That Stays Out of Your Way <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
+            <p>Fullscreen lock only applies when you switch to the browser, so it never interrupts other apps.</p>
+          </div>
+        </div>
+        <div class="wn-item">
+          <div class="wn-icon wn-icon--shortcut">
+            <i class="fa-solid fa-table-columns"></i>
+          </div>
+          <div class="wn-content">
+            <h3>Simpler Settings &amp; Popup</h3>
+            <p>Settings shows the basics, with full lock settings, locked sites and the duress PIN on their own pages. The toolbar popup is cleaner too.</p>
           </div>
         </div>
       </div>
