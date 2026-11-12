@@ -74,6 +74,16 @@
             <span class="nav-label">Lock Specific Sites</span>
             <span class="nav-dot" id="nav-dot-sites"></span>
           </a>
+          <a href="#section-duress" class="nav-link" data-section="section-duress">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span class="nav-label">Duress PIN</span>
+            <span class="nav-dot" id="nav-dot-duress"></span>
+          </a>
         </div>
 
         <div class="nav-group">
@@ -594,6 +604,33 @@
             </div>
             <p class="site-hint">Sites always lock again when the browser locks or restarts. Changing these settings asks for your PIN.</p>
           </div>
+        </div>
+      </section>
+
+      <!-- ═══════ Duress PIN ═══════ -->
+      <section class="section" id="section-duress">
+        <div class="section-top">
+          <div class="section-title-row">
+            <div class="section-icon accent-red">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </div>
+            <div class="section-title-text">
+              <h2>Duress PIN <span class="pro-badge">PRO</span></h2>
+              <p>A secret second PIN that unlocks as normal, but first erases the browsing data you choose.</p>
+            </div>
+          </div>
+          <div class="status-row" id="duress-status">
+            <span class="dot gray"></span>
+            <span>Off</span>
+          </div>
+        </div>
+        <div class="section-body">
+          <a class="btn btn-secondary" id="btn-open-duress" href="duress.html">Set up duress PIN</a>
         </div>
       </section>
 

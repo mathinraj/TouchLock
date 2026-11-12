@@ -46,6 +46,7 @@ Shared computers, open laptops, curious coworkers. TouchLock puts a real lock sc
 - Touch ID on macOS or Windows Hello on Windows, triggered automatically
 - A 4–10 digit PIN, always available as a fallback
 - Optionally require your PIN every 1–24 hours, even when you use your fingerprint <sup>PRO</sup>
+- **Duress PIN** <sup>PRO</sup>: a secret second PIN that unlocks as normal but first erases the history, cookies and site data of sites you choose, or all browsing data
 
 **Stay in control**
 - Changing your PIN, biometrics, recovery questions, or locked sites requires your PIN or fingerprint
@@ -90,6 +91,8 @@ That's it — your browser locks the next time it starts.
 | `idle` | Locking after a period of inactivity |
 | `alarms` | Re-locking a site after the minutes you chose |
 | `declarativeNetRequestWithHostAccess` | Sending locked sites to the unlock page before they load |
+| `history` *(optional)* | Duress PIN only: erasing chosen sites from history. Requested when you turn it on |
+| `browsingData` *(optional)* | Duress PIN only: erasing cookies and site data. Requested when you turn it on |
 | `<all_urls>` host access | The lock overlay and site-lock redirects on any page |
 
 ## Feedback
@@ -111,6 +114,7 @@ To run TouchLock from source:
 Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.vercel.app/changelog.html) · [GitHub Releases](https://github.com/mathinraj/TouchLock/releases)
 
 **v1.5.4**
+- Duress PIN (PRO): a second PIN that erases chosen browsing data, then unlocks as normal
 - Redesigned toolbar popup; extra links behind a ⋯ button next to the featured app
 - Update notices show a one-line summary, match each browser's store version, and are checked daily
 - Fullscreen lock no longer pulls the browser in front of other apps; it applies only when you switch to the browser

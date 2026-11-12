@@ -300,7 +300,8 @@ async function reconcileSiteLocks() {
 // ── Messages from extension pages ───────────────
 
 // Returns a response object, or undefined if the action isn't a site-lock action.
-async function handleSiteLockMessage(msg, sender, checkPin) {
+// checkUnlockPin also accepts the duress PIN; checkPin (settings changes) doesn't.
+async function handleSiteLockMessage(msg, sender, checkPin, checkUnlockPin) {
   switch (msg.action) {
     case 'checkPin':
       if (!isFromExtensionPage(sender)) return { success: false, error: 'Not allowed.' };
@@ -308,7 +309,7 @@ async function handleSiteLockMessage(msg, sender, checkPin) {
 
     case 'unlockSite': {
       if (!isFromSiteLockPage(sender)) return { success: false, error: 'Not allowed.' };
-      const result = await checkPin(msg.pin);
+      const result = await checkUnlockPin(msg.pin);
       if (result.success) await unlockSite(msg.siteId, sender.tab && sender.tab.id);
       return result;
     }

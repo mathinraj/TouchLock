@@ -443,3 +443,16 @@ body {
     width: 100%;
   }
 }
+
+.pro-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: #fff;
+  vertical-align: middle;
+}

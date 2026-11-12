@@ -1943,3 +1943,5 @@ body {
     margin-bottom: 16px;
   }
 }
+
+a.btn { text-decoration: none; }

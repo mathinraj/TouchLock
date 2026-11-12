@@ -11,6 +11,7 @@
     "alarms",
     "declarativeNetRequestWithHostAccess"
   ],
+  "optional_permissions": ["history", "browsingData"],
   "background": {
     "service_worker": "src/scripts/background.js"
   },

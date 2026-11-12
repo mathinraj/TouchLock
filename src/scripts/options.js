@@ -139,6 +139,15 @@ async function init() {
 
     if (!(await requireAuth('Changing your PIN'))) return;
 
+    const { duressConfig } = await chrome.storage.local.get('duressConfig');
+    const duress = getDuressConfig(duressConfig);
+    if (duress.enabled && (await hashValue(p1, duress.pinSalt)) === duress.pinHash) {
+      showMsg(pinMsg, 'That PIN is your duress PIN. Choose a different one.', 'error');
+      return;
+    }
+    // Both PINs must stay the same length, or the lock screen would give the duress PIN away.
+    const turnOffDuress = duress.enabled && duress.pinLength !== p1.length;
+
     const salt = crypto.randomUUID();
     const hash = await hashValue(p1, salt);
 
@@ -149,6 +158,10 @@ async function init() {
       lastPinUnlockAt: Date.now(),
       setupComplete: true
     });
+    if (turnOffDuress) {
+      await chrome.storage.local.set({ duressConfig: { enabled: false, mode: duress.mode, sites: duress.sites } });
+      chrome.permissions.remove({ permissions: DURESS_ALL_PERMISSIONS }, () => void chrome.runtime.lastError);
+    }
 
     pin1.value = '';
     pin2.value = '';
@@ -156,7 +169,9 @@ async function init() {
     pinStrFill.removeAttribute('data-level');
     pinStrLabel.textContent = '';
     pinStrLabel.removeAttribute('data-level');
-    showMsg(pinMsg, 'PIN saved successfully.', 'success');
+    showMsg(pinMsg, turnOffDuress
+      ? 'PIN saved. Your duress PIN was turned off because it no longer has the same number of digits. Set it up again in Duress PIN.'
+      : 'PIN saved successfully.', 'success');
     await refreshStatus();
   });
 
@@ -701,10 +716,11 @@ async function init() {
   // ── Reset All ────────────────────────────────
 
   btnReset.addEventListener('click', async () => {
-    if (!confirm('This will erase your PIN, biometric credentials, security questions, and locked sites. Continue?')) return;
+    if (!confirm('This will erase your PIN, biometric credentials, security questions, locked sites, and duress PIN. Continue?')) return;
     if (!(await requireAuth('Resetting all data'))) return;
 
     await chrome.storage.local.clear();
+    chrome.permissions.remove({ permissions: DURESS_ALL_PERMISSIONS }, () => void chrome.runtime.lastError);
     showMsg(pinMsg, '', '');
     showMsg(bioMsg, '', '');
     showMsg(sqMsg, '', '');
@@ -754,8 +770,15 @@ async function init() {
   async function refreshStatus() {
     const data = await chrome.storage.local.get([
       'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured', 'setupComplete',
-      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout', 'pinRequiredEvery', 'lastPinUnlockAt'
+      'lockOnStartup', 'idleLockEnabled', 'idleLockTimeout', 'pinRequiredEvery', 'lastPinUnlockAt',
+      'duressConfig'
     ]);
+
+    const duress = getDuressConfig(data.duressConfig);
+    const DURESS_LABELS = { 'history': 'erases site history', 'history-data': 'erases site history & data', 'everything': 'erases all data' };
+    setStatus(document.getElementById('duress-status'),
+      duress.enabled ? `On · ${DURESS_LABELS[duress.mode]}` : 'Off', duress.enabled ? 'green' : 'gray');
+    document.getElementById('btn-open-duress').textContent = duress.enabled ? 'Manage duress PIN' : 'Set up duress PIN';
 
     pinIntervalField.classList.toggle('hidden', !(data.pinHash && data.webauthnRegistered));
     pinIntervalSelect.value = String(getPinInterval(data.pinRequiredEvery));
@@ -990,7 +1013,7 @@ function getStoreUrl() {
 async function updateProgress() {
   const data = await chrome.storage.local.get([
     'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured',
-    'lockOnStartup', 'idleLockEnabled', 'lockedSites'
+    'lockOnStartup', 'idleLockEnabled', 'lockedSites', 'duressConfig'
   ]);
 
   const map = {
@@ -1005,7 +1028,8 @@ async function updateProgress() {
     'nav-dot-bio':  !!data.webauthnRegistered,
     'nav-dot-sq':   !!data.securityQuestionsConfigured,
     'nav-dot-lock': data.lockOnStartup !== false || data.idleLockEnabled === true,
-    'nav-dot-sites': Array.isArray(data.lockedSites) && data.lockedSites.length > 0
+    'nav-dot-sites': Array.isArray(data.lockedSites) && data.lockedSites.length > 0,
+    'nav-dot-duress': getDuressConfig(data.duressConfig).enabled
   };
 
   const steps = document.querySelectorAll('.progress-step');

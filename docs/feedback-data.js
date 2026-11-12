@@ -13,6 +13,17 @@
 
 const FEEDBACK_ITEMS = [
   {
+    type: 'feature',
+    title: 'Duress PIN that erases site history and cookies',
+    feedback: 'A second password that when entered wipes all the history of one site and all that sites cookies or another choice could be that every site and the cookies from the account with the extension are wiped.',
+    source: 'Store review',
+    reportedOn: '2026-11-12',
+    status: 'rolling-out',
+    resolution: 'Added a Duress PIN (Settings → Duress PIN). It unlocks like your real PIN but first erases what you choose: the history of specific sites, their history plus cookies and site data, or all browsing data. Extra permissions are only requested when you turn it on.',
+    version: '1.5.4',
+    resolvedOn: '2026-11-12'
+  },
+  {
     type: 'improvement',
     title: 'Fullscreen lock gets in the way of other apps',
     feedback: 'Exclude the full screen option when prompting the finger print when using multiple applications its hard to operate it. Anyways the extension is good',

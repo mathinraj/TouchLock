@@ -260,9 +260,90 @@ async function checkPin(pin) {
 }
 
 async function verifyPin(pin) {
-  const result = await checkPin(pin);
+  const result = await checkUnlockPin(pin);
   if (result.success) await unlockBrowser();
   return result;
+}
+
+// ── Duress PIN ───────────────────────────────────
+// A second PIN that erases the chosen data, then unlocks exactly like the real
+// PIN. It only works for unlocking: settings changes still need the real PIN.
+
+async function checkUnlockPin(pin) {
+  const result = await checkPin(pin);
+  if (result.success || !(await isDuressPin(pin))) return result;
+
+  await runDuressWipe();
+  await chrome.storage.local.set({ lastPinUnlockAt: Date.now() });
+  return { success: true };
+}
+
+async function isDuressPin(pin) {
+  const { duressConfig, pinLength } = await chrome.storage.local.get(['duressConfig', 'pinLength']);
+  const config = getDuressConfig(duressConfig);
+  if (!config.enabled || typeof pin !== 'string' || pin.length !== (pinLength || 6)) return false;
+  return (await hashPin(pin, config.pinSalt)) === config.pinHash;
+}
+
+async function hasPermission(permission) {
+  try { return await chrome.permissions.contains({ permissions: [permission] }); } catch (_) { return false; }
+}
+
+async function runDuressWipe() {
+  const { duressConfig } = await chrome.storage.local.get('duressConfig');
+  const config = getDuressConfig(duressConfig);
+  try {
+    if (config.mode === 'everything') {
+      await wipeEverything();
+    } else {
+      await wipeHistoryFor(config.sites);
+      if (config.mode === 'history-data') await wipeSiteDataFor(config.sites);
+    }
+  } catch (_) {}
+  await chrome.storage.local.set({ duressLastUsedAt: Date.now() });
+}
+
+async function wipeHistoryFor(hosts) {
+  if (!hosts.length || !(await hasPermission('history'))) return;
+  for (const host of hosts) {
+    // history.search caps its results, so repeat until nothing for the host is left.
+    for (let round = 0; round < 50; round++) {
+      const items = await chrome.history.search({ text: host, startTime: 0, maxResults: 1000 });
+      const matches = items.filter((item) => {
+        try { return siteMatchesHost(host, new URL(item.url).hostname, true); } catch (_) { return false; }
+      });
+      if (!matches.length) break;
+      await Promise.all(matches.map(item => chrome.history.deleteUrl({ url: item.url })));
+    }
+  }
+}
+
+async function wipeSiteDataFor(hosts) {
+  if (!hosts.length || !(await hasPermission('browsingData'))) return;
+  if (browserName() === 'firefox') {
+    const hostnames = hosts.flatMap(h => [h, `www.${h}`]);
+    await chrome.browsingData.remove({ hostnames }, { cookies: true, localStorage: true });
+    try {
+      await chrome.browsingData.remove({ hostnames }, { indexedDB: true, serviceWorkers: true });
+    } catch (_) {}
+    return;
+  }
+  // Chrome clears cookies for the whole registrable domain, subdomains included.
+  const origins = hosts.flatMap(h => [`https://${h}`, `https://www.${h}`, `http://${h}`, `http://www.${h}`]);
+  await chrome.browsingData.remove({ origins }, {
+    cookies: true, localStorage: true, indexedDB: true, cacheStorage: true,
+    serviceWorkers: true, cache: true, fileSystems: true, webSQL: true
+  });
+}
+
+async function wipeEverything() {
+  if (!(await hasPermission('browsingData'))) return;
+  const types = {
+    history: true, downloads: true, cookies: true, cache: true,
+    localStorage: true, indexedDB: true, serviceWorkers: true, formData: true
+  };
+  if (browserName() !== 'firefox') Object.assign(types, { cacheStorage: true, fileSystems: true, webSQL: true });
+  await chrome.browsingData.remove({ since: 0 }, types);
 }
 
 // ── Idle detection (auto-lock on inactivity) ────
@@ -491,7 +572,7 @@ const UNINSTALL_URL = 'https://touchlock.vercel.app/uninstall.html';
 const UNINSTALL_URL_KEYS = [
   'pinHash', 'webauthnRegistered', 'securityQuestionsConfigured', 'lockOnStartup',
   'idleLockEnabled', 'idleMediaSettings', 'fullscreenLock', 'pinRequiredEvery',
-  'lockedSites', 'unlockCount', 'installedAt'
+  'lockedSites', 'unlockCount', 'installedAt', 'duressConfig'
 ];
 
 function browserVersion() {
@@ -513,7 +594,8 @@ async function updateUninstallUrl() {
     data.idleLockEnabled && 'idle',
     data.idleLockEnabled && getIdleMediaSettings(data.idleMediaSettings).enabled && 'video',
     data.fullscreenLock && 'fs',
-    data.pinRequiredEvery && `pin${data.pinRequiredEvery}h`
+    data.pinRequiredEvery && `pin${data.pinRequiredEvery}h`,
+    getDuressConfig(data.duressConfig).enabled && 'duress'
   ].filter(Boolean);
 
   const params = new URLSearchParams({
@@ -711,7 +793,7 @@ chrome.windows.onCreated.addListener(async (window) => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   (async () => {
-    const siteResponse = await handleSiteLockMessage(msg, sender, checkPin);
+    const siteResponse = await handleSiteLockMessage(msg, sender, checkPin, checkUnlockPin);
     if (siteResponse !== undefined) {
       sendResponse(siteResponse);
       return;

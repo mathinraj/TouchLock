@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TouchLock – Duress PIN</title>
+  <link rel="stylesheet" href="../styles/options.css">
+  <link rel="stylesheet" href="../styles/duress.css">
+</head>
+<body>
+  <main class="duress-page">
+    <a class="back-link" href="options.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Back to Settings
+    </a>
+
+    <header class="duress-head">
+      <div class="section-icon accent-red">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div class="duress-head-text">
+        <h1>Duress PIN <span class="pro-badge">PRO</span></h1>
+        <p>A secret second PIN for when someone forces you to unlock your browser. It unlocks like your real PIN, but first erases the data you choose below.</p>
+      </div>
+      <div class="status-row" id="duress-status">
+        <span class="dot gray"></span>
+        <span>Off</span>
+      </div>
+    </header>
+
+    <div class="d-note hidden" id="no-pin-note">
+      Set up your PIN in Settings first. The duress PIN works alongside it.
+    </div>
+
+    <!-- How it works -->
+    <section class="d-card">
+      <h2>How it works</h2>
+      <ol class="how">
+        <li>You choose a second PIN that's different from your real one.</li>
+        <li>If you're ever pressured to unlock, type the duress PIN instead.</li>
+        <li>TouchLock erases what you picked, then unlocks as normal. Nothing on screen shows that anything happened.</li>
+      </ol>
+      <p class="d-hint">Works on the browser lock screen and on locked sites. Fingerprint unlock and settings changes always need your real PIN.</p>
+    </section>
+
+    <!-- Step: what to erase -->
+    <section class="d-card">
+      <h2><span class="step">1</span> What should be erased?</h2>
+      <div class="choices" role="radiogroup">
+        <label class="choice">
+          <input type="radio" name="duress-mode" value="history">
+          <span class="choice-body">
+            <span class="choice-title">History of specific sites</span>
+            <span class="choice-desc">Removes your visits to the sites you choose from browser history. You stay signed in to them.</span>
+          </span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="duress-mode" value="history-data" checked>
+          <span class="choice-body">
+            <span class="choice-title">History and site data of specific sites</span>
+            <span class="choice-desc">Removes history, cookies and stored data for the sites you choose. You'll be signed out of them.</span>
+          </span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="duress-mode" value="everything">
+          <span class="choice-body">
+            <span class="choice-title">All browsing data</span>
+            <span class="choice-desc">Removes all history, downloads list, cookies, cache, form entries and site data for every site. You'll be signed out everywhere. Saved passwords and bookmarks are kept.</span>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Step: which sites -->
+    <section class="d-card" id="sites-card">
+      <h2><span class="step">2</span> Which sites?</h2>
+      <div class="site-add">
+        <input type="text" id="duress-site-input" class="sq-answer" placeholder="e.g. bank.com or reddit.com"
+               autocomplete="off" spellcheck="false" aria-label="Website to erase">
+        <button id="btn-add-duress-site" class="btn btn-primary site-add-btn">Add site</button>
+      </div>
+      <p class="site-hint">Subdomains are included: adding google.com also covers mail.google.com.
+        <button class="link-btn hidden" id="btn-add-locked">Add my locked sites</button></p>
+      <div class="msg" id="sites-msg"></div>
+      <ul class="site-list" id="duress-site-list"></ul>
+      <p class="site-empty" id="duress-site-empty">No sites yet. Add at least one.</p>
+    </section>
+
+    <!-- Step: PIN -->
+    <section class="d-card">
+      <h2><span class="step" id="pin-step">3</span> Choose your duress PIN</h2>
+      <p class="d-hint" id="pin-hint">Use the same number of digits as your real PIN, so nobody can tell them apart. It must be different from your real PIN.</p>
+      <div class="pin-pair">
+        <input type="password" id="duress-pin1" class="sq-answer" inputmode="numeric" pattern="[0-9]*"
+               autocomplete="off" placeholder="Duress PIN" aria-label="Duress PIN">
+        <input type="password" id="duress-pin2" class="sq-answer" inputmode="numeric" pattern="[0-9]*"
+               autocomplete="off" placeholder="Confirm duress PIN" aria-label="Confirm duress PIN">
+      </div>
+      <p class="d-hint hidden" id="pin-keep-hint">Leave both empty to keep your current duress PIN.</p>
+    </section>
+
+    <!-- Warning -->
+    <section class="d-card d-warn">
+      <h2>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Before you turn it on
+      </h2>
+      <ul class="warn-list">
+        <li><strong>Erased data can't be recovered.</strong> Not by you, and not by TouchLock.</li>
+        <li><strong>Typing the duress PIN by mistake erases it too.</strong> Pick a PIN you won't enter by accident.</li>
+        <li id="perm-line">Your browser will ask to let TouchLock <strong id="perm-text">read and change your browsing history and clear browsing data</strong>. It's only used when the duress PIN is entered, and is removed if you turn this off.</li>
+      </ul>
+      <label class="confirm-row">
+        <input type="checkbox" id="duress-confirm">
+        <span>I understand that entering my duress PIN permanently erases this data.</span>
+      </label>
+    </section>
+
+    <div class="msg" id="duress-msg"></div>
+    <div class="d-actions">
+      <button class="btn btn-danger" id="btn-save-duress">Turn on duress PIN</button>
+      <button class="btn btn-secondary hidden" id="btn-off-duress">Turn off</button>
+    </div>
+    <p class="d-hint d-last" id="last-used"></p>
+  </main>
+
+  <script src="../scripts/site-lock-shared.js"></script>
+  <script src="../scripts/webauthn-config.js"></script>
+  <script src="../scripts/bio-policy.js"></script>
+  <script src="../scripts/reauth.js"></script>
+  <script src="../scripts/duress.js"></script>
+</body>
+</html>

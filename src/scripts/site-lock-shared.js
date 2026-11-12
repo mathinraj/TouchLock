@@ -123,6 +123,26 @@ function idleMediaCoversHost(settings, hostname) {
     settings.sites.some(host => siteMatchesHost(host, hostname, true));
 }
 
+// ── Duress PIN ───────────────────────────────────
+// Each erase mode lists the optional permissions it needs. They are requested
+// only when the user turns the duress PIN on.
+
+const DURESS_MODES = {
+  'history':      ['history'],
+  'history-data': ['history', 'browsingData'],
+  'everything':   ['browsingData']
+};
+
+const DURESS_ALL_PERMISSIONS = ['history', 'browsingData'];
+
+function getDuressConfig(raw) {
+  const c = Object.assign({ enabled: false, mode: 'history-data', sites: [] }, raw || {});
+  c.enabled = c.enabled === true && typeof c.pinHash === 'string' && typeof c.pinSalt === 'string';
+  if (!(c.mode in DURESS_MODES)) c.mode = 'history-data';
+  c.sites = Array.isArray(c.sites) ? c.sites.filter(h => typeof h === 'string') : [];
+  return c;
+}
+
 function describeSiteMatch(host, includeSubdomains) {
   return includeSubdomains
     ? `Locks ${host} and all its subdomains, like www.${host} and login.${host}`
