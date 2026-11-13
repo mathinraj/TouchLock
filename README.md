@@ -177,6 +177,6 @@ Full release notes: [touchlock.vercel.app/changelog.html](https://touchlock.verc
 
 <div align="center">
 
-Made by [Mathinraj](https://mathinraj.is-a.dev/) · If TouchLock helps you, [buy me a coffee](https://coindrop.to/mathinraj) or leave a review ⭐
+Made by [Mathinraj](https://mathinraj.is-a.dev/) · If TouchLock helps you, [support the project](https://mathinraj.is-a.dev/contribute/) or leave a review ⭐
 
 </div>

@@ -206,6 +206,7 @@ body {
 .sidebar-action.coffee:hover { color: #fbbf24; }
 .sidebar-action.rate:hover   { color: #fbbf24; }
 .sidebar-action.new:hover    { color: #a78bfa; }
+.sidebar-action.dev:hover    { color: #67e8f9; }
 
 .sidebar-action svg { flex-shrink: 0; opacity: 0.5; }
 .sidebar-action:hover svg { opacity: 0.8; }
