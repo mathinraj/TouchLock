@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>TouchLock – Lock Your Browser with Fingerprint, Touch ID & PIN</title>
   <meta name="description" content="TouchLock is a free, open-source browser extension that locks your browser profile — or just specific sites like banking and email — with Touch ID, Windows Hello, or a secure PIN. Works on Edge, Firefox, Chrome, and Brave.">
   <meta name="keywords" content="browser lock extension, fingerprint browser lock, Touch ID browser, Windows Hello browser lock, lock browser with PIN, lock specific websites, password protect website, lock site with fingerprint, browser privacy extension, protect browser history, browser security extension, Edge lock extension, Firefox lock extension, Chrome lock extension, biometric browser lock, lock browser profile, open source browser lock">
   <meta name="author" content="Mathinraj">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-  <meta name="theme-color" content="#10b981">
+  <meta name="theme-color" content="#f2f3f5">
   <link rel="canonical" href="https://touchlock.vercel.app/">
   <meta name="google-site-verification" content="7OHgQl0_ZtSYxF2eXQIzCUngjx1qjT4jGzC4Nbg8K-Q">
 
@@ -42,9 +42,10 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="scrollcraft.css">
+  <link rel="stylesheet" href="home.css">
 
   <!-- Structured Data: SoftwareApplication -->
   <script type="application/ld+json">
@@ -152,522 +153,409 @@
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar" id="navbar">
-    <div class="container nav-content">
-      <a href="#" class="nav-brand">
-        <img src="assets/logo.svg" alt="TouchLock" width="32" height="32">
+  <span data-sc-progress></span>
+
+  <header class="bar" id="bar">
+    <div class="bar__inner">
+      <a href="#top" class="mark" aria-label="TouchLock home">
+        <img src="assets/logo.svg" alt="" width="28" height="28">
         <span>TouchLock</span>
       </a>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#screenshots">Screenshots</a>
-        <a href="#install">Install</a>
-        <a href="changelog.html">What's New</a>
+      <nav class="bar__nav" aria-label="Primary">
+        <a href="#covers">How it locks</a>
+        <a href="#sites">Site lock</a>
+        <a href="#duress">Duress PIN</a>
+        <a href="#privacy">Privacy</a>
+        <a href="changelog.html">What's new</a>
         <a href="feedback.html">Feedback</a>
-      </div>
+      </nav>
+      <a class="btn btn--sm" href="#install" data-store-link>
+        <i class="fa-brands fa-chrome" data-store-icon aria-hidden="true"></i>
+        <span data-store-label>Add to Chrome</span>
+      </a>
     </div>
-  </nav>
+  </header>
 
-  <main>
+  <main id="top">
 
-  <!-- Hero -->
-  <section class="hero" aria-label="Introduction">
-    <div class="hero-glow"></div>
-    <div class="container hero-content">
-      <div class="hero-badge">Open Source &middot; Free Forever</div>
-      <h1>Lock your browser<br>with a <span class="gradient-text">fingerprint</span></h1>
-      <p class="hero-subtitle">
-        Protect your browser profile with Touch ID, Windows Hello, or a secure PIN.
-        No one sees your history, bookmarks, or passwords without your permission —
-        and your bank or email stays locked even after the browser is unlocked.
-      </p>
-      <div class="hero-actions">
-        <a href="#install" class="btn btn-primary">
-          <i class="fa-solid fa-download"></i>
-          Install Now
-        </a>
-        <a href="changelog.html" class="btn btn-secondary">
-          <i class="fa-solid fa-sparkles"></i>
-          What's New in v1.6.0
-        </a>
-      </div>
-      <div class="hero-visual">
-        <div class="browser-mockup">
-          <div class="browser-bar">
-            <div class="browser-dots">
-              <span></span><span></span><span></span>
-            </div>
-            <div class="browser-address">edge://extensions</div>
+    <!-- Hero: the live lock -->
+    <section class="hero" data-sc-act="flow" aria-label="Introduction">
+      <div class="hero__inner">
+        <div class="hero__copy" data-sc-in data-sc-stagger="70">
+          <a class="hero__new" href="#duress"><span>New in 1.6</span> Duress PIN <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <h1 class="hero__title">Lock your browser with your fingerprint.</h1>
+          <p class="hero__lede">Touch ID, Windows Hello or a PIN. For the whole browser, or just your bank and email.</p>
+          <div class="hero__actions">
+            <a class="btn" href="#install" data-store-link>
+              <i class="fa-brands fa-chrome" data-store-icon aria-hidden="true"></i>
+              <span data-store-label>Add to Chrome</span>
+            </a>
+            <a class="btn btn--quiet" href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener">
+              <i class="fa-brands fa-github" aria-hidden="true"></i> Free and open source
+            </a>
           </div>
-          <div class="browser-body">
-            <div class="lock-preview">
-              <div class="lock-icon-wrapper">
-                <i class="fa-solid fa-lock fa-2x"></i>
+        </div>
+
+        <figure class="hero__demo">
+          <div class="win" id="demo" data-state="locked" data-view="inbox">
+            <div class="win__tabs" role="tablist" aria-label="Demo browser tabs">
+              <span class="win__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <button class="win__tab is-active" role="tab" aria-selected="true" data-tab="inbox">
+                <i class="fa-solid fa-envelope" aria-hidden="true"></i><span>Inbox</span>
+              </button>
+              <button class="win__tab" role="tab" aria-selected="false" data-tab="bank">
+                <i class="fa-solid fa-building-columns" aria-hidden="true"></i><span>Bank</span>
+              </button>
+              <button class="win__tab" role="tab" aria-selected="false" data-tab="history">
+                <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i><span>History</span>
+              </button>
+            </div>
+            <div class="win__addr">
+              <i class="fa-solid fa-lock" aria-hidden="true"></i>
+              <span data-addr>mail.example.com</span>
+            </div>
+
+            <div class="win__view">
+              <div class="page" data-page="inbox">
+                <p class="page__title">Inbox</p>
+                <ul class="page__list">
+                  <li><b>Example Bank</b><span>Your monthly statement is ready</span></li>
+                  <li><b>Priya</b><span>Dinner on Friday?</span></li>
+                  <li><b>GitHub</b><span>New sign-in to your account</span></li>
+                  <li><b>Airline</b><span>Your boarding pass for tomorrow</span></li>
+                  <li><b>Landlord</b><span>Lease renewal attached</span></li>
+                </ul>
               </div>
-              <div class="lock-preview-title">Browser Locked</div>
-              <div class="lock-preview-subtitle">Verify your identity to continue</div>
-              <div class="pin-dots-preview">
-                <span></span><span></span><span></span><span></span><span></span><span></span>
+              <div class="page" data-page="bank" hidden>
+                <p class="page__title">Accounts</p>
+                <ul class="page__list">
+                  <li><b>Checking ···· 4821</b><span>Available balance hidden in this demo</span></li>
+                  <li><b>Savings ···· 1290</b><span>Available balance hidden in this demo</span></li>
+                  <li><b>Card ···· 7734</b><span>Statement due in 6 days</span></li>
+                </ul>
               </div>
-              <div class="lock-preview-btn">
-                <i class="fa-solid fa-fingerprint"></i>
-                Unlock with Biometrics
+              <div class="page" data-page="history" hidden>
+                <p class="page__title">History · Today</p>
+                <ul class="page__list">
+                  <li><b>Example Bank</b><span>bank.example.com</span></li>
+                  <li><b>Inbox</b><span>mail.example.com</span></li>
+                  <li><b>Flights to Lisbon</b><span>travel.example.com</span></li>
+                  <li><b>Pull requests</b><span>github.com</span></li>
+                </ul>
+              </div>
+
+              <div class="lock" id="lock" role="group" aria-label="Lock screen">
+                <div class="lock__panel" id="lock-panel">
+                  <img src="assets/logo.svg" alt="" width="44" height="44">
+                  <p class="lock__title">Browser locked</p>
+                  <p class="lock__hint" id="lock-hint">Hold the sensor to unlock</p>
+
+                  <div class="lock__bio" id="lock-bio">
+                    <button class="sensor" id="sensor" type="button" aria-describedby="lock-hint">
+                      <svg viewBox="0 0 80 80" aria-hidden="true">
+                        <circle class="sensor__track" cx="40" cy="40" r="36"/>
+                        <circle class="sensor__ring" id="sensor-ring" cx="40" cy="40" r="36"/>
+                      </svg>
+                      <i class="fa-solid fa-fingerprint" aria-hidden="true"></i>
+                      <span class="visually-hidden">Hold to unlock with fingerprint</span>
+                    </button>
+                    <button class="lock__alt" type="button" id="use-pin">Use PIN instead</button>
+                  </div>
+
+                  <div class="lock__pin" id="lock-pin" hidden>
+                    <div class="pin-dots" id="pin-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                    <div class="keypad" id="keypad">
+                      <button type="button">1</button><button type="button">2</button><button type="button">3</button>
+                      <button type="button">4</button><button type="button">5</button><button type="button">6</button>
+                      <button type="button">7</button><button type="button">8</button><button type="button">9</button>
+                      <button type="button" data-key="bio" aria-label="Use fingerprint"><i class="fa-solid fa-fingerprint" aria-hidden="true"></i></button>
+                      <button type="button">0</button>
+                      <button type="button" data-key="del" aria-label="Delete digit"><i class="fa-solid fa-delete-left" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Features -->
-  <section class="features" id="features" aria-label="Features">
-    <div class="container">
-      <div class="section-header">
-        <h2>Everything you need to<br><span class="gradient-text">secure your browser</span></h2>
-        <p>TouchLock guards your entire browser profile — history, bookmarks, passwords, and more.</p>
+            <div class="win__status" aria-live="polite">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span id="demo-status">Locked</span>
+              <button type="button" class="win__lockbtn" id="lock-now">Lock <kbd>Alt</kbd><kbd>L</kbd></button>
+            </div>
+          </div>
+          <figcaption class="hero__caption">A working demo. Hold the fingerprint, or use PIN <span class="mono">2580</span>. Leave it alone and it locks itself again.</figcaption>
+        </figure>
       </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-fingerprint fa-lg"></i>
-          </div>
-          <h3>Biometric Unlock</h3>
-          <p>Unlock with Touch ID on Mac or Windows Hello on PC. Auto-triggers when the lock screen loads.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-lock fa-lg"></i>
-          </div>
-          <h3>Flexible PIN</h3>
-          <p>4–10 digit PIN with strength indicator, SHA-256 hashed with random salt. Always available as a fallback.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-shield-halved fa-lg"></i>
-          </div>
-          <h3>Profile-Level Lock</h3>
-          <p>Blocks access to history, downloads, bookmarks — your entire profile is protected until authenticated.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-clock fa-lg"></i>
-          </div>
-          <h3>Smart Auto-Lock</h3>
-          <p>Locks on every launch and when you step away, but waits while you're watching a video.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-display fa-lg"></i>
-          </div>
-          <h3>Tab Guards</h3>
-          <p>Prevents switching tabs, opening new tabs, or closing the lock tab. No way to bypass the lock screen.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-rotate-right fa-lg"></i>
-          </div>
-          <h3>PIN Recovery</h3>
-          <p>Forgot your PIN? Answer 2 of 3 security questions to reset. Your data stays safe.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-globe fa-lg"></i>
-          </div>
-          <h3>Lock Specific Sites</h3>
-          <p>Keep banking, email, or any site locked even while the browser is unlocked. One click from the popup.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-user-secret fa-lg"></i>
-          </div>
-          <h3>Duress PIN</h3>
-          <p>Forced to unlock? A secret second PIN opens the browser as normal, but first erases the history and sign-ins of sites you choose.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fa-solid fa-user-shield fa-lg"></i>
-          </div>
-          <h3>PIN-Protected Settings</h3>
-          <p>Changing your PIN, biometrics, recovery questions, locked sites, or duress PIN requires your PIN or fingerprint.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- How It Works -->
-  <section class="how-it-works" id="how-it-works" aria-label="How it works">
-    <div class="container">
-      <div class="section-header">
-        <h2>Simple to set up,<br><span class="gradient-text">impossible to bypass</span></h2>
-        <p>Get protected in under a minute. Three steps, that's it.</p>
-      </div>
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h3>Install the extension</h3>
-            <p>Add TouchLock from the Chrome Web Store, Edge Add-ons, Firefox Add-ons, or load it manually in developer mode.</p>
+    <!-- What gets locked: pinned, rows stamp as you scroll -->
+    <section id="covers" class="covers" data-sc-act="pin" data-sc-span="2.2" aria-labelledby="covers-title">
+      <div data-sc-stage class="covers__stage">
+        <div class="covers__inner">
+          <div class="covers__copy">
+            <h2 id="covers-title" class="h2">Locked means all of it.</h2>
+            <p class="body">Every tab and every window waits behind one lock screen. Anything you open while locked is held there, then returns to where it was going once you unlock.</p>
+            <p class="covers__foot" data-sc-cue="0.78">Locks on every startup, after the idle time you choose, from the toolbar, or with <kbd>Alt</kbd><kbd>L</kbd>.</p>
           </div>
-        </div>
-        <div class="step-connector"></div>
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h3>Set your PIN &amp; security questions</h3>
-            <p>Choose a 4–10 digit PIN and answer 3 security questions for recovery. Optionally register biometrics.</p>
-          </div>
-        </div>
-        <div class="step-connector"></div>
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h3>You're protected</h3>
-            <p>Your browser locks automatically on every startup. Unlock with your fingerprint or PIN. Optionally lock specific sites too.</p>
-          </div>
+          <ul class="covers__list">
+            <li><i class="fa-solid fa-table-columns" aria-hidden="true"></i><span>Open tabs</span><em class="stamp" data-sc-rise="0" data-sc-cue="0.08"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</em></li>
+            <li><i class="fa-regular fa-window-restore" aria-hidden="true"></i><span>New windows</span><em class="stamp" data-sc-rise="0" data-sc-cue="0.18"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</em></li>
+            <li><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i><span>History</span><em class="stamp" data-sc-rise="0" data-sc-cue="0.28"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</em></li>
+            <li><i class="fa-solid fa-download" aria-hidden="true"></i><span>Downloads</span><em class="stamp" data-sc-rise="0" data-sc-cue="0.38"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</em></li>
+            <li><i class="fa-regular fa-bookmark" aria-hidden="true"></i><span>Bookmarks</span><em class="stamp" data-sc-rise="0" data-sc-cue="0.48"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</em></li>
+            <li><i class="fa-solid fa-gear" aria-hidden="true"></i><span>Browser settings pages</span><em class="stamp" data-sc-rise="0" data-sc-cue="0.58"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</em></li>
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Screenshots -->
-  <section class="screenshots" id="screenshots" aria-label="Screenshots">
-    <div class="container">
-      <div class="section-header">
-        <h2>See it in <span class="gradient-text">action</span></h2>
-        <p>A quick look at TouchLock's key screens and features.</p>
-      </div>
-      <div class="screenshot-gallery">
-        <div class="screenshot-track" id="screenshot-track">
-          <div class="screenshot-slide">
-            <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image1.png" alt="TouchLock lock screen showing PIN entry keypad and biometric unlock button" loading="lazy" width="640" height="400">
-            </div>
-            <p class="screenshot-caption">Lock Screen — PIN entry with biometric option</p>
+    <!-- Site lock -->
+    <section id="sites" class="sites sc-section" data-sc-act="flow" aria-labelledby="sites-title">
+      <div class="sc-wrap sites__grid">
+        <div class="sites__panel" data-sc-in>
+          <div class="sites__head">
+            <p>Locked sites</p>
+            <span class="tag">PRO</span>
           </div>
-          <div class="screenshot-slide">
-            <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image3.png" alt="TouchLock auto-triggering Touch ID and Windows Hello biometric authentication on browser startup" loading="lazy" width="640" height="400">
-            </div>
-            <p class="screenshot-caption">Auto-triggers Touch ID &amp; Windows Hello on startup</p>
-          </div>
-          <div class="screenshot-slide">
-            <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image2.png" alt="TouchLock profile-level lock blocking access to browser history, downloads, and all tabs" loading="lazy" width="640" height="400">
-            </div>
-            <p class="screenshot-caption">Profile-Level Lock — blocks history, downloads &amp; all tabs</p>
-          </div>
-          <div class="screenshot-slide">
-            <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image4.png" alt="TouchLock toolbar popup for one-click browser locking from the extension icon" loading="lazy" width="640" height="400">
-            </div>
-            <p class="screenshot-caption">One-click lock from the toolbar popup</p>
-          </div>
-          <div class="screenshot-slide">
-            <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image6.png" alt="TouchLock settings page for configuring PIN, security questions, and biometric authentication" loading="lazy" width="640" height="400">
-            </div>
-            <p class="screenshot-caption">Settings — PIN, security questions &amp; biometric setup</p>
-          </div>
-          <div class="screenshot-slide">
-            <div class="screenshot-img-wrapper">
-              <img src="assets/Screenshots/image5.png" alt="TouchLock PIN recovery screen with security questions to reset forgotten PIN" loading="lazy" width="640" height="400">
-            </div>
-            <p class="screenshot-caption">PIN Recovery — reset with security questions</p>
-          </div>
-        </div>
-      </div>
-      <div class="screenshot-controls">
-        <button class="screenshot-btn" id="screenshot-prev" aria-label="Previous screenshot">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-        <div class="screenshot-dots" id="screenshot-dots"></div>
-        <button class="screenshot-btn" id="screenshot-next" aria-label="Next screenshot">
-          <i class="fa-solid fa-chevron-right"></i>
-        </button>
-      </div>
-    </div>
-  </section>
+          <ul class="sites__list">
+            <li>
+              <span class="fav" aria-hidden="true"><i class="fa-solid fa-building-columns"></i></span>
+              <span class="sites__host">bank.example.com</span>
+              <span class="sites__state"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</span>
+            </li>
+            <li>
+              <span class="fav" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span>
+              <span class="sites__host" data-sub-host>google.com</span>
+              <span class="sites__state"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</span>
+            </li>
+            <li>
+              <span class="fav" aria-hidden="true"><i class="fa-solid fa-heart-pulse"></i></span>
+              <span class="sites__host">health.example.org</span>
+              <span class="sites__state"><i class="fa-solid fa-lock" aria-hidden="true"></i> Locked</span>
+            </li>
+          </ul>
 
-  <!-- What's New -->
-  <section class="whats-new-section" id="whats-new" aria-label="What's new">
-    <div class="container">
-      <div class="section-header">
-        <h2>What's new in <span class="gradient-text">v1.6.0</span></h2>
-        <p>A duress PIN, an idle lock that waits for your videos, and a simpler Settings page.</p>
-      </div>
-      <div class="wn-list">
-        <div class="wn-item">
-          <div class="wn-icon wn-icon--pin">
-            <i class="fa-solid fa-user-secret"></i>
-          </div>
-          <div class="wn-content">
-            <h3>Duress PIN <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
-            <p>A secret second PIN for when you're forced to unlock. It opens the browser as normal, but first erases what you choose: one site's history, its sign-ins, or all browsing data.</p>
-          </div>
-        </div>
-        <div class="wn-item">
-          <div class="wn-icon wn-icon--shortcut">
-            <i class="fa-solid fa-circle-play"></i>
-          </div>
-          <div class="wn-content">
-            <h3>Idle Lock Waits for Videos <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
-            <p>Watching YouTube, Netflix or any other video no longer triggers the idle lock. Limit it to sites you choose and set a safety limit.</p>
-          </div>
-        </div>
-        <div class="wn-item">
-          <div class="wn-icon wn-icon--firefox">
-            <i class="fa-solid fa-expand"></i>
-          </div>
-          <div class="wn-content">
-            <h3>Fullscreen That Stays Out of Your Way <span class="requested-tag"><i class="fa-solid fa-heart"></i> User Requested</span></h3>
-            <p>Fullscreen lock only applies when you switch to the browser, so it never interrupts other apps.</p>
-          </div>
-        </div>
-        <div class="wn-item">
-          <div class="wn-icon wn-icon--shortcut">
-            <i class="fa-solid fa-table-columns"></i>
-          </div>
-          <div class="wn-content">
-            <h3>Simpler Settings &amp; Popup</h3>
-            <p>Settings shows the basics, with full lock settings, locked sites and the duress PIN on their own pages. The toolbar popup is cleaner too.</p>
-          </div>
-        </div>
-      </div>
-      <div class="wn-cta">
-        <a href="changelog.html" class="btn btn-outline">
-          <i class="fa-solid fa-clock-rotate-left"></i>
-          View full changelog
-        </a>
-      </div>
-    </div>
-  </section>
+          <fieldset class="relock">
+            <legend>Lock again</legend>
+            <div class="seg" role="radiogroup">
+              <label><input type="radio" name="relock" value="leave" checked><span>When I leave</span></label>
+              <label><input type="radio" name="relock" value="time"><span>After 15 min</span></label>
+              <label><input type="radio" name="relock" value="browser"><span>When the browser locks</span></label>
+            </div>
+            <p class="relock__say" id="relock-say" aria-live="polite">Close the tab or go somewhere else, and the site asks for your fingerprint next time.</p>
+          </fieldset>
 
-  <!-- Install -->
-  <section class="install" id="install" aria-label="Install TouchLock">
-    <div class="container">
-      <div class="section-header">
-        <h2>Get <span class="gradient-text">TouchLock</span></h2>
-        <p>Available on Chrome Web Store, Edge Add-ons, Firefox Add-ons, and other Chromium browsers. Choose your preferred method.</p>
-      </div>
-      <div class="install-grid">
+          <label class="switch">
+            <input type="checkbox" id="subdomains" checked>
+            <span class="switch__ui" aria-hidden="true"></span>
+            <span>Include subdomains <small id="sub-say">google.com also covers mail.google.com</small></span>
+          </label>
+        </div>
 
-        <!-- Chrome -->
-        <div class="install-card install-card--active">
-          <div class="install-card-icon">
-            <i class="fa-brands fa-chrome fa-2x" style="color: #4285F4;"></i>
+        <div class="sites__copy sc-stack" data-sc-in data-sc-stagger="70">
+          <h2 id="sites-title" class="h2">Lock your bank. Leave the rest open.</h2>
+          <p class="body">Some sites deserve a second door. A locked site asks for your fingerprint or PIN before it opens, even while the rest of the browser is unlocked.</p>
+          <p class="body">Add one in Settings, or open the site and click <b>Lock this site</b> in the toolbar popup.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Idle lock -->
+    <section class="idle sc-section" data-sc-act="flow" aria-labelledby="idle-title">
+      <div class="sc-wrap">
+        <div class="idle__head" data-sc-in data-sc-stagger="70">
+          <h2 id="idle-title" class="h2">Step away and it locks. Watch a film and it waits.</h2>
+          <p class="body">Idle lock counts from 1 minute to 1 hour. While a video plays, the count holds, on any site or only the ones you choose.</p>
+        </div>
+
+        <div class="track" data-sc-reveal="left" data-sc-reveal-at="0.18 0.5" role="img" aria-label="Timeline: you are active, step away and the idle count starts, a video plays and the count holds, then the count finishes and the browser locks.">
+          <div class="track__seg track__seg--active"><span>Using the browser</span></div>
+          <div class="track__seg track__seg--idle"><span>Idle, counting</span></div>
+          <div class="track__seg track__seg--video"><span><i class="fa-solid fa-play" aria-hidden="true"></i> Video playing, count holds</span></div>
+          <div class="track__seg track__seg--idle"><span>Counting again</span></div>
+          <div class="track__end"><i class="fa-solid fa-lock" aria-hidden="true"></i><span>Locked</span></div>
+        </div>
+
+        <ul class="idle__facts" data-sc-in data-sc-stagger="50">
+          <li><b>Count music and podcasts</b> too, if you like.</li>
+          <li><b>A safety limit</b> of 1 to 4 hours locks even mid-film.</li>
+          <li><b>Pause auto-lock</b> for an hour from the toolbar.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Moments rail -->
+    <section class="moments" data-sc-act="pan" data-sc-span="3" aria-labelledby="moments-title">
+      <div data-sc-stage class="moments__stage">
+        <div class="rail" data-sc-pan="0.04">
+          <div class="rail__lead">
+            <h2 id="moments-title" class="h2">Five moments it was built for.</h2>
+            <p class="body">The everyday ones, and the one you hope never comes.</p>
           </div>
-          <h3>Google Chrome</h3>
-          <p class="install-card-status install-card-status--live">Available Now</p>
-          <a href="https://chromewebstore.google.com/detail/touchlock-%E2%80%93-fingerprint-b/jajgeiifpgdfnphjklcogipefkfdacdl" target="_blank" rel="noopener" class="btn btn-primary btn-install">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            Get from Chrome Web Store
+          <article class="moment">
+            <i class="fa-solid fa-mug-hot moment__icon" aria-hidden="true"></i>
+            <h3 class="moment__line">You step out for a coffee and leave the laptop open.</h3>
+            <p class="moment__fix"><b>Idle lock</b> locks it after the minutes you chose.</p>
+          </article>
+          <article class="moment moment--ink">
+            <i class="fa-solid fa-child-reaching moment__icon" aria-hidden="true"></i>
+            <h3 class="moment__line">Your kid borrows it for homework.</h3>
+            <p class="moment__fix"><b>Site lock</b> keeps your bank and email shut, the rest stays open.</p>
+          </article>
+          <article class="moment">
+            <i class="fa-solid fa-user-group moment__icon" aria-hidden="true"></i>
+            <h3 class="moment__line">A coworker walks over to your desk.</h3>
+            <p class="moment__fix"><kbd>Alt</kbd><kbd>L</kbd> locks every window before they get there.</p>
+          </article>
+          <article class="moment moment--accent">
+            <i class="fa-solid fa-power-off moment__icon" aria-hidden="true"></i>
+            <h3 class="moment__line">Someone else opens your browser.</h3>
+            <p class="moment__fix"><b>Startup lock</b> greets them with your fingerprint prompt, not your tabs.</p>
+          </article>
+          <article class="moment moment--alarm">
+            <i class="fa-solid fa-hand moment__icon" aria-hidden="true"></i>
+            <h3 class="moment__line">Someone makes you unlock it.</h3>
+            <p class="moment__fix"><a href="#duress"><b>The other PIN</b> <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Duress PIN: the peak -->
+    <section id="duress" class="duress ground-dark" data-sc-act="pin" data-sc-span="1.9" aria-labelledby="duress-title">
+      <div data-sc-stage class="duress__stage">
+        <div class="duress__inner">
+          <div class="duress__copy">
+            <p class="eyebrow">New in 1.6 · PRO</p>
+            <h2 id="duress-title" class="duress__title" data-sc-kinetic="lines" data-sc-cue="0 1 0.25 0">Forced to unlock? Give them the other PIN.</h2>
+            <p class="body" data-sc-cue="0.16">A duress PIN opens the browser like normal. Before it does, it quietly erases the history, cookies and sign-ins of the sites you chose, or all browsing data.</p>
+          </div>
+
+          <div class="vault" id="vault" data-state="locked" data-sc-cue="0.2" data-sc-rise="0">
+            <div class="vault__head">
+              <p><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> History</p>
+              <span class="vault__flag-key"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Erased by the duress PIN</span>
+            </div>
+            <ul class="vault__list" id="vault-list">
+              <li data-erase><b>Example Bank <i class="fa-solid fa-eraser" aria-hidden="true"></i></b><span>bank.example.com</span></li>
+              <li><b>Weather in Lisbon</b><span>weather.example.com</span></li>
+              <li data-erase><b>Inbox (3) <i class="fa-solid fa-eraser" aria-hidden="true"></i></b><span>mail.example.com</span></li>
+              <li><b>Pasta recipes</b><span>food.example.com</span></li>
+              <li data-erase><b>Messages <i class="fa-solid fa-eraser" aria-hidden="true"></i></b><span>chat.example.com</span></li>
+              <li><b>News</b><span>news.example.com</span></li>
+            </ul>
+            <div class="vault__ctl">
+              <button type="button" class="btn btn--ghost" data-unlock="real">Unlock with your PIN <span class="mono">2580</span></button>
+              <button type="button" class="btn btn--alarm" data-unlock="duress">Unlock with duress PIN <span class="mono">1379</span></button>
+            </div>
+            <p class="vault__say" id="vault-say" aria-live="polite">Locked. Try both PINs and compare.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section id="privacy" class="privacy ground-dark sc-section" data-sc-act="flow" aria-labelledby="privacy-title">
+      <div class="sc-wrap privacy__grid">
+        <h2 id="privacy-title" class="h2" data-sc-in>Nothing leaves your device.</h2>
+        <dl class="facts" data-sc-in data-sc-stagger="60">
+          <div><dt>Local only</dt><dd>Your PIN, settings and locked sites stay in your browser's storage.</dd></div>
+          <div><dt>Hashed, never plain text</dt><dd>The PIN and security answers are hashed with SHA-256 and a random salt.</dd></div>
+          <div><dt>Biometrics stay with the OS</dt><dd>Touch ID and Windows Hello run through WebAuthn. Your fingerprint never reaches TouchLock.</dd></div>
+          <div><dt>No accounts, analytics or ads</dt><dd>There is nothing to sign up for and nothing phoning home.</dd></div>
+          <div><dt>Plain JavaScript, open source</dt><dd>No third-party libraries. <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener">Read every line on GitHub</a>.</dd></div>
+        </dl>
+        <p class="privacy__limit" data-sc-in>One honest limit: someone using an already unlocked browser can still remove the extension from its extensions page.</p>
+      </div>
+    </section>
+
+    <!-- The details -->
+    <section class="details sc-section" data-sc-act="flow" aria-labelledby="details-title">
+      <div class="sc-wrap details__grid">
+        <div class="details__copy sc-stack" data-sc-in data-sc-stagger="70">
+          <h2 id="details-title" class="h2">The small things that make it hold.</h2>
+          <p class="body">Every bug report and feature request is fixed or built within 7 days. <a href="feedback.html">Follow the feedback tracker</a>.</p>
+        </div>
+        <ul class="list" data-sc-in data-sc-stagger="45">
+          <li><i class="fa-solid fa-keyboard" aria-hidden="true"></i><div><b>Lock instantly</b><span><kbd>Alt</kbd><kbd>L</kbd> anywhere, <kbd>Ctrl</kbd><kbd>L</kbd> on Mac. You can change it.</span></div></li>
+          <li><i class="fa-solid fa-expand" aria-hidden="true"></i><div><b>Fullscreen lock</b><span>Optionally hides the address bar and tabs while locked.</span></div></li>
+          <li><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i><div><b>Ask for the PIN every few hours <span class="tag">PRO</span></b><span>Every 1 to 24 hours, even if you usually use your fingerprint.</span></div></li>
+          <li><i class="fa-solid fa-key" aria-hidden="true"></i><div><b>Forgot your PIN?</b><span>Answer 2 of your 3 security questions to set a new one.</span></div></li>
+          <li><i class="fa-solid fa-user-shield" aria-hidden="true"></i><div><b>Settings stay yours</b><span>Changing the PIN, biometrics, questions, locked sites or duress PIN needs your PIN or fingerprint.</span></div></li>
+          <li><i class="fa-solid fa-hashtag" aria-hidden="true"></i><div><b>PINs from 4 to 10 digits</b><span>With a strength meter, and always there as a fallback.</span></div></li>
+        </ul>
+      </div>
+
+      <div class="sc-wrap roadmap" data-sc-in>
+        <h3>Coming next</h3>
+        <ul class="roadmap__list">
+          <li>Lock screen clock</li>
+          <li>Panic button</li>
+          <li>Export and import</li>
+          <li>Lock history log</li>
+          <li>Intruder photo <span class="tag">PRO</span></li>
+          <li>Stealth mode <span class="tag">PRO</span></li>
+          <li>Scheduled lock <span class="tag">PRO</span></li>
+          <li>Multiple profiles <span class="tag">PRO</span></li>
+          <li>Unlock notifications <span class="tag">PRO</span></li>
+          <li>Focus timer <span class="tag">PRO</span></li>
+          <li>Bluetooth auto-lock <span class="tag">PRO</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Install: the close -->
+    <section id="install" class="install" data-sc-act="flow" aria-labelledby="install-title">
+      <div class="sc-wrap install__inner">
+        <img class="install__mark" src="assets/logo.svg" alt="" width="72" height="72" data-sc-in>
+        <h2 id="install-title" class="install__title" data-sc-in>Lock it before you walk away.</h2>
+        <p class="body install__lede" data-sc-in>Free, about a minute to set up, and it locks the next time your browser starts.</p>
+        <div data-sc-in>
+          <a class="btn btn--lg" href="https://chromewebstore.google.com/detail/touchlock-%E2%80%93-fingerprint-b/jajgeiifpgdfnphjklcogipefkfdacdl" target="_blank" rel="noopener" data-store-link data-store-direct>
+            <i class="fa-brands fa-chrome" data-store-icon aria-hidden="true"></i>
+            <span data-store-label>Add to Chrome</span>
           </a>
         </div>
 
-        <!-- Edge -->
-        <div class="install-card install-card--active">
-          <div class="install-card-icon">
-            <i class="fa-brands fa-edge fa-2x" style="color: #0078D4;"></i>
-          </div>
-          <h3>Microsoft Edge</h3>
-          <p class="install-card-status install-card-status--live">Available Now</p>
-          <a href="https://microsoftedge.microsoft.com/addons/detail/touchlock-%E2%80%93-fingerprint-b/aibbojojoeamjgikgailflpbhdpcjgln" target="_blank" rel="noopener" class="btn btn-primary btn-install">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            Get from Edge Add-ons
-          </a>
-        </div>
+        <ul class="stores" data-sc-in>
+          <li><a href="https://chromewebstore.google.com/detail/touchlock-%E2%80%93-fingerprint-b/jajgeiifpgdfnphjklcogipefkfdacdl" target="_blank" rel="noopener"><i class="fa-brands fa-chrome" aria-hidden="true"></i> Chrome Web Store</a></li>
+          <li><a href="https://microsoftedge.microsoft.com/addons/detail/touchlock-%E2%80%93-fingerprint-b/aibbojojoeamjgikgailflpbhdpcjgln" target="_blank" rel="noopener"><i class="fa-brands fa-edge" aria-hidden="true"></i> Edge Add-ons</a></li>
+          <li><a href="https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/" target="_blank" rel="noopener"><i class="fa-brands fa-firefox-browser" aria-hidden="true"></i> Firefox Add-ons</a></li>
+          <li><a href="https://github.com/mathinraj/TouchLock/releases/latest" target="_blank" rel="noopener"><i class="fa-solid fa-file-zipper" aria-hidden="true"></i> Download ZIP</a></li>
+        </ul>
 
-        <!-- Firefox -->
-        <div class="install-card install-card--active">
-          <div class="install-card-icon">
-            <i class="fa-brands fa-firefox-browser fa-2x" style="color: #FF7139;"></i>
-          </div>
-          <h3>Mozilla Firefox</h3>
-          <p class="install-card-status install-card-status--live">Available Now</p>
-          <a href="https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/" target="_blank" rel="noopener" class="btn btn-primary btn-install">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            Get from Firefox Add-ons
-          </a>
-        </div>
+        <p class="install__compat">Chrome, Edge and Brave 110+ · Opera and Vivaldi should work · Firefox 115+, with fingerprint unlock on 150+</p>
 
-        <!-- Manual -->
-        <div class="install-card install-card--manual">
-          <div class="install-card-icon">
-            <i class="fa-solid fa-file-zipper fa-2x" style="color: #6366f1;"></i>
-          </div>
-          <h3>Manual Install</h3>
-          <p class="install-card-status install-card-status--manual">Any Chromium Browser</p>
-          <a href="https://github.com/mathinraj/TouchLock/releases/latest" target="_blank" rel="noopener" class="btn btn-outline btn-install">
-            <i class="fa-solid fa-download"></i>
-            Download Latest ZIP
-          </a>
-        </div>
-
+        <details class="manual">
+          <summary>Install manually in any Chromium browser</summary>
+          <ol>
+            <li>Open the <a href="https://github.com/mathinraj/TouchLock/releases/latest" target="_blank" rel="noopener">latest release</a>, download the ZIP for your browser (for example <code>touchlock-for-chrome-&lt;version&gt;.zip</code>) and extract it.</li>
+            <li>Go to your extensions page: <code>chrome://extensions</code>, <code>edge://extensions</code> or <code>brave://extensions</code>.</li>
+            <li>Turn on <b>Developer mode</b> in the top-right corner.</li>
+            <li>Click <b>Load unpacked</b> and choose the extracted folder.</li>
+            <li>Settings opens on its own. Set your PIN and you're done.</li>
+          </ol>
+        </details>
       </div>
 
-      <!-- Manual install instructions -->
-      <div class="manual-instructions" id="manual-instructions">
-        <h3>Manual Installation Steps</h3>
-        <div class="instruction-steps">
-          <div class="instruction-step">
-            <span class="instruction-num">1</span>
-            <p>Open the <a href="https://github.com/mathinraj/TouchLock/releases/latest" target="_blank" rel="noopener">latest release</a>, download the ZIP for your browser (for example <code>touchlock-for-chrome-&lt;version&gt;.zip</code>), and extract it to a folder</p>
-          </div>
-          <div class="instruction-step">
-            <span class="instruction-num">2</span>
-            <p>Open your browser and go to the extensions page — <code>edge://extensions</code>, <code>chrome://extensions</code>, or <code>brave://extensions</code></p>
-          </div>
-          <div class="instruction-step">
-            <span class="instruction-num">3</span>
-            <p>Enable <strong>Developer mode</strong> (toggle in the top-right corner)</p>
-          </div>
-          <div class="instruction-step">
-            <span class="instruction-num">4</span>
-            <p>Click <strong>Load unpacked</strong> and select the extracted folder</p>
-          </div>
-          <div class="instruction-step">
-            <span class="instruction-num">5</span>
-            <p>TouchLock will open Settings automatically — set your PIN and you're done!</p>
-          </div>
+      <footer class="foot">
+        <div class="sc-wrap foot__inner">
+          <a href="#top" class="mark mark--sm"><img src="assets/logo.svg" alt="" width="22" height="22"><span>TouchLock</span></a>
+          <nav class="foot__links" aria-label="Footer">
+            <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener">GitHub</a>
+            <a href="changelog.html">What's new</a>
+            <a href="https://github.com/mathinraj/TouchLock/releases" target="_blank" rel="noopener">Releases</a>
+            <a href="feedback.html">Feedback tracker</a>
+            <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener">Report a bug</a>
+          </nav>
+          <p class="foot__by">Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj</a></p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Compatibility -->
-  <section class="compatibility" aria-label="Browser compatibility">
-    <div class="container">
-      <div class="section-header">
-        <h2>Works with your browser</h2>
-      </div>
-      <div class="browser-list">
-        <div class="browser-item browser-item--supported">
-          <i class="fa-brands fa-edge"></i>
-          <span class="browser-name">Microsoft Edge</span>
-          <span class="browser-status-badge">Supported</span>
-        </div>
-        <div class="browser-item browser-item--supported">
-          <i class="fa-brands fa-chrome"></i>
-          <span class="browser-name">Google Chrome</span>
-          <span class="browser-status-badge">Supported</span>
-        </div>
-        <div class="browser-item browser-item--supported">
-          <i class="fa-brands fa-brave"></i>
-          <span class="browser-name">Brave</span>
-          <span class="browser-status-badge">Supported</span>
-        </div>
-        <div class="browser-item browser-item--supported">
-          <i class="fa-brands fa-opera"></i>
-          <span class="browser-name">Opera / Vivaldi</span>
-          <span class="browser-status-badge">Should Work</span>
-        </div>
-        <div class="browser-item browser-item--supported">
-          <i class="fa-brands fa-firefox-browser"></i>
-          <span class="browser-name">Firefox</span>
-          <span class="browser-status-badge">Supported</span>
-        </div>
-      </div>
-      <p class="compat-note">Chromium 110+ &amp; Firefox 115+ (Manifest V3) · Biometric unlock on Firefox needs version 150+</p>
-    </div>
-  </section>
-
-  <!-- Upcoming / Roadmap -->
-  <section class="roadmap" id="roadmap" aria-label="Upcoming features">
-    <div class="container">
-      <div class="section-header">
-        <h2>What's <span class="gradient-text">coming next</span></h2>
-        <p>We're building more ways to keep your browser safe. Here's the roadmap.</p>
-      </div>
-      <div class="roadmap-grid">
-        <div class="rm-card">
-          <div class="rm-icon"><i class="fa-solid fa-clock"></i></div>
-          <h3>Lock Screen Clock</h3>
-          <p>See the time and date on your lock screen, just like your phone.</p>
-        </div>
-        <div class="rm-card">
-          <div class="rm-icon rm-icon--bolt"><i class="fa-solid fa-bolt"></i></div>
-          <h3>Panic Button</h3>
-          <p>A floating button on web pages that locks the browser with a single click.</p>
-        </div>
-        <div class="rm-card">
-          <div class="rm-icon"><i class="fa-solid fa-file-export"></i></div>
-          <h3>Export / Import</h3>
-          <p>Backup and restore all your settings, questions, and preferences.</p>
-        </div>
-        <div class="rm-card">
-          <div class="rm-icon"><i class="fa-solid fa-list"></i></div>
-          <h3>Lock History Log</h3>
-          <p>See when your browser was locked and unlocked with timestamps.</p>
-        </div>
-        <div class="rm-card rm-card--pro">
-          <span class="rm-pro-badge">PRO</span>
-          <div class="rm-icon rm-icon--pro"><i class="fa-solid fa-camera"></i></div>
-          <h3>Intruder Detection</h3>
-          <p>Capture a photo after wrong PIN attempts and log the timestamp.</p>
-        </div>
-        <div class="rm-card rm-card--pro">
-          <span class="rm-pro-badge">PRO</span>
-          <div class="rm-icon rm-icon--pro"><i class="fa-solid fa-eye-slash"></i></div>
-          <h3>Stealth Mode</h3>
-          <p>Hide the extension icon — only accessible via your keyboard shortcut.</p>
-        </div>
-        <div class="rm-card rm-card--pro">
-          <span class="rm-pro-badge">PRO</span>
-          <div class="rm-icon rm-icon--pro"><i class="fa-solid fa-calendar-days"></i></div>
-          <h3>Scheduled Lock</h3>
-          <p>Auto-lock at specific times — perfect for parental controls or discipline.</p>
-        </div>
-        <div class="rm-card rm-card--pro">
-          <span class="rm-pro-badge">PRO</span>
-          <div class="rm-icon rm-icon--pro"><i class="fa-solid fa-users"></i></div>
-          <h3>Multiple Profiles</h3>
-          <p>Different PINs for different people with different access levels.</p>
-        </div>
-        <div class="rm-card rm-card--pro">
-          <span class="rm-pro-badge">PRO</span>
-          <div class="rm-icon rm-icon--pro"><i class="fa-solid fa-bell"></i></div>
-          <h3>Unlock Notifications</h3>
-          <p>Get notified when someone unlocks the browser.</p>
-        </div>
-        <div class="rm-card rm-card--pro">
-          <span class="rm-pro-badge">PRO</span>
-          <div class="rm-icon rm-icon--pro"><i class="fa-solid fa-hourglass-half"></i></div>
-          <h3>Break Timer / Focus Mode</h3>
-          <p>Lock the browser for X minutes. Can't unlock until time expires.</p>
-        </div>
-        <div class="rm-card rm-card--pro">
-          <span class="rm-pro-badge">PRO</span>
-          <div class="rm-icon rm-icon--pro"><i class="fa-brands fa-bluetooth-b"></i></div>
-          <h3>Bluetooth Auto-Lock</h3>
-          <p>Lock when your phone or watch goes out of Bluetooth range.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      </footer>
+    </section>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <div class="footer-brand">
-        <img src="assets/logo.svg" alt="TouchLock" width="28" height="28">
-        <span>TouchLock</span>
-      </div>
-      <div class="footer-links">
-        <a href="https://github.com/mathinraj/TouchLock" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
-        <a href="changelog.html"><i class="fa-solid fa-sparkles"></i> What's New</a>
-        <a href="https://github.com/mathinraj/TouchLock/releases" target="_blank" rel="noopener"><i class="fa-solid fa-tag"></i> Releases</a>
-        <a href="feedback.html"><i class="fa-solid fa-list-check"></i> Feedback Tracker</a>
-        <a href="https://github.com/mathinraj/TouchLock/issues" target="_blank" rel="noopener"><i class="fa-solid fa-bug"></i> Report a Bug</a>
-      </div>
-      <p class="footer-copy">Made by <a href="https://mathinraj.is-a.dev/" target="_blank" rel="noopener">Mathinraj 💚</a></p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
+  <script src="scrollcraft.js"></script>
+  <script src="home.js"></script>
 </body>
 </html>
