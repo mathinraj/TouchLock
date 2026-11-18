@@ -37,12 +37,13 @@
   <link rel="apple-touch-icon" sizes="128x128" href="assets/logo-128.png">
 
   <!-- Font Awesome Kit -->
-  <script src="https://kit.fontawesome.com/5432a717c1.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/5432a717c1.js" crossorigin="anonymous" defer></script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"></noscript>
 
   <link rel="stylesheet" href="scrollcraft.css">
   <link rel="stylesheet" href="home.css">
@@ -181,7 +182,7 @@
     <!-- Hero: the live lock -->
     <section class="hero" data-sc-act="flow" aria-label="Introduction">
       <div class="hero__inner">
-        <div class="hero__copy" data-sc-in data-sc-stagger="70">
+        <div class="hero__copy">
           <a class="hero__new" href="#duress"><span>New in 1.6</span> Duress PIN <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
           <h1 class="hero__title">Lock your browser with your fingerprint.</h1>
           <p class="hero__lede">Touch ID, Windows Hello or a PIN. For the whole browser, or just your bank and email.</p>
@@ -200,13 +201,13 @@
           <div class="win" id="demo" data-state="locked" data-view="inbox">
             <div class="win__tabs" role="tablist" aria-label="Demo browser tabs">
               <span class="win__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-              <button class="win__tab is-active" role="tab" aria-selected="true" data-tab="inbox">
+              <button class="win__tab is-active" role="tab" aria-selected="true" aria-label="Inbox" data-tab="inbox">
                 <i class="fa-solid fa-envelope" aria-hidden="true"></i><span>Inbox</span>
               </button>
-              <button class="win__tab" role="tab" aria-selected="false" data-tab="bank">
+              <button class="win__tab" role="tab" aria-selected="false" aria-label="Bank" data-tab="bank">
                 <i class="fa-solid fa-building-columns" aria-hidden="true"></i><span>Bank</span>
               </button>
-              <button class="win__tab" role="tab" aria-selected="false" data-tab="history">
+              <button class="win__tab" role="tab" aria-selected="false" aria-label="History" data-tab="history">
                 <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i><span>History</span>
               </button>
             </div>
@@ -523,6 +524,8 @@
           <li><a href="https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/" target="_blank" rel="noopener"><i class="fa-brands fa-firefox-browser" aria-hidden="true"></i> Firefox Add-ons</a></li>
           <li><a href="https://github.com/mathinraj/TouchLock/releases/latest" target="_blank" rel="noopener"><i class="fa-solid fa-file-zipper" aria-hidden="true"></i> Download ZIP</a></li>
         </ul>
+
+        <p class="install__mobile" data-mobile-note hidden>TouchLock is an extension for desktop browsers. Open <b>touchlock.vercel.app</b> on your computer to install it.</p>
 
         <p class="install__compat">Chrome, Edge and Brave 110+ · Opera and Vivaldi should work · Firefox 115+, with fingerprint unlock on 150+</p>
 

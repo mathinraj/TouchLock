@@ -1,0 +1,35 @@
+# TouchLock
+
+> TouchLock is a free, open-source browser extension for Chrome, Edge, Brave and Firefox that locks the whole browser profile, or just chosen sites such as banking and email, behind Touch ID, Windows Hello or a 4 to 10 digit PIN. Everything stays on the device: no accounts, no analytics, no third-party libraries.
+
+Key facts:
+
+- Locks every tab and window on startup, after 1 minute to 1 hour of inactivity, from the toolbar, or with Alt+L (Ctrl+L on Mac). The shortcut is customizable.
+- Idle lock waits while a video plays, on any site or only chosen sites, with an optional 1 to 4 hour safety limit.
+- While locked, websites and browser pages (history, downloads, bookmarks, settings) are held at the lock screen until the user unlocks.
+- Lock specific sites (PRO): a locked site asks for a fingerprint or PIN even while the browser is unlocked. It locks again when you leave it, after 5 to 60 minutes, or when the browser locks. Subdomains can be included.
+- Duress PIN (PRO, new in 1.6): a second PIN that unlocks as normal but first erases the history, cookies and site data of chosen sites, or all browsing data.
+- PIN recovery by answering 2 of 3 security questions. Changing sensitive settings requires the PIN or fingerprint.
+- The PIN and security answers are hashed with SHA-256 and a random salt. Biometrics use WebAuthn platform authenticators, so fingerprints never reach the extension.
+- Limitation: someone using an already unlocked browser can still remove the extension from the browser's extensions page.
+- Requirements: Chromium 110+ (Chrome, Edge, Brave; Opera and Vivaldi should work) or Firefox 115+. Biometric unlock on Firefox needs version 150+. Desktop only.
+
+## Install
+
+- [Chrome Web Store](https://chromewebstore.google.com/detail/touchlock-%E2%80%93-fingerprint-b/jajgeiifpgdfnphjklcogipefkfdacdl): Chrome, Brave, Opera, Vivaldi
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/touchlock-%E2%80%93-fingerprint-b/aibbojojoeamjgikgailflpbhdpcjgln)
+- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/touchlock-fingerprint-lock/)
+- [Latest release ZIP](https://github.com/mathinraj/TouchLock/releases/latest): manual install with Load unpacked in developer mode
+
+## Docs
+
+- [Homepage](https://touchlock.vercel.app/): features, live lock demo, privacy and install options
+- [Changelog](https://touchlock.vercel.app/changelog.html): release notes for every version
+- [Feedback tracker](https://touchlock.vercel.app/feedback.html): status of bug reports and feature requests, each fixed or built within 7 days
+- [README](https://github.com/mathinraj/TouchLock/blob/main/README.md): features, permissions and development setup
+
+## Optional
+
+- [Source code](https://github.com/mathinraj/TouchLock)
+- [Report an issue](https://github.com/mathinraj/TouchLock/issues)
+- [Developer](https://mathinraj.is-a.dev/)

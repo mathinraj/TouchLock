@@ -21,14 +21,55 @@
     return 'chrome';
   }
 
+  function isPhoneOrTablet() {
+    var ua = navigator.userAgent;
+    if (/Android|iPhone|iPad|iPod|Mobile/i.test(ua)) return true;
+    return /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+  }
+
+  var onMobile = isPhoneOrTablet();
   var store = STORES[detectBrowser()];
+
   document.querySelectorAll('[data-store-link]').forEach(function (a) {
     var label = a.querySelector('[data-store-label]');
     var icon = a.querySelector('[data-store-icon]');
+    if (onMobile) {
+      var direct = a.hasAttribute('data-store-direct');
+      if (label) label.textContent = direct ? 'Send the link to my computer' : 'Get it on desktop';
+      if (icon) icon.className = 'fa-solid ' + (direct ? 'fa-paper-plane' : 'fa-desktop');
+      if (direct) {
+        a.removeAttribute('target');
+        a.href = '#install';
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          sendLink(label);
+        });
+      }
+      return;
+    }
     if (label) label.textContent = store.label;
     if (icon) icon.className = 'fa-brands ' + store.icon;
     if (a.hasAttribute('data-store-direct')) a.href = store.url;
   });
+
+  if (onMobile) {
+    document.querySelectorAll('[data-mobile-note]').forEach(function (n) { n.hidden = false; });
+  }
+
+  function sendLink(label) {
+    var url = 'https://touchlock.vercel.app/';
+    var data = { title: 'TouchLock', text: 'Lock your browser with your fingerprint. Install on desktop:', url: url };
+    if (navigator.share) {
+      navigator.share(data).catch(function () {});
+      return;
+    }
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function () {
+        label.textContent = 'Link copied';
+        setTimeout(function () { label.textContent = 'Send the link to my computer'; }, 2000);
+      });
+    }
+  }
 
   /* ------------------------------------------------------------ bar -- */
   var bar = document.getElementById('bar');
